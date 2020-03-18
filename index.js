@@ -8,6 +8,8 @@ const keys = require('./keys');
 
 mongoose.connect(keys.MongoURI, { useNewUrlParser: true,  useUnifiedTopology: true  });
 
+
+require('./models/quizModel.js');
 require('./models/questionModel.js');
 require('./models/userModel.js')
 
@@ -22,7 +24,8 @@ app.use(session({
 }));
 
 require('./routes/authRoutes.js')(app);
-require('./routes/apiRoutes.js')(app);
+require('./routes/questionRoutes.js')(app);
+require('./routes/quizRoutes')(app);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));

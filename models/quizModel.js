@@ -1,15 +1,25 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-var quizSchema = new Schema({
+const quizSchema = new Schema({
+  name: String,
+  time: Number,
+  questions: [{
     question: String,
     options: [{
       description: String,
       correct: Boolean
     }],
-    tag: String,
-    point: Number,
-    type: String,
+    point: Number
+  }],
+  like: Number,
+  dislike: Number,
+  comments: [{
+    message: String,
+    date: Date,
     createdBy: String
+  }],
+  createdBy: String,
+  createdDate: String
 });
 mongoose.model('Quiz', quizSchema);

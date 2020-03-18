@@ -37,6 +37,9 @@ class QuestionPage extends React.Component {
     this.props.editQuestion(question)
     this.props.history.push('/newquestions');
   }
+  handleAdd = () => {
+    this.props.editQuestion({});
+  }
 
   render() {
     if(this.state.redirect.length > 0) {
@@ -57,6 +60,7 @@ class QuestionPage extends React.Component {
               <Grid item xs={2}>
                  <Link to="/newquestions" component={RouterLink}>
                     <Button
+                     onClick={this.handleAdd}
                      variant="contained"
                      endIcon={<AddIcon/>}>
                       Add 
