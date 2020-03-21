@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import AddIcon from '@material-ui/icons/Add';
 
-import { fetchUser, getAllQuestion } from '../../actions/index.js';
+import { fetchUser, getAllQuestion, getAllQuiz, editQuiz } from '../../actions/index.js';
+import QuizListComponent from './components/QuizListComponent.js';
 
 class QuizPage extends React.Component {
   state = {
@@ -15,6 +16,7 @@ class QuizPage extends React.Component {
   componentDidMount () {
     this.props.fetchUser();
     this.props.getAllQuestion();
+    this.props.getAllQuiz();
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -26,9 +28,21 @@ class QuizPage extends React.Component {
     }
   };
 
-  handleAdd = () => {
-    console.log('Here');
+  editItem = (quiz) => {
+    this.props.editQuiz(quiz)
+    this.props.history.push('/newquiz');
   };
+
+  deleteItem = (status) => {
+    if (status) {
+      this.props.getAllQuiz();
+    }
+  }
+
+  handleAdd = () => {
+    this.props.editQuiz({});
+  };
+
 
   render() {
     if(this.state.redirect.length > 0) {
@@ -58,7 +72,10 @@ class QuizPage extends React.Component {
               </Grid>
               <Grid item xs={12}>&nbsp;</Grid>
               <Grid item xs={12}>
-    
+                <QuizListComponent
+                allQuiz={this.props.allQuiz} 
+                deleteItem={this.deleteItem}
+                editItem={this.editItem}/>
               </Grid>
             </Grid>
           </Paper>
@@ -71,12 +88,12 @@ class QuizPage extends React.Component {
 function mapStateToProps(state) {
   return {
     currentUser: state.auth.currentUser,
-    allQuestions: state.questions.allQuestions,
+    allQuiz: state.quiz.allQuiz
    }
   }
 function mapDispatchToProps (dispatch) {
   return bindActionCreators({
-    fetchUser, getAllQuestion
+    fetchUser, getAllQuestion, getAllQuiz, editQuiz
   }, dispatch)
 };
   

@@ -4,6 +4,7 @@ const { Schema } = mongoose;
 const quizSchema = new Schema({
   name: String,
   time: Number,
+  description: String,
   questions: [{
     question: String,
     options: [{

@@ -31,6 +31,7 @@ export function getAllQuestion() {
       });
     }
 };
+
 export function editQuestion(editQuestions) {
   return function(dispatch){
     dispatch({
@@ -38,4 +39,45 @@ export function editQuestion(editQuestions) {
       payload: editQuestions
     });
   }
+};
+
+export function editQuiz(editQuiz) {
+  return function(dispatch){
+    dispatch({
+      type: 'EDIT_QUIZ',
+      payload: editQuiz
+    });
+  }
+};
+
+export function getAllQuiz() {
+  return function(dispatch){
+    axios.get('/api/getAllQuiz')
+      .then(res => {
+         dispatch({
+           type: 'GET_ALL_QUIZ',
+           payload: res.data
+         });
+      }).catch(err => {
+        dispatch({
+          type: 'GET_ALL_QUIZ_FAILED'
+        });
+      });
+    }
+};
+
+export function getAllHomeQuiz() {
+  return function(dispatch){
+    axios.get('/api/getAllHomeQuiz')
+      .then(res => {
+         dispatch({
+           type: 'GET_ALL_HOME_QUIZ',
+           payload: res.data
+         });
+      }).catch(err => {
+        dispatch({
+          type: 'GET_ALL_HOME_QUIZ_FAILED'
+        });
+      });
+    }
 };

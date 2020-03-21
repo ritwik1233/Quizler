@@ -28,8 +28,8 @@ class NewQuizPage extends React.Component {
     }
   };
 
-  handleAdd = () => {
-    console.log('Here');
+  handleRedirect = () => {
+    this.props.history.push('/quiz');
   };
 
   render() {
@@ -44,7 +44,10 @@ class NewQuizPage extends React.Component {
             <Grid container spacing={0}>
                 <Grid item xs={2}></Grid>
                 <Grid item xs={8}>
-                    <QuizFormComponent allQuestions={this.props.allQuestions}/>
+                    <QuizFormComponent
+                      editQuiz={this.props.editQuiz}
+                      allQuestions={this.props.allQuestions}
+                      handleRedirect={this.handleRedirect}/>
                 </Grid>
                 <Grid item xs={2}></Grid>
             </Grid>
@@ -59,6 +62,7 @@ function mapStateToProps(state) {
   return {
     currentUser: state.auth.currentUser,
     allQuestions: state.questions.allQuestions,
+    editQuiz: state.quiz.editQuiz
    }
   }
 function mapDispatchToProps (dispatch) {

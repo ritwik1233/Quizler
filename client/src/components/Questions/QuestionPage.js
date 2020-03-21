@@ -69,7 +69,10 @@ class QuestionPage extends React.Component {
               </Grid>
               <Grid item xs={12}>&nbsp;</Grid>
               <Grid item xs={12}>
-                <QuestionList allQuestions={this.props.allQuestions} deleteItem={this.deleteItem} editItem={this.editItem} />
+                <QuestionList 
+                  allQuestions={this.props.allQuestions}
+                  deleteItem={this.deleteItem}
+                  editItem={this.editItem} />
               </Grid>
             </Grid>
           </Paper>

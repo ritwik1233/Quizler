@@ -25,7 +25,8 @@ app.use(session({
 
 require('./routes/authRoutes.js')(app);
 require('./routes/questionRoutes.js')(app);
-require('./routes/quizRoutes')(app);
+require('./routes/quizRoutes.js')(app);
+require('./routes/homeRoutes.js')(app);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
