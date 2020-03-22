@@ -57,14 +57,16 @@ class NewQuizPage extends React.Component {
       </Grid> 
     );
   }
-}
+};
+
 function mapStateToProps(state) {
   return {
     currentUser: state.auth.currentUser,
     allQuestions: state.questions.allQuestions,
     editQuiz: state.quiz.editQuiz
    }
-  }
+};
+
 function mapDispatchToProps (dispatch) {
   return bindActionCreators({
     fetchUser, getAllQuestion

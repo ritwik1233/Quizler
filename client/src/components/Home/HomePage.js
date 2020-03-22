@@ -1,14 +1,19 @@
 import React from 'react';
-import { Grid, Typography, Paper } from '@material-ui/core';
+import { Grid, Typography, Paper, Button, Link } from '@material-ui/core';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import {Link as RouterLink} from 'react-router-dom';
 
-import { fetchUser, getAllHomeQuiz } from '../../actions/index.js';
+import { fetchUser, getAllHomeQuiz, editHomeQuiz } from '../../actions/index.js';
 
 class HomePage extends React.Component {
   componentDidMount() {
     this.props.fetchUser();
     this.props.getAllHomeQuiz();
+  };
+
+  openTest = (eachQuiz) => {
+    this.props.editHomeQuiz(eachQuiz)
   };
 
   render() {
@@ -39,8 +44,26 @@ class HomePage extends React.Component {
                 <Grid item xs={12}>
                   <Typography variant="body1">&nbsp;Number of Questions: {eachQuiz.questions.length}</Typography>
                 </Grid>
+              
                 <Grid item xs={12}>
                   <Typography variant="body1">&nbsp;Created by: {eachQuiz.createdBy}</Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="body1">&nbsp;Created Date: {eachQuiz.createdDate}</Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  &nbsp; 
+                  <Link to="/confirmtest" component={RouterLink}>
+                    <Button
+                     onClick={()=>{this.openTest(eachQuiz)}}
+                     variant="contained"
+                     >
+                      Open Test 
+                    </Button>
+                 </Link>
+                </Grid>
+                <Grid item xs={12}>
+                    &nbsp;
                 </Grid>
               </Paper>
               </Grid>
@@ -62,7 +85,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps (dispatch) {
   return bindActionCreators({
     fetchUser,
-    getAllHomeQuiz
+    getAllHomeQuiz,
+    editHomeQuiz
   }, dispatch)
 };
 

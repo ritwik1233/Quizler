@@ -50,6 +50,24 @@ export function editQuiz(editQuiz) {
   }
 };
 
+export function showResult(result) {
+  return function(dispatch){
+    dispatch({
+      type: 'QUIZ_RESULT',
+      payload: result
+    });
+  }
+};
+
+export function editHomeQuiz(editQuiz) {
+  return function(dispatch){
+    dispatch({
+      type: 'EDIT_HOME_QUIZ',
+      payload: editQuiz
+    });
+  }
+};
+
 export function getAllQuiz() {
   return function(dispatch){
     axios.get('/api/getAllQuiz')

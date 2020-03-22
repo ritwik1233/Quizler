@@ -12,7 +12,9 @@ import QuizPage from '../components/Quizes/QuizPage.js';
 import NewQuizPage from '../components/Quizes/NewQuizPage.js';
 import AnalyticsPage from '../components/Analytics/AnalyticsPage.js';
 import ProfilePage from '../components/Profile/ProfilePage.js';
-
+import ConfirmTestPage from './Home/ConfirmTestPage.js';
+import NewTestPage from './Home/NewTestPage.js';
+import ResultPage from './Home/ResultPage.js';
 
 class App extends React.Component {
   render() {
@@ -25,6 +27,9 @@ class App extends React.Component {
           <Grid item xs={12}>
             <Switch>
               <Route  exact path="/" component={HomePage}/>
+              <Route  path="/confirmtest" component={ConfirmTestPage}/>
+              <Route  path="/newtest" component={NewTestPage}/>
+              <Route  path="/result" component={ResultPage}/> 
               <Route  path="/login" component={LoginPage}/>
               <Route  path="/register" component={RegisterPage}/>
               <Route  path="/questions" component={QuestionPage}/>
