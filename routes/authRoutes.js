@@ -63,7 +63,7 @@ module.exports = (app) => {
 
   app.get('/api/currentUser',(req, res) => {
     if (req.session.userID) {
-      User.findOne({ _id: req.session.userID } , { password: 0 }).select({ "password": 0 })
+      User.findOne({ _id: req.session.userID } , { password: 0 }).select({ "password": 0, "verified": 0, "accountType": 0 })
       .then(data => {
         if(!data) {
           return res.status(200).send([]);
