@@ -112,13 +112,8 @@ class NewTestPage extends React.Component {
              });
              options = options.map((eachOption, key) => {
                     if(optionIndex === key) {
-                        if (eachOption.correct) {
-                            return {
-                                ...eachOption, answeredOption: true
-                            };
-                        }
                         return {
-                            ...eachOption, answeredOption: false
+                            ...eachOption, answeredOption: eachOption._id
                         };
                     }
                     return {
