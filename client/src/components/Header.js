@@ -25,13 +25,20 @@ const SubHeaderWithoutLogin = () => {
       <AppBar>
         <Toolbar variant="dense">
           <Grid container spacing={3}>
-            <Grid item xs={ window.innerWidth<500 ? 9 : 11 }>    
-              <Typography variant="h6" color="inherit">
-                Quizler
-              </Typography>
+            <Grid item xs={window.innerWidth<500 ? 9 : 10}>    
+              <Link color="inherit" component={RouterLink} to="/">
+                <Typography variant="h6" color="inherit">
+                  Quizler
+                </Typography>
+              </Link> 
             </Grid>
-            <Grid item xs={ window.innerWidth < 500 ? 3: 1 }>   
-              <Link color="inherit" component={ RouterLink } to="/login">
+            <Grid item xs={window.innerWidth < 500 ? 1: 1}>   
+              <Link color="inherit" component={RouterLink} to="/About">
+                <Typography variant="body1">About</Typography>
+              </Link> 
+            </Grid>
+            <Grid item xs={window.innerWidth < 500 ? 2: 1}>   
+              <Link color="inherit" component={RouterLink} to="/login">
                 <Typography variant="body1">Login</Typography>
               </Link> 
             </Grid>
@@ -68,12 +75,19 @@ const SubHeaderWithLogin = (props) => {
       <AppBar>
         <Toolbar variant="dense">
           <Grid container spacing={3}>
-            <Grid item xs={ window.innerWidth<500 ? 9 : 10 }>    
-              <Typography variant="h6" color="inherit">
-                Quizler
-              </Typography>
+            <Grid item xs={ window.innerWidth < 500 ? 9 : 9 }>
+              <Link color="inherit" component={RouterLink} to="/">
+                <Typography variant="h6" color="inherit">
+                  Quizler
+                </Typography>
+              </Link> 
             </Grid>
-            <Grid item xs={ window.innerWidth < 500 ? 3: 2 }>
+            <Grid item xs={window.innerWidth < 500 ? 1: 1}>   
+              <Link color="inherit" component={RouterLink} to="/About">
+                <Typography variant="body1">About</Typography>
+              </Link> 
+            </Grid>
+            <Grid item xs={ window.innerWidth < 500 ? 2: 2 }>
               <Button
                 color="inherit"
                 endIcon={<ArrowDropDownIcon />}
@@ -114,11 +128,6 @@ const SubHeaderWithLogin = (props) => {
                 <MenuItem onClick={closeMenu}>
                   <Link color="inherit" component={ RouterLink } to="/analytics" style={{ width: '100%' }}>
                     Analytics
-                  </Link>
-                </MenuItem>
-                <MenuItem onClick={closeMenu}>
-                  <Link color="inherit" component={ RouterLink } to="/profile" style={{ width: '100%' }}>
-                    Profile
                   </Link>
                 </MenuItem>
                 <MenuItem onClick={closeMenu}>

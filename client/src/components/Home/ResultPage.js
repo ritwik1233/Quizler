@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Typography, TableContainer, Table, TableRow, TableBody, TableHead, TableCell, Button } from '@material-ui/core';
+import { Grid, Typography, TableContainer, Table, TableRow, TableBody, TableHead, TableCell } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
@@ -137,8 +137,7 @@ class ResultPage extends React.Component {
                 </Grid>
                 <Grid item xs={6}>
                     {!this.props.currentUser._id ?<Typography variant="body1">
-                        Congratulations! You have completed the quiz. Register for more exciting features like creating quizes, 
-                        viewing analytical progress and so on. 
+                        Congratulations! You have completed the quiz. Register for more features like creating quizes and so on. 
                     </Typography>: undefined}
                 </Grid>
                 <Grid item xs={12}>&nbsp;</Grid>
