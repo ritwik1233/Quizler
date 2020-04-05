@@ -94,20 +94,20 @@ const LoginPage = () => {
             id="password"
             autoComplete="current-password"
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
           <Button
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
-          >
+            className={classes.submit}>
             Sign In
           </Button>
           <Grid container>
+            <Grid item xs>
+              <Link to="/forgotpassword" component={RouterLink} variant="body2">
+                {"Forgot Password"}
+              </Link>
+            </Grid>
             <Grid item>
               <Link to="/register" component={RouterLink} variant="body2">
                 {"Don't have an account? Sign Up"}

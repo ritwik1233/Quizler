@@ -6,10 +6,12 @@ import Header from './Header.js';
 import HomePage from '../components/Home/HomePage.js';
 import LoginPage from './Common/LoginPage.js';
 import CommingSoon from './Common/CommingSoon.js';
+import ForgotPassword from './Common/ForgotPassword.js';
 import About from './Common/About.js';
 import RegisterPage from './Common/RegisterPage.js';
 import QuestionPage from '../components/Questions/QuestionPage.js';
 import NewQuestionPage from './Questions/NewQuestionPage.js';
+import ResetPage from './Common/ResetPage.js';
 import QuizPage from '../components/Quizes/QuizPage.js';
 import NewQuizPage from '../components/Quizes/NewQuizPage.js';
 import ConfirmTestPage from './Home/ConfirmTestPage.js';
@@ -31,6 +33,8 @@ class App extends React.Component {
               <Route  path="/newtest" component={NewTestPage}/>
               <Route  path="/result" component={ResultPage}/> 
               <Route  path="/login" component={LoginPage}/>
+              <Route  path="/forgotPassword" component={ForgotPassword}/>
+              <Route  path="/resetPassword" component={ResetPage}/>
               <Route  path="/About" component={About}/>
               <Route  path="/register" component={RegisterPage}/>
               <Route  path="/questions" component={QuestionPage}/>

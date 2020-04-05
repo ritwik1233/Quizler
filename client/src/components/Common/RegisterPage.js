@@ -73,65 +73,66 @@ const RegisterPage = () => {
         { error.length > 0 && 
           <Typography variant="body1" color="error">{error}</Typography>
         }
-        <form className={classes.form} onSubmit = {handleSubmit}>
+        <form className={classes.form} onSubmit={handleSubmit}>
         <TextField
-                variant = 'outlined'
-                margin = 'normal'
-                required
-                fullWidth
-                id = 'fname'
-                label = 'First Name'
-                name = 'fname'
-                autoComplete = 'fname'
+                variant="outlined"
+                margin="normal"
+                id="fname"
+                label="First Name"
+                name="fname"
+                autoComplete="fname"
                 autoFocus
-              />
-              <TextField
-                variant = 'outlined'
-                margin = 'normal'
                 required
                 fullWidth
-                id = 'lname'
-                label = 'Last Name'
-                name = 'lname'
-                autoComplete = 'lname'
               />
               <TextField
-                variant = 'outlined'
-                margin = 'normal'
+                variant="outlined"
+                margin="normal"
+                id="lname"
+                label= "Last Name"
+                name="lname"
+                autoComplete="lname"
                 required
                 fullWidth
-                id = 'email'
-                label = 'Email'
-                name = 'email'
-                autoComplete = 'email'
               />
               <TextField
-                variant = 'outlined'
-                margin = 'normal'
+                variant="outlined"
+                margin="normal"
+                id="email"
+                label="Email"
+                name="email"
+                autoComplete="email"
                 required
                 fullWidth
-                name = 'password'
-                label = 'Password'
-                type = 'password'
-                id = 'password'
-                autoComplete = 'current-password'
               />
               <TextField
-                variant = 'outlined'
-                margin = 'normal'
+                variant="outlined"
+                margin="normal"
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
                 required
                 fullWidth
-                name = 'cpassword'
-                label = 'Confirm Password'
-                type = 'password'
-                id = 'cpassword'
-                autoComplete = 'current-password'
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                name="cpassword"
+                label="Confirm Password"
+                type="password"
+                id ="cpassword"
+                autoComplete="current-password"
+                required
+                fullWidth
               />
               <Button
-                type ='submit'
+                type="submit"
+                variant="contained"
+                color="primary"
                 fullWidth
-                variant = 'contained'
-                color = 'primary'>
+                >
                 Sign Up
               </Button>
         </form>

@@ -8,7 +8,6 @@ const keys = require('./keys');
 
 mongoose.connect(keys.MongoURI, { useNewUrlParser: true,  useUnifiedTopology: true  });
 
-
 require('./models/quizModel.js');
 require('./models/questionModel.js');
 require('./models/userModel.js')
