@@ -3,7 +3,7 @@ const prod = {
     secret: process.env.COOKIEKEY,
     sendGrid: process.env.SENDGRID,
     supportEmail: process.env.SUPPORTEMAIL,
-    hashPass: process.env.EMAILKEY,
+    hashPass: process.env.HASHPASS,
     hashAlgo: process.env.HASHALGO
 }
 module.exports = prod;
