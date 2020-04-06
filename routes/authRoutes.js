@@ -69,7 +69,7 @@ module.exports = (app) => {
 
   app.get('/api/currentUser', (req, res) => {
     if (req.session.userID) {
-      User.findOne({ _id: req.session.userID } , { password: 0 }).select({ "password": 0, "verified": 0 })
+      User.findOne({ _id: req.session.userID } , { password: 0 }).select({ "password": 0 })
       .then(data => {
         if(!data) {
           return res.status(200).send([]);
@@ -178,5 +178,57 @@ module.exports = (app) => {
       });
   });
   
+  app.get('/api/verifyLink', (req, res) => {
+    if(req.session.userID) {
+      const q = encrypt(req.session.userID);
+      User.findOne({_id: req.session.userID }).select({"password": 0}).then(data=>{
+        req.session.verify = true;
+        let userLink = `${req.protocol}://${req.get('host')}/api/confirmVerify?q=${q}`;
+        const msg = {
+          to: data.email,
+          from: keys.supportEmail,
+          subject: 'Quizler Verify account',
+          html: `<p><p>Hello,</p>please use the link below to verify our account</p><a href="${userLink}" target="_blank">Verify Account Link</a>`,
+        };
+        sgMail.send(msg);
+        return res.sendStatus(200);
+      }).catch(err=>{
+        console.log(err);
+        return res.sendStatus(500);
+      });
+    } else {
+      res.sendStatus(500);
+    }
+  });
 
+  app.get('/api/confirmVerify', (req, res) => {
+    if(req.session.verify) {
+      try {
+        const _id = decrypt(req.query.q);
+        User.findOne({ _id }).then(data=>{
+          if(!data) {
+            return;
+          }
+          return User.updateOne({ _id }, { verified: true }, { upsert: true });
+        }).then((result) => {
+          if(result) {
+            req.session.verify = false;
+            return res.send('Your account has been verified. Please close this tab and continue browsing'); 
+          } else {
+            return res.sendStatus(500); 
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          return res.sendStatus(500);
+        });
+      } catch(e) {
+        console.log(e);
+        res.sendStatus(500);
+      }
+    } else {
+      console.log('Session not present');
+      res.sendStatus(500);
+    }
+  });
 };

@@ -35,6 +35,9 @@ class NewQuestionPage extends React.Component {
     if(prevProps.currentUser._id && !this.props.currentUser._id) {
       this.setState({ redirect: '/' });
     }
+    if(this.props.currentUser._id && !this.props.currentUser.verified) {
+      this.props.history.goBack();  
+    }
   };
 
   render() {

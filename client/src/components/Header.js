@@ -17,6 +17,7 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 import { fetchUser } from '../actions/index.js';
+import VerifyAccount from './Common/VerifyAccount.js'
 
 const SubHeaderWithoutLogin = () => {
   return (
@@ -146,11 +147,14 @@ class Header extends React.Component {
   fetchUserData = () => {
     this.props.fetchUser();
   };
-
   render() {
     if(this.props.currentUser._id) {
+      const verifyComponent = !this.props.currentUser.verified && <VerifyAccount />
       return (
-        <SubHeaderWithLogin currentUser={this.props.currentUser} fetchUserData={this.fetchUserData}/>
+        <React.Fragment>
+          <SubHeaderWithLogin currentUser={this.props.currentUser} fetchUserData={this.fetchUserData}/>
+          {verifyComponent}
+        </React.Fragment>
       );
     }
     return (
@@ -164,6 +168,7 @@ return {
   currentUser: state.auth.currentUser
  }
 }
+
 function mapDispatchToProps (dispatch) {
   return bindActionCreators({
     fetchUser
