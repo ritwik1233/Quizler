@@ -7,6 +7,7 @@ import AddIcon from '@material-ui/icons/Add';
 
 import { getAllQuestion, fetchUser, editQuestion } from '../../actions/index.js';
 import QuestionList from './components/QuestionList.js';
+import SearchComponent from '../Common/SearchComponent.js';
 
 class QuestionPage extends React.Component {
   state = {
@@ -49,15 +50,19 @@ class QuestionPage extends React.Component {
       <Grid container spacing={3}>
         <Grid item xs={12}></Grid>
         <Grid item xs={12}></Grid>
-        { window.innerWidth > 800 && <Grid item xs={2}></Grid> }
-        <Grid item xs={ window.innerWidth < 800 ? 12: 8 }>
-          <Paper>
-            <Grid container spacing = {0}>
+        <Grid item xs={12}>
+            <Grid container spacing={0}>
               <Grid item xs={12}>&nbsp;</Grid>
-              <Grid item xs={10}>
+              <Grid item xs={9}>
                 <Typography variant="h5">&nbsp;&nbsp;Questions</Typography>
               </Grid>
               <Grid item xs={2}>
+                <Button
+                  variant="contained">
+                    Upload Question 
+                </Button>
+              </Grid>
+              <Grid item xs={1}>
                  <Link to="/newquestions" component={RouterLink}>
                     <Button
                      onClick={this.handleAdd}
@@ -69,15 +74,16 @@ class QuestionPage extends React.Component {
               </Grid>
               <Grid item xs={12}>&nbsp;</Grid>
               <Grid item xs={12}>
+                <SearchComponent searchData="question" />
+              </Grid>
+              <Grid item xs={12}>
                 <QuestionList 
                   allQuestions={this.props.allQuestions}
                   deleteItem={this.deleteItem}
                   editItem={this.editItem} />
               </Grid>
             </Grid>
-          </Paper>
         </Grid>
-        { window.innerWidth > 800 && <Grid item xs={2}></Grid> }
       </Grid> 
     );
   }

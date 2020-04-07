@@ -51,37 +51,35 @@ class NewQuestionPage extends React.Component {
       <Grid container spacing={3}>
         <Grid item xs={12}>&nbsp;</Grid>
         <Grid item xs={12}>
-          <Paper>
-              <Grid container spacing={0}>
-                <Grid item xs={12}>&nbsp;</Grid>
-                <Grid item xs={2}></Grid>
-                <Grid item xs={8}>
-                <Typography variant="h6">New Question</Typography>
-                  <Select
-                    variant="outlined"
-                    name="type"
-                    value={this.state.questionType}
-                    onChange={this.handleQuestionType}
-                    fullWidth
-                    required
-                   >
-                  <MenuItem value='MCQ'>MCQ</MenuItem>
-                  <MenuItem value='MCQBLANK'>Fill In Blank(MCQ)</MenuItem>
-                </Select>
-                {this.state.questionType === 'MCQ' ?
-                <MCQFormComponent 
-                  handleRedirect={this.handleRedirect} 
-                  editQuestion={this.props.editQuestion} /> 
-                  :
-                <BlankFormComponent 
-                handleRedirect={this.handleRedirect}
-                editQuestion={this.props.editQuestion}
-                />}
-                </Grid>
-                <Grid item xs={2}></Grid>
-                <Grid item xs={12}>&nbsp;</Grid>
-              </Grid>
-          </Paper> 
+          <Grid container spacing={0}>
+            <Grid item xs={12}>&nbsp;</Grid>
+            <Grid item xs={2}></Grid>
+            <Grid item xs={8}>
+            <Typography variant="h6">New Question</Typography>
+              <Select
+                variant="outlined"
+                name="type"
+                value={this.state.questionType}
+                onChange={this.handleQuestionType}
+                fullWidth
+                required
+                >
+              <MenuItem value='MCQ'>MCQ</MenuItem>
+              <MenuItem value='MCQBLANK'>Fill In Blank(MCQ)</MenuItem>
+            </Select>
+            {this.state.questionType === 'MCQ' ?
+            <MCQFormComponent 
+              handleRedirect={this.handleRedirect} 
+              editQuestion={this.props.editQuestion} /> 
+              :
+            <BlankFormComponent 
+            handleRedirect={this.handleRedirect}
+            editQuestion={this.props.editQuestion}
+            />}
+            </Grid>
+            <Grid item xs={2}></Grid>
+            <Grid item xs={12}>&nbsp;</Grid>
+          </Grid>
         </Grid>
       </Grid> 
     );

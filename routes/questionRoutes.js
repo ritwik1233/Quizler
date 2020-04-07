@@ -5,12 +5,34 @@ module.exports = (app) => {
 
   app.get('/api/getAllQuestions', (req, res) => {
     if (req.session.userID) {
-      Question.find({ createdBy: req.session.userID }).then(questions => {
-        return res.send(questions);
-      }).catch(err => {
-        console.log(err);
-        return res.send([]);
-      });
+      const searchQuery = req.query.searchQuery
+      if (searchQuery && searchQuery.length) {
+        var regex = new RegExp(searchQuery);
+        Question.find({ 
+          $and: [
+            { createdBy: req.session.userID },
+            {  $or : [
+              {'tag' : { $regex: regex, $options: 'i' }},
+              {'question' : { $regex: regex, $options: 'i' }},
+              {'options.description': { $regex: regex, $options: 'i' }}
+            ]
+            }
+          ]
+         }).then(questions => {
+           console.log(questions);
+          return res.send(questions);
+        }).catch(err => {
+          console.log(err);
+          return res.send([]);
+        });
+      } else {
+        Question.find({ createdBy: req.session.userID }).then(questions => {
+          return res.send(questions);
+        }).catch(err => {
+          console.log(err);
+          return res.send([]);
+        });
+      }
    } else {
      res.send([]);
    }

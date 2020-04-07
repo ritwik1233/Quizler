@@ -16,9 +16,9 @@ export function fetchUser() {
     }
 };
 
-export function getAllQuestion() {
+export function getAllQuestion(query) {
   return function(dispatch){
-    axios.get('/api/getAllQuestions')
+    axios.get('/api/getAllQuestions', { params:{...query } })
       .then(res => {
          dispatch({
            type: 'GET_ALL_QUESTIONS',
