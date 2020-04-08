@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const mongoose = require('mongoose');
 const path = require('path');
-
+const fileUpload = require('express-fileupload');
 const keys = require('./keys');
 
 mongoose.connect(keys.MongoURI, { useNewUrlParser: true,  useUnifiedTopology: true  });
@@ -15,6 +15,7 @@ require('./models/userModel.js')
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+app.use(fileUpload());
 app.use(bodyParser.json())
 app.use(session({
   secret: keys.secret,

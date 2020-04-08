@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const fs = require('fs');
 const Question = mongoose.model('Question');
 
 module.exports = (app) => {
@@ -96,6 +97,68 @@ module.exports = (app) => {
       })
     } else {
       res.send([]);
+    }
+
+  });
+
+  app.post('/api/uploadfile', (req, res) =>{
+    if(req.session.userID) {
+      if(req.files) {
+        const data = (req.files.file.data).toString();
+        let jsonObj = [];
+        const rows = data.split('\n').filter((each)=>{
+          return each.length > 0;
+        });
+        let empty = false;
+        let i = 1;
+        while(i < rows.length) {
+          const eachItem = rows[i].split(',');
+          if(!eachItem[0].length ||!eachItem[1].length) {
+            empty = true;
+            break;
+          } 
+          const options = eachItem[1].split('/').map((each) => {
+              if(each === eachItem[2]) {
+                return {
+                  description: each,
+                  correct: true,
+                }
+              }
+              return {
+                description: each,
+                correct: false
+              }
+          });
+          jsonObj.push({
+            question: eachItem[0],
+            options: options,
+            tag: eachItem[4] ? eachItem[4]: '',
+            point: eachItem[3]? eachItem[3]: 0,
+            type: 'MCQ',
+            createdBy: req.session.userID
+          });
+          i += 1;
+        }
+        if(empty) {
+          res.send('Invalid Field! Please check your csv file for empty cell');
+        } else {
+          if(jsonObj.length > 0){
+            Question.insertMany((jsonObj)).then(data=>{
+              console.log('Uploaded');
+              return res.send('');
+            }).catch(err=>{
+              console.log(err);
+              return res.send('Internal Service Error');
+            })
+          } else {
+            res.send('Empty File');
+          }
+        }
+      } else {
+        res.send('Empty File');
+      }
+    } else {
+      res.sendStatus(500);
     }
   });
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Paper, Typography, Link, Button } from '@material-ui/core';
+import { Grid, Modal, Typography, Link, Button } from '@material-ui/core';
 import { Link as RouterLink, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -8,10 +8,12 @@ import AddIcon from '@material-ui/icons/Add';
 import { getAllQuestion, fetchUser, editQuestion } from '../../actions/index.js';
 import QuestionList from './components/QuestionList.js';
 import SearchComponent from '../Common/SearchComponent.js';
+import FileUploadComponent from '../Common/FileUploadComponent.js';
 
 class QuestionPage extends React.Component {
   state = {
-    redirect: ''
+    redirect: '',
+    modalOpen: false
   };
 
   componentDidMount () {
@@ -37,9 +39,23 @@ class QuestionPage extends React.Component {
   editItem = (question) => {
     this.props.editQuestion(question)
     this.props.history.push('/newquestions');
-  }
+  };
+
   handleAdd = () => {
     this.props.editQuestion({});
+  };
+
+  handleOpen = () => {
+    this.setState({ modalOpen: true });
+  };
+
+  handleClose = () => {
+    this.setState({ modalOpen: false });
+  };
+
+  fileUpload = () => {
+    this.setState({ modalOpen: false });
+    this.props.getAllQuestion();
   }
 
   render() {
@@ -53,11 +69,25 @@ class QuestionPage extends React.Component {
         <Grid item xs={12}>
             <Grid container spacing={0}>
               <Grid item xs={12}>&nbsp;</Grid>
+              <Grid item xs={12}>
+                <Modal
+                  open={this.state.modalOpen}
+                  onClose={this.handleClose}
+                  style={{
+                    width: '90%',
+                    marginTop: '10%',
+                    marginLeft: '5%'
+                  }}
+                  >
+                  <FileUploadComponent fileUpload={this.fileUpload} />
+                </Modal>
+              </Grid>
               <Grid item xs={9}>
                 <Typography variant="h5">&nbsp;&nbsp;Questions</Typography>
               </Grid>
               <Grid item xs={2}>
                 <Button
+                  onClick={this.handleOpen}
                   variant="contained">
                     Upload Question 
                 </Button>
@@ -74,7 +104,7 @@ class QuestionPage extends React.Component {
               </Grid>
               <Grid item xs={12}>&nbsp;</Grid>
               <Grid item xs={12}>
-                <SearchComponent searchData="question" />
+                <SearchComponent />
               </Grid>
               <Grid item xs={12}>
                 <QuestionList 

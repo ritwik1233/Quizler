@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Paper, Typography, Select, MenuItem } from '@material-ui/core';
+import { Grid, Typography, Select, MenuItem } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Redirect } from 'react-router-dom';
