@@ -22,12 +22,8 @@ class ForgotPassword extends React.Component {
             }
         })
         .then(res => {
-            const result = res.data;
-            if(result === 'User does not exist') {
-                this.setState({ error: result });
-                return;
-            }
-            if(result === 'Reset Password Link Sent') {
+            const result = res.status;
+            if(result === 200) {
                 this.setState({ redirect: true });
                 return;
             }

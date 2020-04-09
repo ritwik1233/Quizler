@@ -11,6 +11,7 @@ mongoose.connect(keys.MongoURI, { useNewUrlParser: true,  useUnifiedTopology: tr
 require('./models/quizModel.js');
 require('./models/questionModel.js');
 require('./models/userModel.js')
+require('./models/tokenModel.js');
 
 const app = express();
 const PORT = process.env.PORT || 5000;

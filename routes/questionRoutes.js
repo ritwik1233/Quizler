@@ -20,7 +20,6 @@ module.exports = (app) => {
             }
           ]
          }).then(questions => {
-           console.log(questions);
           return res.send(questions);
         }).catch(err => {
           console.log(err);

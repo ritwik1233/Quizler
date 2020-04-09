@@ -86,11 +86,13 @@ class QuestionPage extends React.Component {
                 <Typography variant="h5">&nbsp;&nbsp;Questions</Typography>
               </Grid>
               <Grid item xs={2}>
-                <Button
+                {
+                this.props.currentUser.verified && <Button
                   onClick={this.handleOpen}
                   variant="contained">
                     Upload Question 
                 </Button>
+                }
               </Grid>
               <Grid item xs={1}>
                  <Link to="/newquestions" component={RouterLink}>
