@@ -1,14 +1,15 @@
 import React from 'react';
-import { Typography, Grid, TextField, Button, Select, MenuItem, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, IconButton } from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import {  Typography, TextField, Button, Grid,
+  ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, IconButton
+} from '@material-ui/core';
 import axios from 'axios';
-import Delete  from '@material-ui/icons/Delete';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 class QuizFormComponent extends React.Component {
   state = {
     name: this.props.editQuiz.name ? this.props.editQuiz.name : '',
-    selectedQuestion: 'None',
-    questions: this.props.editQuiz.questions ? this.props.editQuiz.questions: [],
+    questions: this.props.editQuiz.questions ? this.props.editQuiz.questions: this.props.selectedQuestions.length > 0 ? this.props.selectedQuestions : [],
     description: this.props.editQuiz.description ? this.props.editQuiz.description: '' ,
     time: this.props.editQuiz.time ? this.props.editQuiz.time: 0,
   };
@@ -21,8 +22,10 @@ class QuizFormComponent extends React.Component {
     this.setState({ time: e.target.value });
   };
 
-  handleQuestionChange = (e) => {
-    this.setState({ selectedQuestion: e.target.value });
+  componentDidUpdate(prevProps, prevState) {
+    if(prevProps.selectedQuestions !== this.props.selectedQuestions) {
+      this.setState({ questions: this.props.selectedQuestions });
+    }
   };
 
   handleDescriptionChange = (e) => {
@@ -32,6 +35,7 @@ class QuizFormComponent extends React.Component {
   deleteQuestion = (data) => {
     const allQuestion = this.state.questions.filter(eachData=>eachData._id !== data._id);
     this.setState({ questions: allQuestion });
+    this.props.deleteQuestion(allQuestion);
   };
   
   submitQuiz = (e) => {
@@ -59,20 +63,13 @@ class QuizFormComponent extends React.Component {
   };
  
   addQuestion = () => {
-    const allQuestion = this.state.questions;
-    const checkQuestion = allQuestion.find(element => element._id === this.state.selectedQuestion)
-    if(checkQuestion) {
-      return;
-    }
-    const questionData = this.props.allQuestions.find(element => element._id === this.state.selectedQuestion)
-    allQuestion.push(questionData);
-    this.setState({ questions: allQuestion });
+   this.props.addQuestion();
   };
 
   render() {
     return (
           <form onSubmit={this.submitQuiz}>
-           <Typography variant="h6">New Quiz</Typography>
+           <Typography variant="h6">Quiz</Typography>
             <TextField
               variant="outlined"
               margin="normal"
@@ -112,78 +109,68 @@ class QuizFormComponent extends React.Component {
               required
               fullWidth
             />
-            <Select
-            variant="outlined"
-            onChange={this.handleQuestionChange}
-            value={this.state.selectedQuestion}
-            required
-            fullWidth
-            >
-            <MenuItem value="None">
-              <em>None</em>
-            </MenuItem>
-            {this.props.allQuestions.map((eachValue, key) => {
-              return (
-                <MenuItem key={key} value={eachValue._id}><em>{eachValue.question}</em></MenuItem>
-              );
-            })}
-          </Select>
-           {this.state.selectedQuestion!=='None'&&
-           <React.Fragment>
-            <br/>
+           <br/>
+           <br/>
+           {this.state.questions.length > 0 && <Grid container spacing={3}>
+             <Grid item xs={12}>
+               <Typography variant="body1">Questions</Typography>
+                <hr/>
+             </Grid>
+              {this.state.questions.map((question, key) => {
+                return (
+                  <React.Fragment key={key}>
+                    <Grid item xs={11}>
+                      <ExpansionPanel>
+                          <ExpansionPanelSummary
+                              expandIcon={<ExpandMoreIcon />}
+                              aria-controls="panel1a-content"
+                              id="panel1a-header">
+                              <Typography>{question.question}</Typography>
+                          </ExpansionPanelSummary>
+                          <ExpansionPanelDetails>
+                              <Grid container spacing={3}>
+                                  {question.options.map((option, key) => {
+                                      return (
+                                          <React.Fragment key={key}>
+                                              <Grid item xs={6}>
+                                                  <Typography variant="body1">{option.description}</Typography>
+                                              </Grid>
+                                              <Grid item xs={2}>
+                                                  <Typography variant="body1">{ option.correct?'Correct': 'Incorrect' }</Typography>
+                                              </Grid>
+                                          </React.Fragment>
+                                      );
+                                  })}
+                              </Grid>
+                          </ExpansionPanelDetails>
+                      </ExpansionPanel>
+                      <br/>
+                    </Grid>
+                    <Grid item xs={1}>
+                      <IconButton aria-label="delete" size="medium" onClick={() => { this.deleteQuestion(question) }}>
+                        <DeleteIcon fontSize="inherit" />
+                      </IconButton>
+                    </Grid>
+                  </React.Fragment>
+                );
+                })
+              }
+           </Grid>
+           }
+          
+           <br/>
            <br/>
            <Button
-            variant="contained"
-            color="primary"
-            onClick={this.addQuestion}>
-           Add Question
-         </Button>
-           </React.Fragment>
-          }
-          <br/>
-          <br/>
-          {this.state.questions.map((eachdata,key) => {
-            return (
-              <Grid container spacing={0} key={key}>
-                <Grid item xs={11}>
-                  <ExpansionPanel key={key}>
-                    <ExpansionPanelSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1a-content"
-                      id="panel1a-header">
-                      <Typography>{eachdata.question}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                        <Grid container spacing={3}>
-                            <Grid item xs={12}><Typography variant="h6">Options</Typography></Grid>
-                            {eachdata.options.map((eachOption, key) => {
-                                return (
-                                    <React.Fragment key={key}>
-                                        <Grid item xs={6}>
-                                            <Typography variant="body1">{eachOption.description}</Typography>
-                                        </Grid>
-                                        <Grid item xs={2}>
-                                            <Typography variant="body1">{ eachOption.correct?'Correct': 'Incorrect' }</Typography>
-                                        </Grid>
-                                    </React.Fragment>
-                                );
-                            })}
-                        </Grid>
-                    </ExpansionPanelDetails>
-                  </ExpansionPanel>
-                </Grid>
-                <Grid item xs={1}>
-                <IconButton component="span" onClick={() =>{this.deleteQuestion(eachdata)}}>
-                  <Delete />
-                </IconButton>      
-                </Grid>
-                <Grid item xs={12}>&nbsp;</Grid>
-              </Grid>
-            )
-          })}
-           <br/>
-           <br/>
-            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              onClick={this.addQuestion}
+              >
+              Add Question
+            </Button>
+            <br/>
+            <br/>
+           <Button
               type="submit"
               variant="contained"
               color="primary"

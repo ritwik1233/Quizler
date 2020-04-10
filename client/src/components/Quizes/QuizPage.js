@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Paper, Typography, Link, Button } from '@material-ui/core';
+import { Grid, Typography, Link, Button } from '@material-ui/core';
 import { Link as RouterLink, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -7,10 +7,12 @@ import AddIcon from '@material-ui/icons/Add';
 
 import { fetchUser, getAllQuestion, getAllQuiz, editQuiz } from '../../actions/index.js';
 import QuizListComponent from './components/QuizListComponent.js';
+import SearchComponent from '../Common/SearchComponent.js';
 
 class QuizPage extends React.Component {
   state = {
-    redirect: ''
+    redirect: '',
+    modalOpen: false
   };
 
   componentDidMount () {
@@ -52,9 +54,7 @@ class QuizPage extends React.Component {
       <Grid container spacing={3}>
         <Grid item xs={12}></Grid>
         <Grid item xs={12}></Grid>
-        { window.innerWidth > 800 && <Grid item xs={2}></Grid> }
-        <Grid item xs={ window.innerWidth < 800 ? 12: 8 }>
-          <Paper>
+        <Grid item xs={12}>
             <Grid container spacing = {0}>
               <Grid item xs={12}>&nbsp;</Grid>
               <Grid item xs={10}>
@@ -72,15 +72,19 @@ class QuizPage extends React.Component {
               </Grid>
               <Grid item xs={12}>&nbsp;</Grid>
               <Grid item xs={12}>
+                <SearchComponent type="quiz" />
+              </Grid>
+              <Grid item xs={12}>
+                  &nbsp;
+              </Grid>
+              <Grid item xs={12}>
                 <QuizListComponent
                 allQuiz={this.props.allQuiz} 
                 deleteItem={this.deleteItem}
                 editItem={this.editItem}/>
               </Grid>
             </Grid>
-          </Paper>
         </Grid>
-        { window.innerWidth > 800 && <Grid item xs={2}></Grid> }
       </Grid> 
     );
   }

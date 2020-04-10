@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const mongoose = require('mongoose');
 const path = require('path');
+const helmet = require('helmet');
+
 const fileUpload = require('express-fileupload');
 const keys = require('./keys');
 
@@ -15,14 +17,14 @@ require('./models/tokenModel.js');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-
-app.use(fileUpload());
-app.use(bodyParser.json())
+app.use(helmet())
 app.use(session({
   secret: keys.secret,
   resave: false,
   saveUninitialized: true,
 }));
+app.use(fileUpload());
+app.use(bodyParser.json())
 
 require('./routes/authRoutes.js')(app);
 require('./routes/questionRoutes.js')(app);

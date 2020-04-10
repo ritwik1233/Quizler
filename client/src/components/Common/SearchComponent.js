@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, TextField, LinearProgress } from '@material-ui/core';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { getAllQuestion } from '../../actions/index.js';
+import { getAllQuestion, getAllQuiz } from '../../actions/index.js';
 class SearchComponent extends React.Component {
     
     state = {
@@ -12,11 +12,21 @@ class SearchComponent extends React.Component {
 
     handleChange = (e) => {
         this.setState({ searchValue: e.target.value, loading: true });
-        this.props.getAllQuestion({ searchQuery: e.target.value });
+        const type = this.props.type;
+        if(type === 'question') {
+            this.props.getAllQuestion({ searchQuery: e.target.value });
+            return;
+        }
+        if(type === 'quiz') {
+            this.props.getAllQuiz();
+        }
     };
 
     componentDidUpdate(prevProps, prevState) {
         if(this.state.loading && prevProps.allQuestions !== this.props.allQuestions) {
+            this.setState({ loading: false });
+        }
+        if(this.state.loading && prevProps.allQuiz !== this.props.allQuiz) {
             this.setState({ loading: false });
         }
     };
@@ -54,13 +64,15 @@ class SearchComponent extends React.Component {
 
 function mapStateToProps(state) {
     return {
-      allQuestions: state.questions.allQuestions
+      allQuestions: state.questions.allQuestions,
+      allQuiz: state.quiz.allQuiz
     }
 }
 
 function mapDispatchToProps (dispatch) {
     return bindActionCreators({
-        getAllQuestion
+        getAllQuestion,
+        getAllQuiz
     }, dispatch)
 };
     

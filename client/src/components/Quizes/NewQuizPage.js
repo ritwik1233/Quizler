@@ -1,17 +1,19 @@
 import React from 'react';
-import { Grid, Paper } from '@material-ui/core';
+import { Grid, Modal } from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { fetchUser, getAllQuestion } from '../../actions/index.js';
 import QuizFormComponent from './components/QuizFormComponent.js';
-
+import QuizModalComponent from './components/QuizModalComponent.js';
 
 
 class NewQuizPage extends React.Component {
   state = {
-    redirect: ''
+    redirect: '',
+    modalOpen: false,
+    selectedQuestions: []
   };
 
   componentDidMount () {
@@ -35,6 +37,30 @@ class NewQuizPage extends React.Component {
     this.props.history.push('/quiz');
   };
 
+  addQuestion = () => {
+    this.setState({ modalOpen: true });
+  };
+
+  handleClose = () => {
+    this.setState({ modalOpen: false });
+  };
+
+  addQuestionData = (data) => {
+    const selectedQuestions = data.map(eachdata=>{
+      const key = Object.keys(eachdata)[0];
+      const questionData = this.props.allQuestions.find(question => {
+        return question._id === key; 
+      })
+      return questionData;
+    });
+    this.setState({ selectedQuestions, modalOpen: false });
+  };
+
+  deleteQuestion = (selectedQuestions) => {
+    this.setState({ selectedQuestions });;
+  }
+
+
   render() {
     if(this.state.redirect.length > 0) {
       return (<Redirect to={this.state.redirect} />);
@@ -43,19 +69,38 @@ class NewQuizPage extends React.Component {
       <Grid container spacing={3}>
         <Grid item xs={12}>&nbsp;</Grid>
         <Grid item xs={12}>
-          <Paper>
+            <Modal
+              open={this.state.modalOpen}
+              onClose={this.handleClose}
+                style={{
+                    width: '90%',
+                    marginLeft: '5%',
+                    maxHeight: 'auto',
+                    overflowY: 'auto'
+                }}>
+                <QuizModalComponent
+                addQuestionData={this.addQuestionData}
+                selectedQuestions={this.state.selectedQuestions}
+                getAllQuestion={this.props.getAllQuestion}
+                />
+            </Modal>
+        </Grid>
+        <Grid item xs={12}>
             <Grid container spacing={0}>
                 <Grid item xs={2}></Grid>
                 <Grid item xs={8}>
                     <QuizFormComponent
                       editQuiz={this.props.editQuiz}
                       allQuestions={this.props.allQuestions}
-                      handleRedirect={this.handleRedirect}/>
+                      handleRedirect={this.handleRedirect}
+                      addQuestion={this.addQuestion}
+                      deleteQuestion={this.deleteQuestion}
+                      selectedQuestions={this.state.selectedQuestions}
+                      />
                 </Grid>
                 <Grid item xs={2}></Grid>
             </Grid>
             <Grid item xs={12}>&nbsp;</Grid>
-          </Paper>
         </Grid>
       </Grid> 
     );

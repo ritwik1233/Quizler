@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Modal, Typography, Link, Button } from '@material-ui/core';
+import { Grid, Modal, Typography, Link, Button, DialogContent } from '@material-ui/core';
 import { Link as RouterLink, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -79,7 +79,9 @@ class QuestionPage extends React.Component {
                     marginLeft: '5%'
                   }}
                   >
-                  <FileUploadComponent fileUpload={this.fileUpload} />
+                    <DialogContent>
+                      <FileUploadComponent fileUpload={this.fileUpload} />
+                    </DialogContent>
                 </Modal>
               </Grid>
               <Grid item xs={9}>
@@ -106,7 +108,7 @@ class QuestionPage extends React.Component {
               </Grid>
               <Grid item xs={12}>&nbsp;</Grid>
               <Grid item xs={12}>
-                <SearchComponent />
+                <SearchComponent  type="question"/>
               </Grid>
               <Grid item xs={12}>
                 <QuestionList 
