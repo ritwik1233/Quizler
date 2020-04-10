@@ -122,12 +122,14 @@ class QuestionPage extends React.Component {
     );
   }
 }
+
 function mapStateToProps(state) {
   return {
     allQuestions: state.questions.allQuestions,
     currentUser: state.auth.currentUser
    }
-  }
+};
+
 function mapDispatchToProps (dispatch) {
   return bindActionCreators({
     getAllQuestion, fetchUser, editQuestion

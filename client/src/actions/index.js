@@ -68,9 +68,9 @@ export function editHomeQuiz(editQuiz) {
   }
 };
 
-export function getAllQuiz() {
+export function getAllQuiz(query) {
   return function(dispatch){
-    axios.get('/api/getAllQuiz')
+    axios.get('/api/getAllQuiz', { params: { ...query } })
       .then(res => {
          dispatch({
            type: 'GET_ALL_QUIZ',
@@ -84,9 +84,9 @@ export function getAllQuiz() {
     }
 };
 
-export function getAllHomeQuiz() {
+export function getAllHomeQuiz(query) {
   return function(dispatch){
-    axios.get('/api/getAllHomeQuiz')
+    axios.get('/api/getAllHomeQuiz', { params: { ...query } })
       .then(res => {
          dispatch({
            type: 'GET_ALL_HOME_QUIZ',

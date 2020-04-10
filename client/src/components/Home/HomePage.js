@@ -1,12 +1,15 @@
 import React from 'react';
-import { Grid, Typography, Paper, Button, Link } from '@material-ui/core';
+import { Grid, Typography, Button, Link, Card, CardContent, CardActions, Avatar } from '@material-ui/core';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {Link as RouterLink} from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 import { fetchUser, getAllHomeQuiz, editHomeQuiz } from '../../actions/index.js';
+import SearchComponent from '../Common/SearchComponent.js';
+import About from '../Common/About.js';
 
 class HomePage extends React.Component {
+
   componentDidMount() {
     this.props.fetchUser();
     this.props.getAllHomeQuiz();
@@ -19,57 +22,66 @@ class HomePage extends React.Component {
   render() {
     return (
       <Grid container spacing={3}>
-        <Grid item xs={12}>&nbsp;</Grid>
-        <Grid item xs={12}>
-          <Typography variant="h5"> HomePage </Typography> 
+        <Grid item xs={12} style={{
+          backgroundColor: 'grey'
+        }}>
+          <About />
         </Grid>
-        {this.props.allQuiz.map((eachQuiz, key) => {
-          return(
-            <React.Fragment key={key}>
-              <Grid item xs={1}></Grid>
-              <Grid item xs={10}>
-              <Paper>
-                <Grid item xs={12}>
-                <Typography variant="h6">&nbsp;{eachQuiz.name}</Typography>
+        <Grid item xs={2}></Grid>
+        <Grid item xs={8}>
+          <SearchComponent type="homequiz" />
+        </Grid>
+        <Grid item xs={2}></Grid>
+        {this.props.allQuiz.map((eachQuiz, key)=>{
+          return (
+              <React.Fragment key={key}>
+                <Grid item xs={2}> 
                 </Grid>
-                <Grid item xs={12}>
-                  <hr/>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="body1">&nbsp;Description: {eachQuiz.description}</Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="body1">&nbsp;Time: {eachQuiz.time}</Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="body1">&nbsp;Number of Questions: {eachQuiz.questions.length}</Typography>
-                </Grid>
-              
-                <Grid item xs={12}>
-                  <Typography variant="body1">&nbsp;Created by: {eachQuiz.createdBy}</Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="body1">&nbsp;Created Date: {eachQuiz.createdDate}</Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  &nbsp; 
-                  <Link to="/confirmtest" component={RouterLink}>
-                    <Button
-                     onClick={()=>{this.openTest(eachQuiz)}}
-                     variant="contained"
-                     >
-                      Open Test 
-                    </Button>
-                 </Link>
-                </Grid>
-                <Grid item xs={12}>
-                    &nbsp;
-                </Grid>
-              </Paper>
+               <Grid item xs={8}>
+                  <Card>
+                    <CardContent>
+                      <Grid container spacing={0}>
+                        <Grid item xs={1}>
+                          <Avatar style={{
+                            backgroundColor: '#673ab7',
+                            width: '50px',
+                            height: '50px'
+                          }}>{eachQuiz.createdBy.charAt(0)}</Avatar>
+                          <br/>
+                        </Grid>
+                        <Grid item xs={11}>
+                          <Typography variant="body2">
+                            <strong>Name:</strong> {eachQuiz.name}
+                          </Typography>
+                          <Typography variant="body2">
+                            <strong>Description:</strong> {eachQuiz.description}
+                          </Typography>
+                          <Typography variant="body2">
+                            <strong>Time:</strong> {eachQuiz.time} min
+                          </Typography>
+                          <Typography variant="body2">
+                            <strong>Number of Questions:</strong> {eachQuiz.questions.length}
+                          </Typography>
+                          <Typography variant="body2">
+                            <strong>Created By:</strong> {eachQuiz.createdBy}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </CardContent>
+                  <CardActions>
+                    <Link to="/confirmtest" component={RouterLink}>
+                      <Button
+                      onClick={()=>{this.openTest(eachQuiz)}}
+                      variant="contained"
+                      >
+                        Open Test 
+                      </Button>
+                  </Link>
+                  </CardActions>
+                </Card>
               </Grid>
-              <Grid item xs={1}></Grid>
-            </React.Fragment>
-          );
+              <Grid item xs={2}></Grid>
+          </React.Fragment>);
         })}
       </Grid> 
     );

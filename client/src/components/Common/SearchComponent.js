@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, TextField, LinearProgress } from '@material-ui/core';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { getAllQuestion, getAllQuiz } from '../../actions/index.js';
+import { getAllQuestion, getAllQuiz, getAllHomeQuiz } from '../../actions/index.js';
 class SearchComponent extends React.Component {
     
     state = {
@@ -18,7 +18,10 @@ class SearchComponent extends React.Component {
             return;
         }
         if(type === 'quiz') {
-            this.props.getAllQuiz();
+            this.props.getAllQuiz({ searchQuery: e.target.value });
+        }
+        if(type === 'homequiz'){
+            this.props.getAllHomeQuiz({ searchQuery: e.target.value });
         }
     };
 
@@ -27,6 +30,9 @@ class SearchComponent extends React.Component {
             this.setState({ loading: false });
         }
         if(this.state.loading && prevProps.allQuiz !== this.props.allQuiz) {
+            this.setState({ loading: false });
+        }
+        if(this.state.loading && prevProps.allHomeQuiz !== this.props.allHomeQuiz) {
             this.setState({ loading: false });
         }
     };
@@ -65,14 +71,16 @@ class SearchComponent extends React.Component {
 function mapStateToProps(state) {
     return {
       allQuestions: state.questions.allQuestions,
-      allQuiz: state.quiz.allQuiz
+      allQuiz: state.quiz.allQuiz,
+      allHomeQuiz: state.home.allQuiz
     }
 }
 
 function mapDispatchToProps (dispatch) {
     return bindActionCreators({
         getAllQuestion,
-        getAllQuiz
+        getAllQuiz,
+        getAllHomeQuiz
     }, dispatch)
 };
     

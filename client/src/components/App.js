@@ -17,6 +17,7 @@ import NewQuizPage from '../components/Quizes/NewQuizPage.js';
 import ConfirmTestPage from './Home/ConfirmTestPage.js';
 import NewTestPage from './Home/NewTestPage.js';
 import ResultPage from './Home/ResultPage.js';
+import ProfilePage from './ProfilePage/ProfilePage.js';
 
 class App extends React.Component {
   render() {
@@ -42,6 +43,7 @@ class App extends React.Component {
               <Route  path="/quiz" component={QuizPage}/>
               <Route  path="/newquiz" component={NewQuizPage}/>
               <Route  path="/analytics" component={CommingSoon}/>
+              <Route  path="/profilepage" component={ProfilePage}/>
             </Switch>
           </Grid>
         </Grid>

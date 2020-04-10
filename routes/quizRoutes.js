@@ -34,12 +34,36 @@ module.exports = (app) => {
 
     app.get('/api/getAllQuiz', (req, res) => {
         if (req.session.userID) {
+          const searchQuery = req.query.searchQuery
+          if (searchQuery && searchQuery.length) {
+            var regex = new RegExp(searchQuery);
+            Quiz.find({ 
+              $and: [
+                { createdBy: req.session.userID },
+                {  $or : [
+                  {'name' : { $regex: regex, $options: 'i' }},
+                  {'description' : { $regex: regex, $options: 'i' }},
+                  { 'questions.question': { $regex: regex, $options: 'i' }},
+                  {'questions.question.options.description': { $regex: regex, $options: 'i' }},
+                  {'comments.message': { $regex: regex, $options: 'i' }},
+                  {'createdBy': { $regex: regex, $options: 'i' }},
+                ]
+                }
+              ]
+             }).then(questions => {
+              return res.send(questions);
+            }).catch(err => {
+              console.log(err);
+              return res.send([]);
+            });
+          } else {
             Quiz.find({ createdBy: req.session.userID }).then(quiz => {
               return res.send(quiz);
             }).catch(err => {
               console.log(err);
               return res.send([]);
             });
+          }
          } else {
            res.send([]);
          }
