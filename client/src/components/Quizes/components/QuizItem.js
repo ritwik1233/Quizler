@@ -4,6 +4,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import axios from 'axios';
 import Delete  from '@material-ui/icons/Delete';
 import Edit  from '@material-ui/icons/Edit';
+import Share from '@material-ui/icons/Share';
 
 function QuizItem(props) {
 
@@ -22,9 +23,14 @@ function QuizItem(props) {
     props.editItem(props.quiz);
   };
 
+  const shareLink = () => {
+    props.shareLink(props.quiz._id);
+    props.handleOpen();
+  };
+
   return (
     <Grid container spacing={0}>
-      <Grid item xs={10}>
+      <Grid item xs={9}>
         <ExpansionPanel>
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
@@ -73,6 +79,11 @@ function QuizItem(props) {
               </Grid>
           </ExpansionPanelDetails>
         </ExpansionPanel>
+      </Grid>
+      <Grid item xs={1}>
+        <IconButton component="span" onClick={shareLink}>
+          <Share />
+        </IconButton>
       </Grid>
       <Grid item xs={1}>
         <IconButton component="span" onClick={editItem}>

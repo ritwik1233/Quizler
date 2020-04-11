@@ -13,10 +13,22 @@ function QuizListComponent(props) {
     props.editItem(quiz);
   };
 
+  const shareLink = (link) => {
+    props.shareLink(link);
+  }
+  const handleOpen = () =>{
+    props.handleOpen();
+  }
+
   const quizList = props.allQuiz.map((eachdata) => {
     return (
       <Grid key={eachdata._id} item xs={12}>
-        <QuizItem quiz={eachdata} deleteItem={deleteItem} editItem={editItem} />
+        <QuizItem 
+        quiz={eachdata}
+        deleteItem={deleteItem}
+        editItem={editItem}
+        handleOpen={handleOpen}
+        shareLink={shareLink} />
       </Grid>
     )
   });
