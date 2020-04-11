@@ -9,14 +9,28 @@ import SearchComponent from '../Common/SearchComponent.js';
 import About from '../Common/About.js';
 
 class HomePage extends React.Component {
-
+  state = {
+    width: window.innerWidth > 1200? 8 :12
+  }
+  
   componentDidMount() {
     this.props.fetchUser();
     this.props.getAllHomeQuiz();
+    window.addEventListener('resize', () => {
+        const width = window.innerWidth > 1200 ? 8 :12;
+        this.setState({ width });
+    });
+  };
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', () => {
+      const width = window.innerWidth > 1200 ? 8 :12;
+      this.setState({ width });
+    });
   };
 
   openTest = (eachQuiz) => {
-    this.props.editHomeQuiz(eachQuiz)
+    this.props.editHomeQuiz(eachQuiz);
   };
 
   render() {
@@ -27,21 +41,21 @@ class HomePage extends React.Component {
         }}>
           <About />
         </Grid>
-        <Grid item xs={2}></Grid>
-        <Grid item xs={8}>
+        {(this.state.width === 8) && <Grid item xs={2}></Grid>}
+        <Grid item xs={this.state.width}>
           <SearchComponent type="homequiz" />
         </Grid>
-        <Grid item xs={2}></Grid>
-        {this.props.allQuiz.map((eachQuiz, key)=>{
+        {(this.state.width === 8) && <Grid item xs={2}></Grid>}
+        {this.props.allQuiz.map((eachQuiz, key) => {
           return (
               <React.Fragment key={key}>
-                <Grid item xs={2}> 
-                </Grid>
-               <Grid item xs={8}>
+                {(this.state.width === 8) && <Grid item xs={2}></Grid>}
+               <Grid item xs={this.state.width}>
                   <Card>
                     <CardContent>
-                      <Grid container spacing={0}>
-                        <Grid item xs={1}>
+                      <Grid container spacing={3}
+                      >
+                        <Grid item xs={2}>
                           <Avatar style={{
                             backgroundColor: '#673ab7',
                             width: '50px',
@@ -49,7 +63,7 @@ class HomePage extends React.Component {
                           }}>{eachQuiz.createdBy.charAt(0)}</Avatar>
                           <br/>
                         </Grid>
-                        <Grid item xs={11}>
+                        <Grid item xs={10}>
                           <Typography variant="body2">
                             <strong>Name:</strong> {eachQuiz.name}
                           </Typography>
@@ -80,7 +94,7 @@ class HomePage extends React.Component {
                   </CardActions>
                 </Card>
               </Grid>
-              <Grid item xs={2}></Grid>
+                {(this.state.width === 8) && <Grid item xs={2}></Grid>}
           </React.Fragment>);
         })}
       </Grid> 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Grid, Paper, Button, FormControl, FormLabel, RadioGroup, FormControlLabel  } from '@material-ui/core';
+import { Typography, Grid, Button, FormControl, FormLabel, RadioGroup, FormControlLabel, Card, CardContent  } from '@material-ui/core';
 import Radio from '@material-ui/core/Radio';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -145,35 +145,40 @@ class NewTestPage extends React.Component {
                 <RadioGroup  value={this.state.answerValue} onChange={this.handleOptionChange}>
                 {this.props.editQuiz.questions[this.state.next].options.map((eachdata, key) => {
                     return (
-                  <FormControlLabel key={key} value={eachdata.description} control={<Radio />} label={eachdata.description} />
-                    )
+                        <FormControlLabel key={key} value={eachdata.description} control={<Radio />} label={eachdata.description} />
+                    );
                 })
                 }
                 </RadioGroup>
               </FormControl>;
         const questionCard = <React.Fragment>
-            <Grid item xs={2}></Grid>
+            <Grid item xs={1}></Grid>
+            <Grid item xs={1}></Grid>
             <Grid item xs={8}>
-                <Paper>
-                    <Grid container spacing={0}>
-                        <Grid item xs={12}>
-                            <Typography variant="body1">{questions.question}</Typography>
+                <Card>
+                    <CardContent>
+                        <Grid container spacing={0}>
+                            <Grid item xs={12}>
+                                <Typography variant="body1">{questions.question}</Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <hr/>
+                            </Grid>
+                            <Grid item xs={12}>
+                                {options}
+                            </Grid>
                         </Grid>
-                        <Grid item xs={12}>
-                            <hr/>
-                        </Grid>
-                        <Grid item xs={12}>
-                            {options}
-                        </Grid>
-                    </Grid>
-                </Paper>
+                    </CardContent>
+                </Card>
             </Grid>
-            <Grid item xs={2}></Grid>
-            <Grid item xs={10}></Grid>
+            <Grid item xs={1}></Grid>
+            <Grid item xs={1}></Grid>
+            <Grid item xs={1}></Grid>
             <Grid item xs={1}>
                 {this.state.next !== 0
                 && <Button variant="contained" onClick={this.prevQuestion}>Prev</Button>}
             </Grid>
+            <Grid item xs={8}></Grid>
             <Grid item xs={1}>
                 {(this.state.next + 1) !== this.props.editQuiz.questions.length
                 ?
@@ -181,10 +186,10 @@ class NewTestPage extends React.Component {
                 <Button variant="contained" onClick={this.submitAnswer}>Submit</Button>
                 }
             </Grid>
+            <Grid item xs={1}></Grid>
         </React.Fragment>
-
         const timer = this.state.minuteInterval ?
-        `Timer:${this.state.minute < 10 ? '0' : ''}${(this.state.minute+1)}:00 `:
+        `Timer:${this.state.minute < 10 ? '0' : ''}${(this.state.minute + 1)}:00 `:
         `Timer:${this.state.minute < 10 ? '0' : ''}${this.state.minute}:${this.state.seconds < 10 ? '0' : ''}${this.state.seconds}`;      
 
         return (

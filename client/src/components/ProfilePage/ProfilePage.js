@@ -33,15 +33,15 @@ class ProfilePage extends React.Component {
             <Grid container spacing={0}>
                 <Grid item xs={12}>&nbsp;</Grid>
                 <Grid item xs={12}>&nbsp;</Grid>
-                <Grid item xs={4}></Grid>
-                <Grid item xs={4}>
+                <Grid item xs={1}></Grid>
+                <Grid item xs={10}>
                     <Card>
                         <CardContent>
                             {this.props.currentUser._id && <Grid container spacing={0} alignContent="center">
                                 <Grid item xs={12}>
                                     <Avatar style={{
                                         backgroundColor: '#673ab7',
-                                        width: '50',
+                                        width: '50px',
                                         height: '50px',
                                     }}>{this.props.currentUser.fname.charAt(0)}</Avatar>
                                 </Grid>
@@ -67,7 +67,7 @@ class ProfilePage extends React.Component {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xs={4}></Grid>
+                <Grid item xs={1}></Grid>
             </Grid>
         );
     }
