@@ -3,32 +3,29 @@ import { Grid } from '@material-ui/core';
 
 import QuestionItem from './QuestionItem.js';
 
-class QuestionList extends React.Component {
+function QuestionList(props) {
 
-  deleteItem = (status) => {
-    this.props.deleteItem(status);
+  const deleteItem = (status) => {
+    props.deleteItem(status);
   };
   
-  editItem = (question) => {
-    this.props.editItem(question);
+  const editItem = (question) => {
+    props.editItem(question);
   };
 
-
-  render() {
-    const questionList = this.props.allQuestions.map((eachdata, key) => {
-      return (
-        <Grid key={key} item xs = {12}>
-          <QuestionItem question={eachdata} deleteItem={this.deleteItem} editItem={this.editItem} />
-        </Grid>
-      )
-    });
+  const questionList = props.allQuestions.map((eachdata, key) => {
     return (
-      <Grid container spacing={3}>
-        {questionList}
-      </Grid> 
-    );
-  };
-}
+      <Grid key={key} item xs = {12}>
+        <QuestionItem question={eachdata} deleteItem={deleteItem} editItem={editItem} />
+      </Grid>
+    )
+  });
+  return (
+    <Grid container spacing={3}>
+      {questionList}
+    </Grid> 
+  );
+};
 
   
 export default QuestionList;

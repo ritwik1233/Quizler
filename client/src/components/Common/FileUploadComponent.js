@@ -1,19 +1,18 @@
-import React from 'react';
+import React  from 'react';
 import { Grid, Typography, Paper, Button, Table, TableHead, TableRow,TableCell, TableBody, Container, LinearProgress } from '@material-ui/core';
 import axios from 'axios';
 
-class FileUploadComponent extends React.Component {
-    state = {
-        loading: false,
-        error: '',
-    };
+function FileUploadComponent(props) {
+    const [loading, setLoading] = React.useState(false);
+    const [error, setError] = React.useState('');
 
-
-    onSubmit = (e) => {
+    const onSubmit = (e) => {
         e.preventDefault();
-        this.setState({ loading: true, error: '' });
+        setLoading(true);
+        setError('');
         if(!e.target.fileUpload.files[0]) {
-            this.setState({ loading: false, error: 'No File Selected' });     
+            setLoading(false);
+            setError('No File Selected');
             return;
         }
         const data = new FormData();
@@ -25,22 +24,21 @@ class FileUploadComponent extends React.Component {
         axios.post('/api/uploadfile', data, config)
             .then((res) => {
                 if(res.data.length) {
-                    this.setState({ loading: false, error: res.data });
+                    setLoading(false);
+                    setError(res.data);
                 } else {
-                    this.setState({ loading: false });
-                    this.props.fileUpload();
+                    setLoading(false);
+                    props.fileUpload();
                 }
             })
             .catch((err) => {
-                this.setState({ loading: false })
+                setLoading(false);        
             });
     };
-
-    render() {
-        return (
+    return (
         <Grid container spacing={0}>
             <Grid item xs={12}>
-                <form onSubmit={this.onSubmit}>
+                <form onSubmit={onSubmit}>
                     <Paper>
                         <Container fixed>
                             <Grid container spacing={0}>
@@ -82,7 +80,7 @@ class FileUploadComponent extends React.Component {
                                     &nbsp;
                                 </Grid>
                                 {
-                                this.state.loading && 
+                                loading && 
                                 <React.Fragment>
                                     <Grid item xs={12}>
                                         <LinearProgress />
@@ -93,11 +91,11 @@ class FileUploadComponent extends React.Component {
                                 </React.Fragment>
                                 }
                                 {
-                                    this.state.error.length > 0 && 
+                                    error.length > 0 && 
                                     <React.Fragment>
                                         <Grid item xs={12}>
                                             <Typography variant="body1" color="error">
-                                                {this.state.error}
+                                                {error}
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={12}>
@@ -135,7 +133,6 @@ class FileUploadComponent extends React.Component {
                 </form>
             </Grid>
         </Grid>
-        )
-    }
+    );
 }
 export default FileUploadComponent;
