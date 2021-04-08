@@ -7,6 +7,7 @@ Quizler is an open source web application where users can :-
 * share materials with others(functionality in progress).
 * view analytical reports.
 
+Demo : https://quizler-app.herokuapp.com
 
 ## Local Setup
 * Clone repo
