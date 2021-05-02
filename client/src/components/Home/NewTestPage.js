@@ -1,216 +1,163 @@
 import React from 'react';
-import { Typography, Grid, Button, FormControl, FormLabel, RadioGroup, FormControlLabel, Card, CardContent  } from '@material-ui/core';
+import PropTypes from 'prop-types';
+import { Typography, Grid, FormControl, FormLabel, RadioGroup, FormControlLabel } from '@material-ui/core';
 import Radio from '@material-ui/core/Radio';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { connect, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import QuestionCard from './QuestionCard.js';
 
 import { showResult } from '../../actions/index.js';
 
-class NewTestPage extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.timer = 0;
-        this.state = {
-            next: 0,
-            minute: this.props.editQuiz.time - 1,
-            seconds: 60,
-            minuteInterval: true,
-            answers: [],
-            answerValue: '',
-            redirect: ''
-        };
+function getTimer(totalTime, totalSeconds) {
+    let minute = totalTime-totalSeconds;
+    minute = Math.ceil(minute / 60) - 1;
+    if(minute < 10){
+        minute =`0${minute}`;
     }
+    let second = 60 - (totalSeconds % 60) - 1;
+    if(second < 10) {
+        second = `0${second}`;
+    }
+    return `Timer: ${minute}:${second}`;
 
-    componentDidMount() {
-        this.timer = setInterval(this.countDown, 1000);
-    };
+}
 
-    componentWillUnmount() {
-        clearInterval(this.timer);
-    };
+function NewTestPage(props) {
+    const dispatch = useDispatch();
+    const [answers, setAnswers] = React.useState([]);
+    const [answerValue, setAnswerValue] = React.useState('');
+    const [redirect, setRedirect] = React.useState(''); 
+    const [seconds, setSeconds] = React.useState(0);
+    const [next, setNext] = React.useState(0);
 
-    componentDidUpdate(prevPros, prevState) {
-        if(this.state.minuteInterval) {
-            if(this.state.seconds === 0 && this.state.minute === 0){
-                this.setState({ minuteInterval: false });
-                clearInterval(this.timer);
-                this.submitAnswer();
-            } else {
-                this.setState({ minuteInterval: false });
-            }
-        }
-        if(prevState.next!==this.state.next) {
-            const checkAnswer = this.state.answers[this.state.next];
-            if (checkAnswer !== undefined) {
-                this.setState({ answerValue: checkAnswer });
-            }
-        }
-    };
+    React.useEffect(() => {
+        let timer = setInterval(() => {
+            setSeconds(prevSecond => prevSecond + 1);
+        }, 1000);
+        return () => clearInterval(timer);
+      }, []);
 
-    countDown = () => {
-        const seconds = this.state.seconds - 1;
-        let minute = this.state.minute;
-        if (seconds === 0) {
-            if (minute === 0) {
-                this.setState({ minute: 0, seconds: 0, minuteInterval: true });
-                return;
-            }
-            minute = minute - 1;
-            this.setState({ minute, seconds: 60, minuteInterval: true });
-            return;
-        }
-        this.setState({ seconds: seconds });
-    };
-
-    prevQuestion = () => {
-        const prev = this.state.next - 1;
-        if (this.state.answerValue) {         
-            let answerArray = this.state.answers;
-            answerArray[this.state.next] = this.state.answerValue;
-            this.setState({ answers: answerArray, next: prev, answerValue: '' });
-            return;
-        }
-        this.setState({ next: prev });
-    };
-
-    handleOptionChange = (e) => {
-        if((this.state.next + 1) === this.props.editQuiz.questions.length) {
-            let answerArray = this.state.answers;
-            answerArray[this.state.next] = e.target.value;
-            this.setState({ answerValue: e.target.value, answers: answerArray });
-            return;
-        }
-        this.setState({ answerValue: e.target.value });
-    };
-
-    nextQuestion = () => {
-        const next = this.state.next + 1;
-        if (this.state.answerValue) {         
-            let answerArray = this.state.answers;
-            answerArray[this.state.next] = this.state.answerValue;
-            this.setState({ answers: answerArray, next, answerValue: '' });
-            return;
-        }
-        this.setState({ next });
-    };
-
-    submitAnswer = () => {
-        const allQuestions = this.props.editQuiz.questions;
-        const allAnswers = this.state.answers;
-        let result = [];
-        for (let i = 0; i < allQuestions.length; i += 1) {
-            if(!allAnswers[i]) {
-                result[i] = {
-                    ...this.props.editQuiz.questions[i],
-                };
-            } else {
-             let options = this.props.editQuiz.questions[i].options;
-             let optionIndex = options.findIndex((eachOption) => {
-                return eachOption.description === allAnswers[i]
-             });
-             options = options.map((eachOption, key) => {
-                    if(optionIndex === key) {
-                        return {
-                            ...eachOption, answeredOption: eachOption._id
-                        };
-                    }
+    const submitAnswer = () => {
+        const allQuestions = props.editQuiz.questions;
+        const allAnswers = answers;
+        let result = allQuestions.map((question, index) => {
+            let options = question.options.map(option => {
+                if(option.description===allAnswers[index]) {
                     return {
-                        ...eachOption
-                    };
-                });
-             result[i] = {
-                ...this.props.editQuiz.questions[i],
+                        ...option,
+                        answeredOption: option._id
+                    }
+                }
+                return {
+                    ...option,
+                }
+            });
+            return {
+                ...question,
                 options
-              };
-            }
-        }
-        this.props.showResult(result);
-        this.setState({ redirect: '/result' });
+            };
+        });
+        dispatch(showResult(result));
+        setRedirect('/result');
     };
 
-    render() {
-        if (this.state.redirect.length) {
-           return (<Redirect to={this.state.redirect} />); 
+    // hook to check if time is over 
+    React.useEffect(() => {
+        if(seconds >= (props.editQuiz.time)*60) {
+           submitAnswer();
         }
+    },[seconds]);
 
-        if (!this.props.editQuiz._id) {
-            return(<Redirect to="/"/>);
+    // hook to initialize selected option answers array
+    React.useEffect(() => {
+        const answerArray = props.editQuiz.questions.map(e => {
+            return 0;
+        });
+        setAnswers(answerArray);
+    }, [props.editQuiz]);
+
+    // hook to update the selected option after clicking on next or previous
+    React.useEffect(() => {
+        const checkAnswer = answers[next];
+        if (checkAnswer !== undefined) {
+            setAnswerValue(checkAnswer);
         }
+    }, [next]);
 
-        const questions = this.props.editQuiz.questions[this.state.next];
-        const options = <FormControl component="fieldset">
-                <FormLabel component="legend">Options</FormLabel>
-                <RadioGroup  value={this.state.answerValue} onChange={this.handleOptionChange}>
-                {this.props.editQuiz.questions[this.state.next].options.map((eachdata, key) => {
-                    return (
-                        <FormControlLabel key={key} value={eachdata.description} control={<Radio />} label={eachdata.description} />
-                    );
-                })
-                }
-                </RadioGroup>
-              </FormControl>;
-        const questionCard = <React.Fragment>
-            <Grid item xs={1}></Grid>
-            <Grid item xs={1}></Grid>
-            <Grid item xs={8}>
-                <Card>
-                    <CardContent>
-                        <Grid container spacing={0}>
-                            <Grid item xs={12}>
-                                <Typography variant="body1">{questions.question}</Typography>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <hr/>
-                            </Grid>
-                            <Grid item xs={12}>
-                                {options}
-                            </Grid>
-                        </Grid>
-                    </CardContent>
-                </Card>
-            </Grid>
-            <Grid item xs={1}></Grid>
-            <Grid item xs={1}></Grid>
-            <Grid item xs={1}></Grid>
-            <Grid item xs={1}>
-                {this.state.next !== 0
-                && <Button variant="contained" onClick={this.prevQuestion}>Prev</Button>}
-            </Grid>
-            <Grid item xs={8}></Grid>
-            <Grid item xs={1}>
-                {(this.state.next + 1) !== this.props.editQuiz.questions.length
-                ?
-                <Button variant="contained" onClick={this.nextQuestion}>Next</Button>:
-                <Button variant="contained" onClick={this.submitAnswer}>Submit</Button>
-                }
-            </Grid>
-            <Grid item xs={1}></Grid>
-        </React.Fragment>
-        const timer = this.state.minuteInterval ?
-        `Timer:${this.state.minute < 10 ? '0' : ''}${(this.state.minute + 1)}:00 `:
-        `Timer:${this.state.minute < 10 ? '0' : ''}${this.state.minute}:${this.state.seconds < 10 ? '0' : ''}${this.state.seconds}`;      
+    const prevQuestion = () => {
+        if (answerValue) {         
+            let answerArray = answers;
+            answerArray[next] = answerValue;
+            setAnswers(answerArray);
+            setNext(prev => prev  -1)
+            setAnswerValue('');
+            return;
+        }
+        setNext(prev => prev -1);
+    };
+    const handleOptionChange = (e) => {
+        let answerArray = answers;
+        answerArray[next] = e.target.value;
+        setAnswerValue(e.target.value);
+        setAnswers(answerArray);
+    };
+    const nextQuestion = () => {
+        setNext(prevNext => prevNext + 1);
+    };
 
+    if (redirect.length) {
+        return (<Redirect to={redirect} />); 
+    }
+    if (!props.editQuiz._id) {
+        return(<Redirect to="/"/>);
+    }
+    const selectedQuestion = props.editQuiz.questions[next];
+    const timer = getTimer((props.editQuiz.time)*60, seconds);
         return (
             <Grid container spacing={0}>
                <Grid item xs={12}>&nbsp;</Grid>
                <Grid item xs={10}></Grid>
                 <Grid item xs={2}>
                     <Typography variant="body1">
-                        {timer}                
+                        {timer}
                     </Typography>
                 </Grid>
                 <Grid item xs={12}>
-                    <Typography variant="h6">Question: {(this.state.next + 1)} of {this.props.editQuiz.questions.length}</Typography>
+                    <Typography variant="h6">Question: {(next + 1)} of {props.editQuiz.questions.length}</Typography>
                 </Grid>
                 <Grid item xs={12}>
-                    <Typography variant="body1">Total Answered: {this.state.answers.length} of {this.props.editQuiz.questions.length}</Typography>
+                    <Typography variant="body1">Total Answered: {answers.length} of {props.editQuiz.questions.length}</Typography>
                 </Grid>        
-                {questionCard}
+                {selectedQuestion && 
+                    <QuestionCard
+                        question={selectedQuestion.question}
+                        next={next}
+                        questionLength={props.editQuiz.questions.length}
+                        options={selectedQuestion.options}
+                        prevQuestion={()=>{
+                            prevQuestion()
+                        }}
+                        nextQuestion={()=>{
+                            nextQuestion()
+                        }}
+                        submitAnswer={()=>{
+                            submitAnswer()
+                        }}   
+                    >
+                        <FormControl component="fieldset">
+                        <FormLabel component="legend">Options</FormLabel>
+                            <RadioGroup  value={answerValue} onChange={handleOptionChange}>
+                                {selectedQuestion && selectedQuestion.options.map((eachdata, key) => {
+                                    return (
+                                        <FormControlLabel key={key} value={eachdata.description} control={<Radio />} label={eachdata.description} />
+                                    );
+                                })}
+                            </RadioGroup>
+                    </FormControl>;
+                </QuestionCard>}
             </Grid>
         );
-    }
+    
 }
 
 function mapStateToProps(state) {
@@ -219,12 +166,14 @@ function mapStateToProps(state) {
     }
 };
 
-function mapDispatchToProps (dispatch) {
-    return bindActionCreators({
-        showResult
-    }, dispatch)
+// type checking for props
+NewTestPage.propTypes = {
+    editQuiz: PropTypes.objectOf(Object),
+};
+  
+// setting default props
+NewTestPage.defaultProps = {
+    editQuiz: []
 };
 
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(NewTestPage);
+export default connect(mapStateToProps)(NewTestPage);

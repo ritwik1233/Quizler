@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Grid, Typography, TableContainer, Table, TableRow, TableBody, TableHead, TableCell } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -134,7 +135,7 @@ function ResultPage(props) {
                         Incorrect Answers: {incorrectAnswers(props.quizResult)}
                     </Grid>
                     <Grid item xs={12}>
-                        Points Earned: {pointsEarned(props.quizResult)} out of {totalPoints(props.editQuiz.questions)}
+                        Points Earned: {pointsEarned(props.quizResult)} out of {totalPoints(props.quizResult)}
                     </Grid>
                 </Grid>
             </Grid>
@@ -168,10 +169,20 @@ function ResultPage(props) {
 function mapStateToProps(state) {
     return {
         quizResult: state.home.quizResult,
-        editQuiz: state.home.editQuiz,
         currentUser: state.auth.currentUser,
     }
 };
 
+// type checking for props
+ResultPage.propTypes = {
+    quizResult: PropTypes.arrayOf(Object),
+    currentUser: PropTypes.objectOf(Object),
+};
+  
+// setting default props
+ResultPage.defaultProps = {
+    quizResult: [],
+    currentUser: [],
+};
 
-export default connect(mapStateToProps, null)(ResultPage);
+export default connect(mapStateToProps)(ResultPage);
