@@ -1,71 +1,67 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Grid, TextField, LinearProgress } from '@material-ui/core';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { getAllQuestion, getAllQuiz, getAllHomeQuiz } from '../../actions/index.js';
-class SearchComponent extends React.Component {
-    
-    state = {
-        searchValue: '',
-        loading: false
-    }
 
-    handleChange = (e) => {
-        this.setState({ searchValue: e.target.value, loading: true });
-        const type = this.props.type;
+function SearchComponent(props) {
+    const dispatch =  useDispatch();
+    const [searchValue, setSearchValue] = React.useState('');
+    const [loading, setLoading] = React.useState(false);
+    
+    // Use Effect Hook For Component Update
+    React.useEffect(()=>{
+        if(loading) {
+            setLoading(false);
+        }
+    }, [props.allQuestions, props.allQuiz, props.allHomeQuiz]); 
+    
+    const handleChange = (e) => {
+        setSearchValue(e.target.value);
+        setLoading(true);
+        const type = props.type;
         if(type === 'question') {
-            this.props.getAllQuestion({ searchQuery: e.target.value });
+            dispatch(getAllQuestion({ searchQuery: e.target.value }));
             return;
         }
         if(type === 'quiz') {
-            this.props.getAllQuiz({ searchQuery: e.target.value });
+            dispatch(getAllQuiz({ searchQuery: e.target.value }))
+            return;
         }
         if(type === 'homequiz'){
-            this.props.getAllHomeQuiz({ searchQuery: e.target.value });
+            dispatch(getAllHomeQuiz({ searchQuery: e.target.value }))
         }
     };
 
-    componentDidUpdate(prevProps, prevState) {
-        if(this.state.loading && prevProps.allQuestions !== this.props.allQuestions) {
-            this.setState({ loading: false });
-        }
-        if(this.state.loading && prevProps.allQuiz !== this.props.allQuiz) {
-            this.setState({ loading: false });
-        }
-        if(this.state.loading && prevProps.allHomeQuiz !== this.props.allHomeQuiz) {
-            this.setState({ loading: false });
-        }
-    };
 
-    render() {
-        return (
-        <Grid container spacing={0}>
-            { 
-            this.state.loading &&
-                <Grid item xs={12}>
-                    <LinearProgress />
-                </Grid>
-            }
+
+    return (
+    <Grid container spacing={0}>
+        {loading &&
             <Grid item xs={12}>
-                <TextField
-                    variant="filled"
-                    margin="normal"
-                    id="question"
-                    label="Search"
-                    name="question"
-                    autoComplete="question"
-                    value={this.state.searchValue}
-                    onChange={this.handleChange}
-                    autoFocus
-                    required
-                    fullWidth
-                />
+                <LinearProgress />
             </Grid>
-            <Grid item xs={12}>
-                &nbsp;
-            </Grid>
-        </Grid>);
-    }
+        }
+        <Grid item xs={12}>
+            <TextField
+                variant="filled"
+                margin="normal"
+                id="question"
+                label="Search"
+                name="question"
+                autoComplete="question"
+                value={searchValue}
+                onChange={handleChange}
+                autoFocus
+                required
+                fullWidth
+            />
+        </Grid>
+        <Grid item xs={12}>
+            &nbsp;
+        </Grid>
+    </Grid>);
+
 }
 
 function mapStateToProps(state) {
@@ -76,12 +72,17 @@ function mapStateToProps(state) {
     }
 }
 
-function mapDispatchToProps (dispatch) {
-    return bindActionCreators({
-        getAllQuestion,
-        getAllQuiz,
-        getAllHomeQuiz
-    }, dispatch)
+// type checking for props
+SearchComponent.propTypes = {
+    allQuestions: PropTypes.arrayOf(Object),
+    allQuiz: PropTypes.arrayOf(Object),
+    allHomeQuiz: PropTypes.arrayOf(Object),
+  };
+
+// setting default props
+SearchComponent.defaultProps = {
+    allQuestions: [],
+    allQuiz: [],
+    allHomeQuiz: []
 };
-    
-export default connect(mapStateToProps, mapDispatchToProps)(SearchComponent);
+export default connect(mapStateToProps)(SearchComponent);

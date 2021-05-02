@@ -29,7 +29,6 @@ return {
  }
 }
 
-
 // type checking for props
 Header.propTypes = {
   currentUser: PropTypes.objectOf(Object),
