@@ -6,9 +6,6 @@ import VerifyAccount from '../Common/VerifyAccount.js'
 import SubHeaderWithLogin from './SubHeaderWithLogin.js';
 import SubHeaderWithoutLogin from './SubHeaderWithoutLogin.js';
 
-
-
-
 function Header(props){
   const dispatch = useDispatch();
   const fetchUserData = () => {

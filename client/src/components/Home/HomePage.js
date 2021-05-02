@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Typography, Button, Link, Card, CardContent, CardActions, Avatar } from '@material-ui/core';
-import { bindActionCreators } from 'redux';
 import { connect, useDispatch } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 
