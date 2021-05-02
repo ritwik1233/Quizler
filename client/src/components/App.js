@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid } from '@material-ui/core';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import Header from './Header.js';
+import Header from './Header/Header.js';
 import HomePage from '../components/Home/HomePage.js';
 import LoginPage from './Common/LoginPage.js';
 import CommingSoon from './Common/CommingSoon.js';

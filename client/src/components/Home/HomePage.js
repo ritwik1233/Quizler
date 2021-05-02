@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Typography, Button, Link, Card, CardContent, CardActions, Avatar } from '@material-ui/core';
 import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 
-import { fetchUser, getAllHomeQuiz, editHomeQuiz } from '../../actions/index.js';
+import { fetchUser, getAllHomeQuiz } from '../../actions/index.js';
 import SearchComponent from '../Common/SearchComponent.js';
 import About from '../Common/About.js';
 
 function HomePage (props) {
-
+  const dispatch = useDispatch();
   const [ width, setwidth ] = useState(window.innerWidth > 1200? 8 :12);
   
   /*Component did mount */
@@ -18,8 +18,8 @@ function HomePage (props) {
       const width = window.innerWidth > 1200 ? 8 :12;
       setwidth(width);
     }
-    props.fetchUser();
-    props.getAllHomeQuiz();
+    dispatch(fetchUser());
+    dispatch(getAllHomeQuiz());
     window.addEventListener('resize',handleResize);
     /*Component will unmount */  
     return () => {
@@ -98,13 +98,5 @@ function mapStateToProps(state) {
    }
 };
 
-function mapDispatchToProps (dispatch) {
-  return bindActionCreators({
-    fetchUser,
-    getAllHomeQuiz,
-    editHomeQuiz
-  }, dispatch)
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
+export default connect(mapStateToProps)(HomePage);
 

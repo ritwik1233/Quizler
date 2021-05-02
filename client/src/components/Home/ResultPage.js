@@ -182,7 +182,7 @@ ResultPage.propTypes = {
 // setting default props
 ResultPage.defaultProps = {
     quizResult: [],
-    currentUser: [],
+    currentUser: {},
 };
 
 export default connect(mapStateToProps)(ResultPage);

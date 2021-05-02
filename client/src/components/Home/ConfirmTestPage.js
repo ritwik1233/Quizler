@@ -127,7 +127,7 @@ ConfirmTestPage.propTypes = {
 
 // setting default props
 ConfirmTestPage.defaultProps = {
-  editQuiz: [],
-  editQuiz: [],
+  editQuiz: {},
+  allQuiz: [],
 };
 export default connect(mapStateToProps)(ConfirmTestPage);
