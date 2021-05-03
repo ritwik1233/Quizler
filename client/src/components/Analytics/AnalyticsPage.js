@@ -1,13 +1,13 @@
-import React from 'react';
-import { Grid } from '@material-ui/core';
+import React from "react";
+import { Grid } from "@material-ui/core";
 
-function AnalyticsPage () {
+function AnalyticsPage() {
   return (
-    <Grid container spacing = { 3 }>
-      <Grid item xs = { 12 }>
-        <h4> Analytics Page </h4> 
+    <Grid container spacing={3}>
+      <Grid item xs={12}>
+        <h4> Analytics Page </h4>
       </Grid>
-    </Grid> 
+    </Grid>
   );
 }
 

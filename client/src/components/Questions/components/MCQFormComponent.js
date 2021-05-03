@@ -1,42 +1,42 @@
-import React from 'react';
-import { Typography, TextField, Button, MenuItem } from '@material-ui/core';
-import axios from 'axios';
-import PropTypes from 'prop-types';
+import React from "react";
+import { Typography, TextField, Button, MenuItem } from "@material-ui/core";
+import axios from "axios";
+import PropTypes from "prop-types";
 
-import AddOptionFormComponent from './AddOptionFormComponent.js';
-import OptionListComponent from './OptionListComponent.js';
+import AddOptionFormComponent from "./AddOptionFormComponent.js";
+import OptionListComponent from "./OptionListComponent.js";
 
 function MCQFormComponent(props) {
   const [addOption, setAddOption] = React.useState(false);
-  const [question, setQuestion] = React.useState('');
+  const [question, setQuestion] = React.useState("");
   const [point, setPoint] = React.useState(0);
   const [options, setOptions] = React.useState([]);
   const [tag, setTag] = React.useState([]);
-  const [tagValue, setTagValue] = React.useState('');
+  const [tagValue, setTagValue] = React.useState("");
 
   React.useEffect(() => {
-    if(props.editQuestion.question) {
-    setQuestion(props.editQuestion.question);
+    if (props.editQuestion.question) {
+      setQuestion(props.editQuestion.question);
     }
   }, [props.editQuestion.question]);
 
   React.useEffect(() => {
-    if(props.editQuestion.point) {
+    if (props.editQuestion.point) {
       setPoint(props.editQuestion.point);
     }
   }, [props.editQuestion.point]);
 
   React.useEffect(() => {
-    if(props.editQuestion.options) {
+    if (props.editQuestion.options) {
       setOptions(props.editQuestion.options);
     }
   }, [props.editQuestion.options]);
 
   React.useEffect(() => {
-    if(props.editQuestion.tag) {
+    if (props.editQuestion.tag) {
       setTagValue(props.editQuestion.tag);
     }
-  }, [props.editQuestion.tag])
+  }, [props.editQuestion.tag]);
 
   const handleOption = () => {
     setAddOption(true);
@@ -54,7 +54,9 @@ function MCQFormComponent(props) {
   };
 
   const deleteOption = (optionIndex) => {
-    let optionArray = options.filter((eachData, index) =>(index !== optionIndex));
+    let optionArray = options.filter(
+      (eachData, index) => index !== optionIndex
+    );
     setOptions(optionArray);
   };
 
@@ -66,21 +68,20 @@ function MCQFormComponent(props) {
       options: options,
       tag: tagValue,
       point: point,
-      type: 'MCQ'
+      type: "MCQ",
     };
-    axios.post('/api/addQuestion', data)
-      .then(() => {
-        props.handleRedirect();
-      })
+    axios.post("/api/addQuestion", data).then(() => {
+      props.handleRedirect();
+    });
   };
 
   const handleQuestionChange = (e) => {
     setQuestion(e.target.value);
-  }
+  };
 
   const handlePointChange = (e) => {
     setPoint(e.target.value);
-  }
+  };
 
   const selectOption = (tagValue) => {
     setTagValue(tagValue);
@@ -88,16 +89,18 @@ function MCQFormComponent(props) {
 
   const handleTagChange = (e) => {
     setTagValue(e.target.value);
-    axios.get('/api/getAllTag', {
-      params: {
-        tag: e.target.value
-      }
-    })
-    .then(res => {
-      setTag(res.data);
-    }).catch(err => {
-      setTag([]);
-    });
+    axios
+      .get("/api/getAllTag", {
+        params: {
+          tag: e.target.value,
+        },
+      })
+      .then((res) => {
+        setTag(res.data);
+      })
+      .catch((err) => {
+        setTag([]);
+      });
   };
 
   const option = options.map((eachData, index) => {
@@ -108,7 +111,7 @@ function MCQFormComponent(props) {
         index={index}
         deleteOption={deleteOption}
       />
-    )
+    );
   });
 
   return (
@@ -126,28 +129,25 @@ function MCQFormComponent(props) {
         required
         fullWidth
       />
-      <Button 
-        variant="contained"
-        color="primary"
-        onClick={handleOption}>
-          Add Option
+      <Button variant="contained" color="primary" onClick={handleOption}>
+        Add Option
       </Button>
-      {addOption &&
+      {addOption && (
         <React.Fragment>
-        <br/>
-        <br/>
-        <AddOptionFormComponent
-        addOptionForm={addOptionForm}
-        handleCancel={handleCancel}
-      />
-      </React.Fragment>}
-      <br/>
-      {options.length>0 && 
-      <Typography variant="h6">Options</Typography>}
-      {option}    
+          <br />
+          <br />
+          <AddOptionFormComponent
+            addOptionForm={addOptionForm}
+            handleCancel={handleCancel}
+          />
+        </React.Fragment>
+      )}
+      <br />
+      {options.length > 0 && <Typography variant="h6">Options</Typography>}
+      {option}
       <TextField
         variant="outlined"
-        margin="normal" 
+        margin="normal"
         name="point"
         label="Point"
         type="number"
@@ -158,55 +158,57 @@ function MCQFormComponent(props) {
         required
         fullWidth
       />
-      {tag.length > 0 ? 
-      <TextField
-        style ={{ marginBottom: '0px' }}
-        variant="outlined"
-        margin="normal"
-        onChange={handleTagChange}
-        value={tagValue}
-        required
-        fullWidth
-        id ="tag"
-        label="Tag"
-        name="tag"
-        autoComplete="tag"
-      />
-      :
-      <TextField
-      variant="outlined"
-      margin="normal"
-      onChange={handleTagChange}
-      value={tagValue}
-      required
-      fullWidth
-      id ="tag"
-      label="Tag"
-      name="tag"
-      autoComplete="tag"
-      />}
-      {tag.length > 0 &&
-        <div style={{
-          borderStyle: 'solid',
-          borderWidth: '1px'
-        }}>
-        {tag.map((eachData, key) => {
+      {tag.length > 0 ? (
+        <TextField
+          style={{ marginBottom: "0px" }}
+          variant="outlined"
+          margin="normal"
+          onChange={handleTagChange}
+          value={tagValue}
+          required
+          fullWidth
+          id="tag"
+          label="Tag"
+          name="tag"
+          autoComplete="tag"
+        />
+      ) : (
+        <TextField
+          variant="outlined"
+          margin="normal"
+          onChange={handleTagChange}
+          value={tagValue}
+          required
+          fullWidth
+          id="tag"
+          label="Tag"
+          name="tag"
+          autoComplete="tag"
+        />
+      )}
+      {tag.length > 0 && (
+        <div
+          style={{
+            borderStyle: "solid",
+            borderWidth: "1px",
+          }}
+        >
+          {tag.map((eachData, key) => {
             return (
-            <MenuItem 
-            onClick={() => {selectOption(eachData)} } 
-            key={key}>
-              {eachData}
-            </MenuItem>
-            )
+              <MenuItem
+                onClick={() => {
+                  selectOption(eachData);
+                }}
+                key={key}
+              >
+                {eachData}
+              </MenuItem>
+            );
           })}
         </div>
-      }
-      <br/>               
-      <Button
-        type ='submit'
-        fullWidth
-        variant = 'contained'
-        color = 'primary'>
+      )}
+      <br />
+      <Button type="submit" fullWidth variant="contained" color="primary">
         Submit
       </Button>
     </form>
@@ -216,14 +218,12 @@ function MCQFormComponent(props) {
 // type checking for props
 MCQFormComponent.propTypes = {
   editQuestion: PropTypes.objectOf(Object),
-  handleRedirect: PropTypes.func
-
+  handleRedirect: PropTypes.func,
 };
 
 // setting default props
 MCQFormComponent.defaultProps = {
   editQuestion: {},
-  handleRedirect: ()=>{}
+  handleRedirect: () => {},
 };
 export default MCQFormComponent;
-

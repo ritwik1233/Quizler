@@ -17,17 +17,27 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0"
   },
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^8.0.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-react": "^7.22.0",
+    "prettier": "^2.2.1"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint ./",
+    "format": "prettier --write \"**/*.{js,jsx,json,md}\""
   },
   "proxy": "http://localhost:5000",
   "eslintConfig": {
     "extends": [
       "react-app",
-      "plugin:prettier/recommended"
+      "plugin:prettier/recommended",
+      "react-app/jest"
     ]
   },
   "browserslist": {

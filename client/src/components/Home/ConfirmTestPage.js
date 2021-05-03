@@ -1,47 +1,46 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Typography, Grid, Button, Card, CardContent } from '@material-ui/core';
-import { connect, useDispatch } from 'react-redux';
-import { Redirect } from 'react-router-dom';
-import { editHomeQuiz, getAllHomeQuiz } from '../../actions/index.js';
-
+import React from "react";
+import PropTypes from "prop-types";
+import { Typography, Grid, Button, Card, CardContent } from "@material-ui/core";
+import { connect, useDispatch } from "react-redux";
+import { Redirect } from "react-router-dom";
+import { editHomeQuiz, getAllHomeQuiz } from "../../actions/index.js";
 
 function ConfirmTestPage(props) {
   const dispatch = useDispatch();
   const [redirect, setRedirect] = React.useState(false);
   //Component Did Mount Start
-  React.useEffect(()=>{
-      const urlParams = new URLSearchParams(window.location.search);
-      const _id = urlParams.get('q');
-      if (_id !== null) {
-        if(props.allQuiz.length > 0) {
-          const item = props.allQuiz.find(each => {
-            return each._id === _id
-          });
-          if(!item) {
-            setRedirect(true);
-            return;
-          }
-          dispatch(editHomeQuiz(item));
+  React.useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const _id = urlParams.get("q");
+    if (_id !== null) {
+      if (props.allQuiz.length > 0) {
+        const item = props.allQuiz.find((each) => {
+          return each._id === _id;
+        });
+        if (!item) {
+          setRedirect(true);
           return;
         }
-        dispatch(getAllHomeQuiz());
+        dispatch(editHomeQuiz(item));
         return;
       }
-      setRedirect(true);
-  },[]);
+      dispatch(getAllHomeQuiz());
+      return;
+    }
+    setRedirect(true);
+  }, []);
   //Component Did Mount End
 
   //Component Did Update Start
-  React.useEffect(()=>{
+  React.useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const _id = urlParams.get('q');
+    const _id = urlParams.get("q");
     if (_id !== null) {
-      if(props.allQuiz.length > 0) {
-        const item = props.allQuiz.find(each => {
-          return each._id === _id
+      if (props.allQuiz.length > 0) {
+        const item = props.allQuiz.find((each) => {
+          return each._id === _id;
         });
-        if(!item) {
+        if (!item) {
           setRedirect(true);
           return;
         }
@@ -51,11 +50,11 @@ function ConfirmTestPage(props) {
       return;
     }
     setRedirect(true);
-},[props.allQuiz]);
+  }, [props.allQuiz]);
   //Component Did Update Stop
 
   const handleSubmit = () => {
-    props.history.push('/newtest');
+    props.history.push("/newtest");
   };
 
   const handleCancel = () => {
@@ -63,61 +62,99 @@ function ConfirmTestPage(props) {
     setRedirect(true);
   };
 
-  if(redirect) {
-    return(<Redirect to="/" />);
+  if (redirect) {
+    return <Redirect to="/" />;
   }
 
   return (
     <Grid container spacing={0}>
-        <Grid item xs={12}>&nbsp;</Grid>
-        <Grid item xs={12}>&nbsp;</Grid>
-        { props.editQuiz._id && <React.Fragment>
+      <Grid item xs={12}>
+        &nbsp;
+      </Grid>
+      <Grid item xs={12}>
+        &nbsp;
+      </Grid>
+      {props.editQuiz._id && (
+        <React.Fragment>
           <Grid item xs={1}></Grid>
           <Grid item xs={10}>
-          <Card>
-            <CardContent>
+            <Card>
+              <CardContent>
                 <Grid container spacing={0}>
                   <Grid item xs={12}>
-                    <Typography variant="h5">&nbsp;Name: {props.editQuiz.name}</Typography>
+                    <Typography variant="h5">
+                      &nbsp;Name: {props.editQuiz.name}
+                    </Typography>
                   </Grid>
                   <Grid item xs={12}>
-                    <Typography variant="body1">&nbsp;Description: {props.editQuiz.description}</Typography>
+                    <Typography variant="body1">
+                      &nbsp;Description: {props.editQuiz.description}
+                    </Typography>
                   </Grid>
                   <Grid item xs={12}>
-                    <Typography variant="body1">&nbsp;Time: {props.editQuiz.time} minutes</Typography>
+                    <Typography variant="body1">
+                      &nbsp;Time: {props.editQuiz.time} minutes
+                    </Typography>
                   </Grid>
                   <Grid item xs={12}>
-                    <Typography variant="body1">&nbsp;Number of Questions: {props.editQuiz.questions.length}</Typography>
+                    <Typography variant="body1">
+                      &nbsp;Number of Questions:{" "}
+                      {props.editQuiz.questions.length}
+                    </Typography>
                   </Grid>
                   <Grid item xs={12}>
-                    <Typography variant="body1">&nbsp;Total Point: {props.editQuiz.questions.reduce((acc, item)=>(acc + item.point ), 0)}</Typography>
+                    <Typography variant="body1">
+                      &nbsp;Total Point:{" "}
+                      {props.editQuiz.questions.reduce(
+                        (acc, item) => acc + item.point,
+                        0
+                      )}
+                    </Typography>
                   </Grid>
                   <Grid item xs={12}>
-                    <Typography variant="body1">&nbsp;You are about to start the quiz. Click cancel to to back or Start to start the test</Typography>
+                    <Typography variant="body1">
+                      &nbsp;You are about to start the quiz. Click cancel to to
+                      back or Start to start the test
+                    </Typography>
                   </Grid>
                   <Grid item xs={10}></Grid>
                   <Grid item xs={1}>
-                    <Button variant="contained" color="secondary" onClick={handleCancel}>Cancel</Button>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={handleCancel}
+                    >
+                      Cancel
+                    </Button>
                   </Grid>
                   <Grid item xs={1}>
-                    <Button variant="contained" color="primary" onClick={handleSubmit}>Start</Button>
-                  </Grid> 
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleSubmit}
+                    >
+                      Start
+                    </Button>
+                  </Grid>
                 </Grid>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
           </Grid>
-          <Grid item xs={1}>&nbsp;</Grid>
-        </React.Fragment>}
+          <Grid item xs={1}>
+            &nbsp;
+          </Grid>
+        </React.Fragment>
+      )}
     </Grid>
   );
 }
 
 function mapStateToProps(state) {
-    return {
-      editQuiz: state.home.editQuiz,
-      allQuiz: state.home.allQuiz
-    }
-};
+  return {
+    editQuiz: state.home.editQuiz,
+    allQuiz: state.home.allQuiz,
+  };
+}
 
 // type checking for props
 ConfirmTestPage.propTypes = {

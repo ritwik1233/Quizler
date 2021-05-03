@@ -1,31 +1,32 @@
-import React, { useState } from 'react';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { Avatar,
-         Button,
-         CssBaseline,
-         TextField,
-         Link,
-         Grid,
-         Typography,
-         makeStyles,
-         Container 
-      } from '@material-ui/core';
-import { Link as RouterLink, Redirect } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState } from "react";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  Link,
+  Grid,
+  Typography,
+  makeStyles,
+  Container,
+} from "@material-ui/core";
+import { Link as RouterLink, Redirect } from "react-router-dom";
+import axios from "axios";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -35,26 +36,26 @@ const useStyles = makeStyles(theme => ({
 
 const LoginPage = () => {
   const classes = useStyles();
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [redirect, setRedirect] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
     const values = {
       email: e.target.email.value,
-      password: e.target.password.value      
+      password: e.target.password.value,
     };
-    axios.post('/api/login', values)
-    .then(res => {
-      setError('');
-      setRedirect(true);
-    }).catch(err => {
-      setError(err.response.data);
-    });
-  }
+    axios
+      .post("/api/login", values)
+      .then((res) => {
+        setError("");
+        setRedirect(true);
+      })
+      .catch((err) => {
+        setError(err.response.data);
+      });
+  };
   if (redirect) {
-    return (
-      <Redirect to='/' />
-    );
+    return <Redirect to="/" />;
   }
   return (
     <Container component="main" maxWidth="xs">
@@ -66,9 +67,11 @@ const LoginPage = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        { error.length > 0 && 
-          <Typography variant="body1" color="error">{error}</Typography>
-        }
+        {error.length > 0 && (
+          <Typography variant="body1" color="error">
+            {error}
+          </Typography>
+        )}
         <form className={classes.form} onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
@@ -97,7 +100,8 @@ const LoginPage = () => {
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}>
+            className={classes.submit}
+          >
             Sign In
           </Button>
           <Grid container>
@@ -116,5 +120,5 @@ const LoginPage = () => {
       </div>
     </Container>
   );
-}
+};
 export default LoginPage;

@@ -1,32 +1,33 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect, useDispatch } from 'react-redux';
-import { fetchUser } from '../../actions/index.js';
-import VerifyAccount from '../Common/VerifyAccount.js'
-import SubHeaderWithLogin from './SubHeaderWithLogin.js';
-import SubHeaderWithoutLogin from './SubHeaderWithoutLogin.js';
+import React from "react";
+import PropTypes from "prop-types";
+import { connect, useDispatch } from "react-redux";
+import { fetchUser } from "../../actions/index.js";
+import VerifyAccount from "../Common/VerifyAccount.js";
+import SubHeaderWithLogin from "./SubHeaderWithLogin.js";
+import SubHeaderWithoutLogin from "./SubHeaderWithoutLogin.js";
 
-function Header(props){
+function Header(props) {
   const dispatch = useDispatch();
   const fetchUserData = () => {
     dispatch(fetchUser());
   };
-  if(props.currentUser._id) {
+  if (props.currentUser._id) {
     return (
       <React.Fragment>
-        <SubHeaderWithLogin currentUser={props.currentUser} fetchUserData={fetchUserData}/>
+        <SubHeaderWithLogin
+          currentUser={props.currentUser}
+          fetchUserData={fetchUserData}
+        />
         {!props.currentUser.verified && <VerifyAccount />}
       </React.Fragment>
     );
   }
-  return (
-    <SubHeaderWithoutLogin />
-  );
-};
+  return <SubHeaderWithoutLogin />;
+}
 function mapStateToProps(state) {
-return {
-  currentUser: state.auth.currentUser
- }
+  return {
+    currentUser: state.auth.currentUser,
+  };
 }
 
 // type checking for props
