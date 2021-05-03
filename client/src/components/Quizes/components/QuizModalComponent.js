@@ -1,20 +1,43 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Proptypes from 'prop-types';
 import { Grid, Typography, Paper, Container,
-    ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Checkbox, Button } from '@material-ui/core';
+    Accordion,
+    AccordionSummary,
+    AccordionDetails, Checkbox, Button } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import SearchComponent from '../../Common/SearchComponent.js';
 
-class QuizModalComponent extends React.Component {
+function QuizModalComponent(props) {
+    const [checkedArray, setCheckedArray] = React.useState([]);
+    const [selectedQuestions, setSelectedQuestions] = React.useState([]);
 
-    state = {
-        checkedArray: [],
-        selectedQuestions: this.props.selectedQuestions
-    }
+    // Use Effect Hook for checked array update
+    React.useEffect(() => {
+        const checkedArray = props.allQuestions.map((each, i) => {
+            const _id = each._id;
+            const obj = {};
+            const findIndex = props.selectedQuestions.find(q => {
+                return q._id === each._id 
+            });
+            if(findIndex) {
+                obj[_id] = true;
+                return obj;
+            } else {
+                obj[_id] = false;
+                return obj;
+            }
+        });
+        setCheckedArray(checkedArray)
+    }, [props.allQuestions])
 
-    handleChange = (_id) => {
-        const checkedArray = this.state.checkedArray.map((each) => {
+    React.useEffect(()=>{
+        setSelectedQuestions(selectedQuestions);
+    }, [selectedQuestions]);
+
+    const handleChange = (_id) => {
+        const updatedCheckedArray = checkedArray.map((each) => {
             if(each[_id] !== undefined) {
                 const obj = each;
                 obj[_id] = !obj[_id]
@@ -22,138 +45,100 @@ class QuizModalComponent extends React.Component {
             }
             return { ...each };
         });
-        this.setState({ checkedArray });
+        setCheckedArray(updatedCheckedArray);
     };
 
-    componentDidUpdate(prevProps, prevState) {
-        if(prevProps.allQuestions !== this.props.allQuestions) {
-            const checkedArray = this.props.allQuestions.map((each, i) => {
-                const _id = each._id;
-                const obj = {};
-                obj[_id] = false;
-                return obj;
-            });
-            this.setState({ checkedArray })
-        }
-    };
-
-    componentDidMount() {
-        if(this.props.allQuestions.length) {
-            const checkedArray = this.props.allQuestions.map((each, i) => {
-                const _id = each._id;
-                const obj = {};
-                const findIndex = this.props.selectedQuestions.find(q => {
-                    return q._id === each._id 
-                });
-                if(findIndex) {
-                    obj[_id] = true;
-                    return obj;
-                } else {
-                    obj[_id] = false;
-                    return obj;
-                }
-            });
-            this.setState({ checkedArray })
-        }
-    };
-
-    componentWillUnmount() {
-        this.props.getAllQuestion();
-    };
-
-    addQuestionData = () => {
-        const checkedArray = this.state.checkedArray.filter(each => {
+    const addQuestionData = () => {
+        const updatedCheckedArray = checkedArray.filter(each => {
             const keys = Object.keys(each);
             return each[keys[0]];
         });
-        this.props.addQuestionData(checkedArray);
+        props.addQuestionData(updatedCheckedArray);
     };
 
-    render() {
-        return (
-            <Grid container spacing={0}>
-            <Grid item xs={12}>
-                <Paper>
-                    <Container fixed>
-                        <Grid container spacing={0}>
-                            <Grid item xs={12}>&nbsp;</Grid>
-                            <Grid item xs={12}>
-                                <Typography variant="h4">Questions</Typography>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <hr/>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <SearchComponent type="question" />
-                            </Grid>
-                            <Grid item xs={12}>
-                                &nbsp;
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Grid container spacing={0}>
-                                    {this.props.allQuestions.map((question,key) => {
-                                        return(
-                                            <React.Fragment key={key}>
-                                                <Grid item xs={1}>
-                                                {this.state.checkedArray.length > 0 && <Checkbox
-                                                    checked={this.state.checkedArray[key][question._id]}
-                                                    onChange={()=>{ 
-                                                        this.handleChange(question._id); 
-                                                    }}
-                                                    inputProps={{ 'aria-label': 'primary checkbox' }}
-                                                />}
-                                                </Grid>
-                                                <Grid item xs={11}>
-                                                    <ExpansionPanel>
-                                                        <ExpansionPanelSummary
-                                                            expandIcon={<ExpandMoreIcon />}
-                                                            aria-controls="panel1a-content"
-                                                            id="panel1a-header">
-                                                                <Typography>{question.question}</Typography>
-                                                        </ExpansionPanelSummary>
-                                                        <ExpansionPanelDetails>
-                                                            <Grid container spacing={3}>
-                                                                {question.options.map((option, key) => {
-                                                                    return (
-                                                                        <React.Fragment key={key}>
-                                                                            <Grid item xs={6}>
-                                                                                <Typography variant="body1">{option.description}</Typography>
-                                                                            </Grid>
-                                                                            <Grid item xs={2}>
-                                                                                <Typography variant="body1">{ option.correct?'Correct': 'Incorrect' }</Typography>
-                                                                            </Grid>
-                                                                        </React.Fragment>
-                                                                    );
-                                                                })}
-                                                            </Grid>
-                                                        </ExpansionPanelDetails>
-                                                    </ExpansionPanel>
-                                                    <br/>
-                                                </Grid>
-                                            </React.Fragment>
-                                        );
-                                    })}
-                                </Grid>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Button
-                                    variant="contained"
-                                    fullWidth
-                                    onClick = {this.addQuestionData}
-                                > 
-                                Add 
-                                </Button>
-                            </Grid>
-                            <Grid item xs={12}>
-                                &nbsp;
+    return (
+        <Grid container spacing={0}>
+             <Grid item xs={12}>
+            <Paper>
+                <Container fixed>
+                    <Grid container spacing={0}>
+                        <Grid item xs={12}>&nbsp;</Grid>
+                        <Grid item xs={12}>
+                            <Typography variant="h4">Questions</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <hr/>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <SearchComponent type="question" />
+                        </Grid>
+                        <Grid item xs={12}>
+                            &nbsp;
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Grid container spacing={0}>
+                                {props.allQuestions.map((question,key) => {
+                                    return(
+                                        <React.Fragment key={key}>
+                                            <Grid item xs={1}>
+                                            {checkedArray.length > 0 && <Checkbox
+                                                checked={checkedArray[key][question._id]}
+                                                onChange={()=>{ 
+                                                    handleChange(question._id); 
+                                                }}
+                                                inputProps={{ 'aria-label': 'primary checkbox' }}
+                                            />}
+                                            </Grid>
+                                            <Grid item xs={11}>
+                                                <Accordion>
+                                                    <AccordionSummary
+                                                        expandIcon={<ExpandMoreIcon />}
+                                                        aria-controls="panel1a-content"
+                                                        id="panel1a-header">
+                                                            <Typography>{question.question}</Typography>
+                                                    </AccordionSummary>
+                                                    <AccordionDetails>
+                                                        <Grid container spacing={3}>
+                                                            {question.options.map((option, key) => {
+                                                                return (
+                                                                    <React.Fragment key={key}>
+                                                                        <Grid item xs={6}>
+                                                                            <Typography variant="body1">{option.description}</Typography>
+                                                                        </Grid>
+                                                                        <Grid item xs={2}>
+                                                                            <Typography variant="body1">{ option.correct?'Correct': 'Incorrect' }</Typography>
+                                                                        </Grid>
+                                                                    </React.Fragment>
+                                                                );
+                                                            })}
+                                                        </Grid>
+                                                    </AccordionDetails>
+                                                </Accordion>
+                                                <br/>
+                                            </Grid>
+                                        </React.Fragment>
+                                    );
+                                })}
                             </Grid>
                         </Grid>
-                    </Container>
-                </Paper>
-            </Grid>
+                        <Grid item xs={12}>
+                            <Button
+                                variant="contained"
+                                fullWidth
+                                onClick = {addQuestionData}
+                            > 
+                            Add 
+                            </Button>
+                        </Grid>
+                        <Grid item xs={12}>
+                            &nbsp;
+                        </Grid>
+                    </Grid>
+                </Container>
+            </Paper>
         </Grid>
-        );
-    };
+        </Grid>
+    );
 };
 
 function mapStateToProps(state) {
@@ -161,5 +146,20 @@ function mapStateToProps(state) {
       allQuestions: state.questions.allQuestions,
     }
 }
+// type checking for props
+QuizModalComponent.propTypes = {
+    allQuestions: Proptypes.arrayOf(Object),
+    selectedQuestion:Proptypes.arrayOf(Object),
+    addQuestionData: Proptypes.func,
+    getAllQuestion: Proptypes.func
+};
+  
+// setting default props
+QuizModalComponent.defaultProps = {
+    allQuestions: [],
+    selectedQuestion: [],
+    addQuestionData: ()=>{},
+    getAllQuestion: ()=>{}
+};
 
 export default connect(mapStateToProps, null, null,  { forwardRef: true })(QuizModalComponent);

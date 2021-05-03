@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid } from '@material-ui/core';
-
+import PropTypes from 'prop-types';
 import QuizItem from './QuizItem';
 
 function QuizListComponent(props) {
@@ -16,6 +16,7 @@ function QuizListComponent(props) {
   const shareLink = (link) => {
     props.shareLink(link);
   }
+  
   const handleOpen = () =>{
     props.handleOpen();
   }
@@ -39,5 +40,22 @@ function QuizListComponent(props) {
   );
 };
 
-  
+// type checking for props
+QuizListComponent.propTypes = {
+  allQuiz: PropTypes.arrayOf(Object),
+  deleteItem: PropTypes.func,
+  editItem: PropTypes.func,
+  shareLink: PropTypes.func,
+  handleOpen: PropTypes.func
+};
+
+// setting default props
+QuizListComponent.defaultProps = {
+  allQuiz: [],
+  deleteItem: ()=>{},
+  editItem: ()=>{},
+  shareLink: ()=>{},
+  handleOpen: ()=>{}
+};
+
 export default QuizListComponent;

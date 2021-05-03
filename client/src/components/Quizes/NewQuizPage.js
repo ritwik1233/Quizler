@@ -3,7 +3,6 @@ import { Grid, Modal } from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 
 import { fetchUser, getAllQuestion } from '../../actions/index.js';
 import QuizFormComponent from './components/QuizFormComponent.js';
@@ -74,9 +73,9 @@ function NewQuizPage(props) {
                   overflowY: 'auto'
               }}>
               <QuizModalComponent
-              addQuestionData={addQuestionData}
-              selectedQuestions={selectedQuestions}
-              getAllQuestion={props.getAllQuestion}
+                selectedQuestions={selectedQuestions}
+                addQuestionData={addQuestionData}
+                getAllQuestion={getAllQuestion}
               />
           </Modal>
       </Grid>
@@ -86,11 +85,11 @@ function NewQuizPage(props) {
               <Grid item xs={8}>
                   <QuizFormComponent
                     editQuiz={props.editQuiz}
+                    selectedQuestions={selectedQuestions}
                     allQuestions={props.allQuestions}
                     handleRedirect={handleRedirect}
                     addQuestion={addQuestion}
                     deleteQuestion={deleteQuestion}
-                    selectedQuestions={selectedQuestions}
                     />
               </Grid>
               <Grid item xs={2}></Grid>

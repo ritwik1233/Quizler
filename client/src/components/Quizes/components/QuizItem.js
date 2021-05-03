@@ -1,5 +1,6 @@
 import React from 'react';
-import { Grid, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, IconButton } from '@material-ui/core';
+import PropTypes from 'prop-types';
+import { Grid, Typography, Accordion, AccordionSummary, AccordionDetails, IconButton } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import axios from 'axios';
 import Delete  from '@material-ui/icons/Delete';
@@ -31,14 +32,14 @@ function QuizItem(props) {
   return (
     <Grid container spacing={0}>
       <Grid item xs={9}>
-        <ExpansionPanel>
-          <ExpansionPanelSummary
+        <Accordion>
+          <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
             id="panel1a-header">
             <Typography>{props.quiz.name}</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
+          </AccordionSummary>
+          <AccordionDetails>
               <Grid container spacing={3}>
                   <Grid item xs={12}>
                     <Typography>Description: {props.quiz.description}</Typography>
@@ -49,14 +50,14 @@ function QuizItem(props) {
                   {props.quiz.questions.map((eachQuestion) => {
                       return (
                           <Grid item xs={12} key={eachQuestion._id}>                                
-                          <ExpansionPanel>
-                              <ExpansionPanelSummary
+                          <Accordion>
+                              <AccordionSummary
                                   expandIcon={<ExpandMoreIcon />}
                                   aria-controls="panel1a-content"
                                   id="panel1a-header">
                                     <Typography>{eachQuestion.question}</Typography>
-                              </ExpansionPanelSummary>
-                              <ExpansionPanelDetails>
+                              </AccordionSummary>
+                              <AccordionDetails>
                               <Grid container spacing={3}>
                                   {eachQuestion.options.map((eachOption) => {
                                       return (
@@ -71,14 +72,14 @@ function QuizItem(props) {
                                       );
                                   })}
                               </Grid>
-                              </ExpansionPanelDetails>
-                          </ExpansionPanel>    
+                              </AccordionDetails>
+                          </Accordion>    
                           </Grid>
                       );
                   })}
               </Grid>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
+          </AccordionDetails>
+        </Accordion>
       </Grid>
       <Grid item xs={1}>
         <IconButton component="span" onClick={shareLink}>
@@ -99,5 +100,22 @@ function QuizItem(props) {
   );
 }
 
-  
+
+// type checking for props
+QuizItem.propTypes = {
+  quiz: PropTypes.objectOf(Object),
+  deleteItem: PropTypes.func,
+  editItem: PropTypes.func,
+  shareLink: PropTypes.func,
+  handleOpen: PropTypes.func
+};
+
+// setting default props
+QuizItem.defaultProps = {
+  quiz: {},
+  deleteItem: ()=>{},
+  editItem: ()=>{},
+  shareLink: ()=>{},
+  handleOpen: ()=>{}
+};
 export default QuizItem;
