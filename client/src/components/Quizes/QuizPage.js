@@ -1,151 +1,151 @@
 import React from 'react';
 import { Grid, Typography, Link, Button, Modal, CardContent, Card } from '@material-ui/core';
+import PropTypes from 'prop-types';
 import { Link as RouterLink, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { connect, useDispatch } from 'react-redux';
 import AddIcon from '@material-ui/icons/Add';
-
 
 import { fetchUser, getAllQuestion, getAllQuiz, editQuiz } from '../../actions/index.js';
 import QuizListComponent from './components/QuizListComponent.js';
 import SearchComponent from '../Common/SearchComponent.js';
 
-class QuizPage extends React.Component {
-  state = {
-    redirect: '',
-    modalOpen: false,
-    link: ''
-  };
-
-  componentDidMount () {
-    this.props.fetchUser();
-    this.props.getAllQuestion();
-    this.props.getAllQuiz();
-  };
-
-  componentDidUpdate(prevProps, prevState) {
-    if (!prevProps.currentUser._id && !this.props.currentUser._id && this.state.redirect.length === 0) {
-      this.setState({ redirect: '/' });
+function QuizPage(props) {
+  const dispatch = useDispatch();
+  const [redirect, setRedirect] = React.useState(false);
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [link, setLink] = React.useState('');
+  
+  // Component Did Mount Hook
+  React.useState(() => {
+    dispatch(fetchUser());
+    dispatch(getAllQuestion());
+    dispatch(getAllQuiz());
+  },[]);
+  
+  // componentDidUpdate Hook for current User Object
+  React.useEffect(() => {
+    const _id = props.currentUser._id;
+    if(_id !== 'default' && !_id) {
+        setRedirect(true);
     }
-    if(prevProps.currentUser._id && !this.props.currentUser._id) {
-      this.setState({ redirect: '/' });
-    }
+  }, [props.currentUser]);
+  
+  const editItem = (quiz) => {
+    dispatch(editQuiz(quiz));
+    props.history.push('/newquiz');
   };
 
-  editItem = (quiz) => {
-    this.props.editQuiz(quiz)
-    this.props.history.push('/newquiz');
-  };
-
-  deleteItem = (status) => {
+  const deleteItem = (status) => {
     if (status) {
-      this.props.getAllQuiz();
+      dispatch(getAllQuiz());
     }
   }
 
-  handleAdd = () => {
-    this.props.editQuiz({});
+  const handleAdd = () => {
+    dispatch(editQuiz({}));
   };
 
-  handleClose = () => {
-    this.setState({ modalOpen: false });
+  const handleClose = () => {
+    setModalOpen(false);
   }
-  handleOpen = () => {
-    this.setState({ modalOpen: true });
+  const handleOpen = () => {
+    setModalOpen(true);
   }
 
-  shareLink = (id) => {
+  const shareLink = (id) => {
     const link = `${window.location.origin}/confirmtest?q=${id}`;
-    console.log(window.location.origin);
-    this.setState({ link })
+    setLink(link);
   }
 
-  render() {
-    if(this.state.redirect.length > 0) {
-      return (<Redirect to={this.state.redirect} />);
-    }
-
-    return (
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Modal
-              open={this.state.modalOpen}
-              onClose={this.handleClose}
-                style={{
-                  width: '50%',
-                  marginTop: '15%',
-                  marginLeft: '25%'
-                }}
-                >
-                <Card>
-                  <CardContent>
-                    <Grid container spacing={0}>
-                      <Grid item xs={12}>
-                        <Typography variant="h6">Share Link</Typography>
-                      </Grid>
-                      <Grid item xs={12}>
-                        <hr/>
-                      </Grid>
-                      <Grid item xs={12}>
-                        <a href={this.state.link} target="_blank" rel="noopener noreferrer">{this.state.link}</a>
-                      </Grid>
-                      <Grid item xs={12}>
-                        &nbsp;
-                      </Grid>
+  if(redirect) {
+    return (<Redirect to='/' />);
+  }
+  return (
+    <Grid container spacing={3}>
+      <Grid item xs={12}>
+        <Modal
+            open={modalOpen}
+            onClose={handleClose}
+              style={{
+                width: '50%',
+                marginTop: '15%',
+                marginLeft: '25%'
+              }}
+              >
+              <Card>
+                <CardContent>
+                  <Grid container spacing={0}>
+                    <Grid item xs={12}>
+                      <Typography variant="h6">Share Link</Typography>
                     </Grid>
-                  </CardContent>
-                </Card>
-            </Modal>
-        </Grid>
-        <Grid item xs={12}>
-            <Grid container spacing = {0}>
-              <Grid item xs={12}>&nbsp;</Grid>
-              <Grid item xs={10}>
-                <Typography variant="h5">&nbsp;&nbsp;Quizes</Typography>
-              </Grid>
-              <Grid item xs={2}>
-                 <Link to="/newQuiz" component={RouterLink}>
-                    <Button
-                     onClick={this.handleAdd}
-                     variant="contained"
-                     endIcon={<AddIcon/>}>
-                      Add 
-                    </Button>
-                 </Link>
-              </Grid>
-              <Grid item xs={12}>&nbsp;</Grid>
-              <Grid item xs={12}>
-                <SearchComponent type="quiz" />
-              </Grid>
-              <Grid item xs={12}>
-                  &nbsp;
-              </Grid>
-              <Grid item xs={12}>
-                <QuizListComponent
-                allQuiz={this.props.allQuiz} 
-                deleteItem={this.deleteItem}
-                editItem={this.editItem}
-                shareLink={this.shareLink}
-                handleOpen={this.handleOpen}
-                />
-              </Grid>
+                    <Grid item xs={12}>
+                      <hr/>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <a href={link} target="_blank" rel="noopener noreferrer">{link}</a>
+                    </Grid>
+                    <Grid item xs={12}>
+                      &nbsp;
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+          </Modal>
+      </Grid>
+      <Grid item xs={12}>
+          <Grid container spacing = {0}>
+            <Grid item xs={12}>&nbsp;</Grid>
+            <Grid item xs={10}>
+              <Typography variant="h5">&nbsp;&nbsp;Quizes</Typography>
             </Grid>
-        </Grid>
-      </Grid> 
-    );
-  }
-}
+            <Grid item xs={2}>
+                <Link to="/newQuiz" component={RouterLink}>
+                  <Button
+                    onClick={handleAdd}
+                    variant="contained"
+                    endIcon={<AddIcon/>}>
+                    Add 
+                  </Button>
+                </Link>
+            </Grid>
+            <Grid item xs={12}>&nbsp;</Grid>
+            <Grid item xs={12}>
+              <SearchComponent type="quiz" />
+            </Grid>
+            <Grid item xs={12}>
+                &nbsp;
+            </Grid>
+            <Grid item xs={12}>
+              <QuizListComponent
+              allQuiz={props.allQuiz} 
+              deleteItem={deleteItem}
+              editItem={editItem}
+              shareLink={shareLink}
+              handleOpen={handleOpen}
+              />
+            </Grid>
+          </Grid>
+      </Grid>
+    </Grid> 
+  );
+};
+
 function mapStateToProps(state) {
   return {
     currentUser: state.auth.currentUser,
     allQuiz: state.quiz.allQuiz
    }
-  }
-function mapDispatchToProps (dispatch) {
-  return bindActionCreators({
-    fetchUser, getAllQuestion, getAllQuiz, editQuiz
-  }, dispatch)
-};
-  
-export default connect(mapStateToProps, mapDispatchToProps)(QuizPage);
+}
 
+// type checking for props
+QuizPage.propTypes = {
+  currentUser: PropTypes.objectOf(Object),
+  allQuiz: PropTypes.arrayOf(Object)
+};
+
+// setting default props
+QuizPage.defaultProps = {
+  currentUser: { _id: 'default' },
+  allQuiz: []
+};
+export default connect(mapStateToProps)(QuizPage);

@@ -1,111 +1,105 @@
 import React from 'react';
 import { Grid, Modal } from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 
 import { fetchUser, getAllQuestion } from '../../actions/index.js';
 import QuizFormComponent from './components/QuizFormComponent.js';
 import QuizModalComponent from './components/QuizModalComponent.js';
 
+function NewQuizPage(props) {
+  const dispatch = useDispatch();
+  const [redirect, setRedirect] = React.useState(false);
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [selectedQuestions, setSelectedQuestions] = React.useState([]);
 
-class NewQuizPage extends React.Component {
-  state = {
-    redirect: '',
-    modalOpen: false,
-    selectedQuestions: []
-  };
+  // Component Did Mount Hook
+  React.useState(() => {
+    dispatch(fetchUser());
+    dispatch(getAllQuestion());
+  },[]);
 
-  componentDidMount () {
-    this.props.fetchUser();
-    this.props.getAllQuestion();
-  };
-
-  componentDidUpdate(prevProps, prevState) {
-    if (!prevProps.currentUser._id && !this.props.currentUser._id && this.state.redirect.length === 0) {
-      this.setState({ redirect: '/' });
+  // componentDidUpdate Hook for current User Object
+  React.useEffect(() => {
+    const _id = props.currentUser._id;
+    if(_id !== 'default' && !_id) {
+        setRedirect(true);
     }
-    if(prevProps.currentUser._id && !this.props.currentUser._id) {
-      this.setState({ redirect: '/' });
-    }
-    if(this.props.currentUser._id && !this.props.currentUser.verified) {
-      this.props.history.goBack();  
-    }
+  }, [props.currentUser]);
+
+  const handleRedirect = () => {
+    props.history.push('/quiz');
   };
 
-  handleRedirect = () => {
-    this.props.history.push('/quiz');
+  const addQuestion = () => {
+    setModalOpen(true);
   };
 
-  addQuestion = () => {
-    this.setState({ modalOpen: true });
+  const handleClose = () => {
+    setModalOpen(false);
   };
 
-  handleClose = () => {
-    this.setState({ modalOpen: false });
-  };
-
-  addQuestionData = (data) => {
+  const addQuestionData = (data) => {
     const selectedQuestions = data.map(eachdata=>{
       const key = Object.keys(eachdata)[0];
-      const questionData = this.props.allQuestions.find(question => {
+      const questionData = props.allQuestions.find(question => {
         return question._id === key; 
       })
       return questionData;
     });
-    this.setState({ selectedQuestions, modalOpen: false });
+    setSelectedQuestions(selectedQuestions);
+    setModalOpen(false);
   };
 
-  deleteQuestion = (selectedQuestions) => {
-    this.setState({ selectedQuestions });;
+  const deleteQuestion = (selectedQuestions) => {
+    setSelectedQuestions(selectedQuestions);
   }
-
-
-  render() {
-    if(this.state.redirect.length > 0) {
-      return (<Redirect to={this.state.redirect} />);
-    }
-    return (
-      <Grid container spacing={3}>
-        <Grid item xs={12}>&nbsp;</Grid>
-        <Grid item xs={12}>
-            <Modal
-              open={this.state.modalOpen}
-              onClose={this.handleClose}
-                style={{
-                    width: '90%',
-                    marginLeft: '5%',
-                    maxHeight: 'auto',
-                    overflowY: 'auto'
-                }}>
-                <QuizModalComponent
-                addQuestionData={this.addQuestionData}
-                selectedQuestions={this.state.selectedQuestions}
-                getAllQuestion={this.props.getAllQuestion}
-                />
-            </Modal>
-        </Grid>
-        <Grid item xs={12}>
-            <Grid container spacing={0}>
-                <Grid item xs={2}></Grid>
-                <Grid item xs={8}>
-                    <QuizFormComponent
-                      editQuiz={this.props.editQuiz}
-                      allQuestions={this.props.allQuestions}
-                      handleRedirect={this.handleRedirect}
-                      addQuestion={this.addQuestion}
-                      deleteQuestion={this.deleteQuestion}
-                      selectedQuestions={this.state.selectedQuestions}
-                      />
-                </Grid>
-                <Grid item xs={2}></Grid>
-            </Grid>
-            <Grid item xs={12}>&nbsp;</Grid>
-        </Grid>
-      </Grid> 
-    );
+  
+  if(redirect) {
+    return (<Redirect to='/' />);
   }
-};
+  return (
+    <Grid container spacing={3}>
+      <Grid item xs={12}>&nbsp;</Grid>
+      <Grid item xs={12}>
+          <Modal
+            open={modalOpen}
+            onClose={handleClose}
+              style={{
+                  width: '90%',
+                  marginLeft: '5%',
+                  maxHeight: 'auto',
+                  overflowY: 'auto'
+              }}>
+              <QuizModalComponent
+              addQuestionData={addQuestionData}
+              selectedQuestions={selectedQuestions}
+              getAllQuestion={props.getAllQuestion}
+              />
+          </Modal>
+      </Grid>
+      <Grid item xs={12}>
+          <Grid container spacing={0}>
+              <Grid item xs={2}></Grid>
+              <Grid item xs={8}>
+                  <QuizFormComponent
+                    editQuiz={props.editQuiz}
+                    allQuestions={props.allQuestions}
+                    handleRedirect={handleRedirect}
+                    addQuestion={addQuestion}
+                    deleteQuestion={deleteQuestion}
+                    selectedQuestions={selectedQuestions}
+                    />
+              </Grid>
+              <Grid item xs={2}></Grid>
+          </Grid>
+          <Grid item xs={12}>&nbsp;</Grid>
+      </Grid>
+    </Grid> 
+  );
+}
 
 function mapStateToProps(state) {
   return {
@@ -115,11 +109,16 @@ function mapStateToProps(state) {
    }
 };
 
-function mapDispatchToProps (dispatch) {
-  return bindActionCreators({
-    fetchUser, getAllQuestion
-  }, dispatch)
+// type checking for props
+NewQuizPage.propTypes = {
+  currentUser: PropTypes.objectOf(Object),
+  allQuestions: PropTypes.arrayOf(Object),
+  editQuiz: PropTypes.objectOf(Object)
 };
-  
-export default connect(mapStateToProps, mapDispatchToProps)(NewQuizPage);
 
+// setting default props
+NewQuizPage.defaultProps = {
+  currentUser: { _id: 'default' },
+  allQuiz: []
+};
+export default connect(mapStateToProps)(NewQuizPage);
