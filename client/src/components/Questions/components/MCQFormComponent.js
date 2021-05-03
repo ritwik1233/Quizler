@@ -1,208 +1,229 @@
 import React from 'react';
 import { Typography, TextField, Button, MenuItem } from '@material-ui/core';
 import axios from 'axios';
-
+import PropTypes from 'prop-types';
 
 import AddOptionFormComponent from './AddOptionFormComponent.js';
 import OptionListComponent from './OptionListComponent.js';
 
+function MCQFormComponent(props) {
+  const [addOption, setAddOption] = React.useState(false);
+  const [question, setQuestion] = React.useState('');
+  const [point, setPoint] = React.useState(0);
+  const [options, setOptions] = React.useState([]);
+  const [tag, setTag] = React.useState([]);
+  const [tagValue, setTagValue] = React.useState('');
 
-class MCQFormComponent extends React.Component {
-  state = {
-    addOption: false,
-    question: this.props.editQuestion.question ? this.props.editQuestion.question : '',
-    point: this.props.editQuestion.point ? this.props.editQuestion.point : 0,
-    options: this.props.editQuestion.options? this.props.editQuestion.options : [],
-    tag: [],
-    tagValue: this.props.editQuestion.tag ? this.props.editQuestion.tag : ''
-  };
-  
-  handleOption = () => {
-    this.setState({
-      addOption: true
-    });
+  React.useEffect(() => {
+    if(props.editQuestion.question) {
+    setQuestion(props.editQuestion.question);
+    }
+  }, [props.editQuestion.question]);
+
+  React.useEffect(() => {
+    if(props.editQuestion.point) {
+      setPoint(props.editQuestion.point);
+    }
+  }, [props.editQuestion.point]);
+
+  React.useEffect(() => {
+    if(props.editQuestion.options) {
+      setOptions(props.editQuestion.options);
+    }
+  }, [props.editQuestion.options]);
+
+  React.useEffect(() => {
+    if(props.editQuestion.tag) {
+      setTagValue(props.editQuestion.tag);
+    }
+  }, [props.editQuestion.tag])
+
+  const handleOption = () => {
+    setAddOption(true);
   };
 
-  handleCancel = () => {
-    this.setState({ addOption: false })
+  const handleCancel = () => {
+    setAddOption(false);
   };
 
-  addOptionForm = (optionData) => {
-    const optionArray = this.state.options;
+  const addOptionForm = (optionData) => {
+    const optionArray = options;
     optionArray.push(optionData);
-    this.setState({ options: optionArray, addOption: false });
+    setOptions(optionArray);
+    setAddOption(false);
   };
 
-  deleteOption = (optionIndex) => {
-    let optionArray = this.state.options.filter((eachData, index) =>(index !== optionIndex));
-    this.setState({ options: optionArray });
+  const deleteOption = (optionIndex) => {
+    let optionArray = options.filter((eachData, index) =>(index !== optionIndex));
+    setOptions(optionArray);
   };
 
-  submitQuestion = (e) => {
+  const submitQuestion = (e) => {
     e.preventDefault();
     const data = {
-      _id: this.props.editQuestion._id ? this.props.editQuestion._id : undefined,
-      question: this.state.question,
-      options: this.state.options,
-      tag: this.state.tagValue,
-      point: this.state.point,
+      _id: props.editQuestion._id ? props.editQuestion._id : undefined,
+      question: question,
+      options: options,
+      tag: tagValue,
+      point: point,
       type: 'MCQ'
     };
     axios.post('/api/addQuestion', data)
       .then(() => {
-        this.props.handleRedirect();
+        props.handleRedirect();
       })
   };
 
-  handleQuestionChange = (e) => {
-    this.setState({ question: e.target.value });
+  const handleQuestionChange = (e) => {
+    setQuestion(e.target.value);
   }
 
-  handlePointChange = (e) => {
-    this.setState({ point: e.target.value });  
+  const handlePointChange = (e) => {
+    setPoint(e.target.value);
   }
 
-  handleQuestionType = (e) => {
-    this.setState({ questionType: e.target.value});
+  const selectOption = (tagValue) => {
+    setTagValue(tagValue);
   };
 
-  selectOption = (tagValue) => {
-    this.setState({ tagValue: tagValue });
-  };
-
-  handleTagChange = (e) => {
-    this.setState({ tagValue: e.target.value });
+  const handleTagChange = (e) => {
+    setTagValue(e.target.value);
     axios.get('/api/getAllTag', {
       params: {
         tag: e.target.value
       }
     })
     .then(res => {
-      this.setState({ tag: res.data });
+      setTag(res.data);
     }).catch(err => {
-      this.setState({ tag: []});
+      setTag([]);
     });
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    if(prevState.tagValue !== this.state.tagValue && this.state.tagValue.length > 0 && this.state.tagValue.length > 0) {
-      this.setState({ tag: [] });
-    }
-  };
-
-  render() {
-    const option = this.state.options.map((eachData, index) => {
-      return (
-        <OptionListComponent
-          optionData={eachData}
-          key={index}
-          index={index}
-          deleteOption={this.deleteOption}
-        />
-      )
-    });
+  const option = options.map((eachData, index) => {
     return (
-          <form onSubmit={this.submitQuestion}>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              id="question"
-              label="Question"
-              name="question"
-              autoComplete="question"
-              autoFocus
-              value={this.state.question}
-              onChange={this.handleQuestionChange}
-              required
-              fullWidth
-            />
-            <Button 
-              variant="contained"
-              color="primary"
-              onClick={this.handleOption}>
-                Add Option
-            </Button>
-            {this.state.addOption &&
-              <React.Fragment>
-              <br/>
-              <br/>
-              <AddOptionFormComponent
-              addOptionForm={this.addOptionForm}
-              handleCancel={this.handleCancel}
-            />
-            </React.Fragment>}
-            <br/>
-            {this.state.options.length>0 && 
-            <Typography variant="h6">Options</Typography>}
-            {option}    
-            <TextField
-              variant="outlined"
-              margin="normal" 
-              name="point"
-              label="Point"
-              type="number"
-              id="point"
-              autoComplete="point"
-              value={this.state.point}
-              onChange={this.handlePointChange}
-              required
-              fullWidth
-            />
-            {this.state.tag.length > 0 ? 
-            <TextField
-              style ={{ marginBottom: '0px' }}
-              variant="outlined"
-              margin="normal"
-              onChange={this.handleTagChange}
-              value={this.state.tagValue}
-              required
-              fullWidth
-              id ="tag"
-              label="Tag"
-              name="tag"
-              autoComplete="tag"
-            />
-            :
-            <TextField
-            variant="outlined"
-            margin="normal"
-            onChange={this.handleTagChange}
-            value={this.state.tagValue}
-            required
-            fullWidth
-            id ="tag"
-            label="Tag"
-            name="tag"
-            autoComplete="tag"
-            />}
-            {this.state.tag.length > 0 &&
-              <div style={{
-                borderStyle: 'solid',
-                borderWidth: '1px'
-              }}>
-              {this.state.tag.map((eachData, key) => {
-                  return (
-                  <MenuItem 
-                  onClick={() => {this.selectOption(eachData)} } 
-                  key={key}>
-                    {eachData}
-                  </MenuItem>
-                  )
-                })}
-              </div>
-            }
-            <br/>               
-            <Button
-              type ='submit'
-              fullWidth
-              variant = 'contained'
-              color = 'primary'>
-              Submit
-            </Button>
-            </form>
-            
-    );
-  }
+      <OptionListComponent
+        optionData={eachData}
+        key={index}
+        index={index}
+        deleteOption={deleteOption}
+      />
+    )
+  });
+
+  return (
+    <form onSubmit={submitQuestion}>
+      <TextField
+        variant="outlined"
+        margin="normal"
+        id="question"
+        label="Question"
+        name="question"
+        autoComplete="question"
+        autoFocus
+        value={question}
+        onChange={handleQuestionChange}
+        required
+        fullWidth
+      />
+      <Button 
+        variant="contained"
+        color="primary"
+        onClick={handleOption}>
+          Add Option
+      </Button>
+      {addOption &&
+        <React.Fragment>
+        <br/>
+        <br/>
+        <AddOptionFormComponent
+        addOptionForm={addOptionForm}
+        handleCancel={handleCancel}
+      />
+      </React.Fragment>}
+      <br/>
+      {options.length>0 && 
+      <Typography variant="h6">Options</Typography>}
+      {option}    
+      <TextField
+        variant="outlined"
+        margin="normal" 
+        name="point"
+        label="Point"
+        type="number"
+        id="point"
+        autoComplete="point"
+        value={point}
+        onChange={handlePointChange}
+        required
+        fullWidth
+      />
+      {tag.length > 0 ? 
+      <TextField
+        style ={{ marginBottom: '0px' }}
+        variant="outlined"
+        margin="normal"
+        onChange={handleTagChange}
+        value={tagValue}
+        required
+        fullWidth
+        id ="tag"
+        label="Tag"
+        name="tag"
+        autoComplete="tag"
+      />
+      :
+      <TextField
+      variant="outlined"
+      margin="normal"
+      onChange={handleTagChange}
+      value={tagValue}
+      required
+      fullWidth
+      id ="tag"
+      label="Tag"
+      name="tag"
+      autoComplete="tag"
+      />}
+      {tag.length > 0 &&
+        <div style={{
+          borderStyle: 'solid',
+          borderWidth: '1px'
+        }}>
+        {tag.map((eachData, key) => {
+            return (
+            <MenuItem 
+            onClick={() => {selectOption(eachData)} } 
+            key={key}>
+              {eachData}
+            </MenuItem>
+            )
+          })}
+        </div>
+      }
+      <br/>               
+      <Button
+        type ='submit'
+        fullWidth
+        variant = 'contained'
+        color = 'primary'>
+        Submit
+      </Button>
+    </form>
+  );
+}
+
+// type checking for props
+MCQFormComponent.propTypes = {
+  editQuestion: PropTypes.objectOf(Object),
+  handleRedirect: PropTypes.func
+
 };
 
+// setting default props
+MCQFormComponent.defaultProps = {
+  editQuestion: {},
+  handleRedirect: ()=>{}
+};
 export default MCQFormComponent;
+

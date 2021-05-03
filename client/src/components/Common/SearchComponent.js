@@ -33,8 +33,6 @@ function SearchComponent(props) {
         }
     };
 
-
-
     return (
     <Grid container spacing={0}>
         {loading &&

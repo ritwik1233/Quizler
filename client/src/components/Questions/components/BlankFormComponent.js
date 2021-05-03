@@ -1,243 +1,270 @@
 import React from 'react';
 import { TextField, Button, MenuItem, ButtonGroup, Tooltip, Typography } from '@material-ui/core';
 import axios from 'axios';
-
+import PropTypes from 'prop-types';
 import AddOptionFormComponent from './AddOptionFormComponent.js';
 import OptionListComponent from './OptionListComponent.js';
 
+function formSetence(editQuestion) {
+  const correctAnswer = editQuestion.options.find(element => element.correct);
+  const firstHalf = editQuestion.question.split('_____')[0].trim().length ? editQuestion.question.split('_____')[0].trim() + ' ' : '';
+  const secondHalf = editQuestion.question.split('_____')[1].trim();
+  const fullSentence =  firstHalf + correctAnswer.description + ' ' + secondHalf;
+  return fullSentence;
+};
 
-class BlankFormComponent extends React.Component {
-  
-  state = {
-    tag: [],
-    options: this.props.editQuestion.options ? this.props.editQuestion.options : [],
-    tagValue: this.props.editQuestion.tag ? this.props.editQuestion.tag : '',
-    point: this.props.editQuestion.point ? this.props.editQuestion.point: 0,
-    sentenceValue: this.props.editQuestion.question ? this.formSetence(this.props.editQuestion) : '',
-    sentence: false,
-    addOption: false
-  };
+function wordSplit(sentence){
+    return sentence.split(' ');
+};
 
-  formSetence(editQuestion) {
-    const correctAnswer = editQuestion.options.find(element => element.correct);
-    const firstHalf = editQuestion.question.split('_____')[0].trim().length ? editQuestion.question.split('_____')[0].trim() + ' ' : '';
-    const secondHalf = editQuestion.question.split('_____')[1].trim();
-    const fullSentence =  firstHalf + correctAnswer.description + ' ' + secondHalf;
-    return fullSentence;
-  };
+function BlankFormComponent(props) {
+  const [tag, setTag] = React.useState([]);
+  const [options, setOptions] = React.useState([]);
+  const [tagValue, setTagValue] = React.useState('');
+  const [point, setPoint] = React.useState(0);
+  const [sentenceValue, setSentenceValue] = React.useState('');
+  const [sentence, setSentence] = React.useState(false);
+  const [addOption, setAddOption] = React.useState(false);
 
-  submitQuestion = (e) => { 
+  React.useEffect(() => {
+    if(props.editQuestion.options) {
+      setOptions(props.editQuestion.options);
+    }
+  }, [props.editQuestion.options]);
+
+  React.useEffect(() => {
+    if(props.editQuestion.tag) {
+      setTagValue(props.editQuestion.tag);
+    }
+  }, [props.editQuestion.tag]);
+
+  React.useEffect(() => {
+    if(props.editQuestion.point) {
+      setPoint(props.editQuestion.point);
+    }
+  }, [props.editQuestion.point]);
+
+  React.useEffect(() => {
+    if(props.editQuestion.question) {
+      const blankSentence = formSetence(props.editQuestion);
+      setPoint(blankSentence);
+    }
+  }, [props.editQuestion.question]);
+
+  const submitQuestion = (e) => { 
     e.preventDefault();
     const data = {
-      _id: this.props.editQuestion._id ? this.props.editQuestion._id : undefined,
-      question: this.state.sentenceValue,
-      options: this.state.options,
-      tag: this.state.tagValue,
+      _id: props.editQuestion._id ? props.editQuestion._id : undefined,
+      question: sentenceValue,
+      options: options,
+      tag: tagValue,
       point: e.target.point.value,
       type: 'MCQBLANK'
     };
     axios.post('/api/addQuestion', data)
       .then(() => {
-        this.props.handleRedirect();
+        props.handleRedirect();
       })   
   };
-
-
-  wordSplit = (sentence) => {
-    return sentence.split(' ');
-  };
-
-  markBlank = (data) => {
-    const sentence = this.state.sentenceValue.replace(data, '_____');
-    const optionArray = this.state.options;
+  const markBlank = (data) => {
+    const sentence = sentenceValue.replace(data, '_____');
+    const optionArray = options;
     optionArray.push({ description: data, correct: true });
-    this.setState({ options: optionArray, sentenceValue: sentence });
+    setOptions(optionArray);
+    setSentenceValue(sentence);
   };
 
-  handleOption = () => {
-    this.setState({
-        addOption: true
-    });
+  const handleOption = () => {
+    setAddOption(true);
   };
 
-  handleCancel = () => {
-      this.setState({
-          addOption: false
-      });
+  const handleCancel = () => {
+    setAddOption(false);
   };
 
-  handleSentenceChange = (e) => {
-    this.setState({ sentenceValue: e.target.value });
+  const handleSentenceChange = (e) => {
+    setSentenceValue(e.target.value);
   };
 
-  handlePointChange = (e) => {
-    this.setState({ point: e.target.value });
+  const handlePointChange = (e) => {
+    setPoint(e.target.value)
   };
   
-  addOptionForm = (optionData) => {
+  const addOptionForm = (optionData) => {
     const optionArray = this.state.options;
     optionArray.push(optionData);
-    this.setState({ options: optionArray, addOption: false });
+    setOptions(optionArray);
+    setAddOption(false);
   };
 
-  selectOption = (tagValue) => {
-    this.setState({ tagValue: tagValue });
+  const selectOption = (tagValue) => {
+    setTagValue(tagValue);
   };
 
-  onSentenceUpdate = () => {
-    if (this.state.sentenceValue.length > 0) {
-        this.setState({ sentence: !this.state.sentence, options: [] });
+  const onSentenceUpdate = () => {
+    if (sentenceValue.length > 0) {
+        setSentence(!sentence);
+        setOptions([]);
     }
   };
 
-  handleTagChange = (e) => {
-    this.setState({ tagValue: e.target.value });
+  const handleTagChange = (e) => {
+    setTagValue(e.target.value);
     axios.get('/api/getAllTag', {
         params: {
         tag: e.target.value
         }
     })
     .then(res => {
-        this.setState({ tag: res.data });
+        setTag(res.data);
     }).catch(err => {
-        this.setState({ tag: []});
+      setTag([]);
     });
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    if(prevState.tagValue !== this.state.tagValue && this.state.tagValue.length > 0 && this.state.tagValue.length > 0) {
-      this.setState({ tag: [] });
-    }
+  const deleteOption = (optionIndex) => {
+    let optionArray = options.filter((eachData, index) =>(index !== optionIndex));
+    setOptions(optionArray);
   };
- 
-  render() {
-    const words = this.wordSplit(this.state.sentenceValue);
-    const option = this.state.options.map((eachData, index) => {
-        return (
-          <OptionListComponent
-            optionData={eachData}
-            key={index}
-            index={index}
-            deleteOption={this.deleteOption}
-          />
-        )
-      });
+
+  const words = wordSplit(sentenceValue);
+  const option = options.map((eachData, index) => {
       return (
-        <form onSubmit={this.submitQuestion}>
-         {!this.state.sentence ?
-         <Tooltip title="Enter full sentence">
-         <TextField
-           variant="outlined"
-           margin="normal"
-           id="question"
-           value={this.state.sentenceValue}
-           onChange={this.handleSentenceChange}
-           label="Sentence"
-           name="question"
-           autoComplete="question"
-           required
-           fullWidth
-           autoFocus
-         />
-         </Tooltip>:
-         this.state.options.length > 0 ? 
-         <Typography variant="body1">{this.state.sentenceValue}</Typography>:
-         <ButtonGroup color="primary" aria-label="outlined primary button group">
-            {words.map((eachData, key) => {
-                return (
-                    <Tooltip title="Mark as blank" key={key}>
-                        <Button onClick={()=>{ this.markBlank(eachData)}} >{eachData}</Button>
-                    </Tooltip>
-                );
-            })}
-          </ButtonGroup>}
-          <Button variant="contained" onClick={this.onSentenceUpdate} color="primary">
-            {this.state.sentence?'Remove Sentence':'Add Sentence'}
+        <OptionListComponent
+          optionData={eachData}
+          key={index}
+          index={index}
+          deleteOption={deleteOption}
+        />
+      )
+  });
+    return (
+      <form onSubmit={submitQuestion}>
+        {!sentence ?
+        <Tooltip title="Enter full sentence">
+        <TextField
+          variant="outlined"
+          margin="normal"
+          id="question"
+          value={sentenceValue}
+          onChange={handleSentenceChange}
+          label="Sentence"
+          name="question"
+          autoComplete="question"
+          required
+          fullWidth
+          autoFocus
+        />
+        </Tooltip>:
+        options.length > 0 ? 
+        <Typography variant="body1">{sentenceValue}</Typography>:
+        <ButtonGroup color="primary" aria-label="outlined primary button group">
+          {words.map((eachData, key) => {
+              return (
+                  <Tooltip title="Mark as blank" key={key}>
+                      <Button onClick={()=>{ markBlank(eachData)}} >{eachData}</Button>
+                  </Tooltip>
+              );
+          })}
+        </ButtonGroup>}
+        <Button variant="contained" onClick={onSentenceUpdate} color="primary">
+          {sentence?'Remove Sentence':'Add Sentence'}
+        </Button>
+        <br/>
+        {options.length > 0 &&
+          <Button 
+          variant="contained"
+          color="primary"
+          onClick={handleOption}>
+              Add Option
           </Button>
-          <br/>
-          {this.state.options.length > 0 &&
-            <Button 
-            variant="contained"
-            color="primary"
-            onClick={this.handleOption}>
-                Add Option
-            </Button>
-           }
-           {this.state.addOption &&
-              <React.Fragment>
-                <br/>
-                <br/>
-                <AddOptionFormComponent
-                correct={true}
-                addOptionForm={this.addOptionForm}
-                handleCancel={this.handleCancel}
-              />
-              </React.Fragment>
-            }
-          {this.state.options.length>0 && 
-          <Typography variant="h6">Options</Typography>}
-          {option} 
-          <TextField
-            variant="outlined"
-            margin="normal"
-            name="point"
-            label="Point"
-            type="number"
-            id="point"
-            autoComplete="point"
-            value={this.state.point}
-            onChange={this.handlePointChange}
-            required
-            fullWidth
-          />          
-          {this.state.tag.length > 0 ? 
-          <TextField
-            style ={{ marginBottom: '0px' }}
-            variant="outlined"
-            margin="normal"
-            onChange={this.handleTagChange}
-            value={this.state.tagValue}
-            required
-            fullWidth
-            id ="tag"
-            label="Tag"
-            name="tag"
-            autoComplete="tag"
-          />:
-          <TextField
-            variant="outlined"
-            margin="normal"
-            onChange={this.handleTagChange}
-            value={this.state.tagValue}
-            required
-            fullWidth
-            id ="tag"
-            label="Tag"
-            name="tag"
-            autoComplete="tag"
-           />}
-           {this.state.tag.length > 0 &&
-            <div style={{
-                borderStyle: 'solid',
-                borderWidth: '1px'
-            }}>
-                {this.state.tag.map((eachData, key) => {
-                    return (
-                    <MenuItem 
-                    onClick={() => {this.selectOption(eachData)} } 
-                    key={key}>
-                    {eachData}
-                    </MenuItem>
-                    )
-                })}
-            </div>
-            }
-            <br/>               
-            <Button variant="contained" type="submit" color="primary">
-           Submit
-         </Button>  
-        </form>
-      );
-  }
+          }
+          {addOption &&
+            <React.Fragment>
+              <br/>
+              <br/>
+              <AddOptionFormComponent
+              correct={true}
+              addOptionForm={addOptionForm}
+              handleCancel={handleCancel}
+            />
+            </React.Fragment>
+          }
+        {options.length>0 && 
+        <Typography variant="h6">Options</Typography>}
+        {option} 
+        <TextField
+          variant="outlined"
+          margin="normal"
+          name="point"
+          label="Point"
+          type="number"
+          id="point"
+          autoComplete="point"
+          value={point}
+          onChange={handlePointChange}
+          required
+          fullWidth
+        />          
+        {tag.length > 0 ? 
+        <TextField
+          style ={{ marginBottom: '0px' }}
+          variant="outlined"
+          margin="normal"
+          onChange={handleTagChange}
+          value={tagValue}
+          required
+          fullWidth
+          id ="tag"
+          label="Tag"
+          name="tag"
+          autoComplete="tag"
+        />:
+        <TextField
+          variant="outlined"
+          margin="normal"
+          onChange={handleTagChange}
+          value={tagValue}
+          required
+          fullWidth
+          id ="tag"
+          label="Tag"
+          name="tag"
+          autoComplete="tag"
+          />}
+          {tag.length > 0 &&
+          <div style={{
+              borderStyle: 'solid',
+              borderWidth: '1px'
+          }}>
+              {tag.map((eachData, key) => {
+                  return (
+                  <MenuItem 
+                  onClick={() => {selectOption(eachData)} } 
+                  key={key}>
+                  {eachData}
+                  </MenuItem>
+                  )
+              })}
+          </div>
+          }
+          <br/>               
+          <Button variant="contained" type="submit" color="primary">
+          Submit
+        </Button>  
+      </form>
+    );
 }
+
+// type checking for props
+BlankFormComponent.propTypes = {
+  editQuestion: PropTypes.objectOf(Object),
+  handleRedirect: PropTypes.func
+};
+
+// setting default props
+BlankFormComponent.defaultProps = {
+  editQuestion: {},
+  handleRedirect: ()=>{}
+};
 export default BlankFormComponent;

@@ -1,7 +1,6 @@
 import React from 'react';
 import {  Typography, TextField, Button, Grid,
-  Accordion, AccordionSummary, AccordionDetails,
-  ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, IconButton
+  Accordion, AccordionSummary, AccordionDetails, IconButton
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -156,7 +155,6 @@ function QuizFormComponent(props) {
             }
           </Grid>
           }
-        
           <br/>
           <br/>
           <Button

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Grid, Modal, Typography, Link, Button, DialogContent } from '@material-ui/core';
 import { Link as RouterLink, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { connect, useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 import AddIcon from '@material-ui/icons/Add';
 
 import { getAllQuestion, fetchUser, editQuestion } from '../../actions/index.js';
@@ -10,117 +10,116 @@ import QuestionList from './components/QuestionList.js';
 import SearchComponent from '../Common/SearchComponent.js';
 import FileUploadComponent from '../Common/FileUploadComponent.js';
 
-class QuestionPage extends React.Component {
-  state = {
-    redirect: '',
-    modalOpen: false
-  };
+function QuestionPage(props) {
+  const [redirect, setRedirect] = React.useState(false);
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const dispatch = useDispatch();
 
-  componentDidMount () {
-    this.props.fetchUser();
-    this.props.getAllQuestion();
-  };
-
-  componentDidUpdate(prevProps, prevState) {
-    if (!prevProps.currentUser._id && !this.props.currentUser._id && this.state.redirect.length === 0) {
-      this.setState({ redirect: '/' });
+  // Component Did Mount Hook
+  React.useState(() => {
+    dispatch(fetchUser());
+    dispatch(getAllQuestion());
+  },[]);
+  
+  // componentDidUpdate Hook for current User Object
+  React.useEffect(() => {
+    const _id = props.currentUser._id;
+    if(_id !== 'default' && !_id) {
+        setRedirect(true);
     }
-    if(prevProps.currentUser._id && !this.props.currentUser._id) {
-      this.setState({ redirect: '/' });
-    }
-  };
-
-  deleteItem = (status) => {
+  }, [props.currentUser]);
+  
+  const deleteItem = (status) => {
     if (status) {
-      this.props.getAllQuestion();
+      dispatch(getAllQuestion());
     }
   };
 
-  editItem = (question) => {
-    this.props.editQuestion(question)
-    this.props.history.push('/newquestions');
+  const editItem = (question) => {
+    dispatch(editQuestion(question));
+    props.history.push('/newquestions');
   };
 
-  handleAdd = () => {
-    this.props.editQuestion({});
+  const handleAdd = () => {
+    dispatch(editQuestion({}));
   };
 
-  handleOpen = () => {
-    this.setState({ modalOpen: true });
+  const handleOpen = () => {
+    setModalOpen(true);
   };
 
-  handleClose = () => {
-    this.setState({ modalOpen: false });
+  const handleClose = () => {
+    setModalOpen(false);
   };
 
-  fileUpload = () => {
-    this.setState({ modalOpen: false });
-    this.props.getAllQuestion();
+  const fileUpload = () => {
+    setModalOpen(false);
+    dispatch(props.getAllQuestion());
   }
 
-  render() {
-    if(this.state.redirect.length > 0) {
-      return (<Redirect to={this.state.redirect} />);
-    }
-    return (
-      <Grid container spacing={3}>
-        <Grid item xs={12}></Grid>
-        <Grid item xs={12}></Grid>
-        <Grid item xs={12}>
-            <Grid container spacing={0}>
-              <Grid item xs={12}>&nbsp;</Grid>
-              <Grid item xs={12}>
-                <Modal
-                  open={this.state.modalOpen}
-                  onClose={this.handleClose}
-                  style={{
-                    width: '90%',
-                    marginTop: '10%',
-                    marginLeft: '5%'
-                  }}
-                  >
-                    <DialogContent>
-                      <FileUploadComponent fileUpload={this.fileUpload} />
-                    </DialogContent>
-                </Modal>
-              </Grid>
-              <Grid item xs={9}>
-                <Typography variant="h5">&nbsp;&nbsp;Questions</Typography>
-              </Grid>
-              <Grid item xs={2}>
-                {
-                this.props.currentUser.verified && <Button
-                  onClick={this.handleOpen}
-                  variant="contained">
-                    Upload Question 
-                </Button>
-                }
-              </Grid>
-              <Grid item xs={1}>
-                 <Link to="/newquestions" component={RouterLink}>
-                    <Button
-                     onClick={this.handleAdd}
-                     variant="contained"
-                     endIcon={<AddIcon/>}>
-                      Add 
-                    </Button>
-                 </Link>
-              </Grid>
-              <Grid item xs={12}>&nbsp;</Grid>
-              <Grid item xs={12}>
-                <SearchComponent  type="question"/>
-              </Grid>
-              <Grid item xs={12}>
-                <QuestionList 
-                  allQuestions={this.props.allQuestions}
-                  deleteItem={this.deleteItem}
-                  editItem={this.editItem} />
-              </Grid>
+  if(redirect) {
+    return (<Redirect to='/' />);
+  }
+
+  return (
+    <Grid container spacing={3}>
+      <Grid item xs={12}></Grid>
+      <Grid item xs={12}></Grid>
+      <Grid item xs={12}>
+          <Grid container spacing={0}>
+            <Grid item xs={12}>&nbsp;</Grid>
+            <Grid item xs={12}>
+              <Modal
+                open={modalOpen}
+                onClose={handleClose}
+                style={{
+                  width: '90%',
+                  marginTop: '10%',
+                  marginLeft: '5%'
+                }}
+                >
+                  <DialogContent>
+                    <FileUploadComponent fileUpload={fileUpload} />
+                  </DialogContent>
+              </Modal>
             </Grid>
-        </Grid>
-      </Grid> 
-    );
-  }
+            <Grid item xs={9}>
+              <Typography variant="h5">&nbsp;&nbsp;Questions</Typography>
+            </Grid>
+            <Grid item xs={2}>
+              {
+              props.currentUser.verified && <Button
+                onClick={handleOpen}
+                variant="contained">
+                  Upload Question 
+              </Button>
+              }
+            </Grid>
+            <Grid item xs={1}>
+                <Link to="/newquestions" component={RouterLink}>
+                  <Button
+                    onClick={handleAdd}
+                    variant="contained"
+                    endIcon={<AddIcon/>}>
+                    Add 
+                  </Button>
+                </Link>
+            </Grid>
+            <Grid item xs={12}>&nbsp;</Grid>
+            <Grid item xs={12}>
+              <SearchComponent  type="question"/>
+            </Grid>
+            <Grid item xs={12}>
+              <QuestionList 
+                allQuestions={props.allQuestions}
+                deleteItem={deleteItem}
+                editItem={editItem} />
+            </Grid>
+          </Grid>
+      </Grid>
+    </Grid> 
+  );
+
 }
 
 function mapStateToProps(state) {
@@ -130,10 +129,15 @@ function mapStateToProps(state) {
    }
 };
 
-function mapDispatchToProps (dispatch) {
-  return bindActionCreators({
-    getAllQuestion, fetchUser, editQuestion
-  }, dispatch)
+// type checking for props
+QuestionPage.propTypes = {
+  allQuestions: PropTypes.arrayOf(Object),
+  currentUser: PropTypes.objectOf(Object)
 };
-  
-export default connect(mapStateToProps, mapDispatchToProps)(QuestionPage);
+
+// setting default props
+QuestionPage.defaultProps = {
+  currentUser: { _id: 'default' },
+  allQuiz: []
+};
+export default connect(mapStateToProps)(QuestionPage);

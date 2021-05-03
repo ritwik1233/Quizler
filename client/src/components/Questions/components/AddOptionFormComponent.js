@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Grid, Paper, TextField, Button, Checkbox, FormControlLabel } from '@material-ui/core';
 
-
-const AddOptionFormComponent = function (props) {
-    console.log();
+function AddOptionFormComponent(props) {
     const [checked, setChecked] = useState(false);
     const [error, setError] = useState(false);
     const [optionValue, addOption] = useState('');
@@ -81,5 +80,18 @@ const AddOptionFormComponent = function (props) {
         </Grid>
       </Paper>
     );
-  }
+}
+
+// type checking for props
+AddOptionFormComponent.propTypes = {
+  addOptionForm: PropTypes.func,
+  handleCancel: PropTypes.func
+};
+
+// setting default props
+AddOptionFormComponent.defaultProps = {
+  addOptionForm: ()=>{},
+  handleCancel: ()=>{}
+};
+
 export default  AddOptionFormComponent;

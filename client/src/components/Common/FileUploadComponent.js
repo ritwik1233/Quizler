@@ -1,4 +1,5 @@
 import React  from 'react';
+import PropTypes from 'prop-types';
 import { Grid, Typography, Paper, Button, Table, TableHead, TableRow,TableCell, TableBody, Container, LinearProgress } from '@material-ui/core';
 import axios from 'axios';
 
@@ -135,4 +136,14 @@ function FileUploadComponent(props) {
         </Grid>
     );
 }
+
+// type checking for props
+FileUploadComponent.propTypes = {
+  fileUpload: PropTypes.func
+};
+  
+// setting default props
+FileUploadComponent.defaultProps = {
+    fileUpload: ()=>{}
+};
 export default FileUploadComponent;

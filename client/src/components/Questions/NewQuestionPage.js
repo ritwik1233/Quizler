@@ -1,90 +1,88 @@
 import React from 'react';
 import { Grid, Typography, Select, MenuItem } from '@material-ui/core';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { connect, useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 
 import MCQFormComponent from './components/MCQFormComponent.js';
 import BlankFormComponent from './components/BlankFormComponent.js';
-
 import { fetchUser } from '../../actions/index.js';
 
+function NewQuestionPage(props) {
+  const dispatch = useDispatch();
+  const [redirect, setRedirect] = React.useState(false);
+  const [questionType, setQuestionType] = React.useState('MCQ');
 
-class NewQuestionPage extends React.Component {
-  state = {
-    redirect: '',
-    questionType: this.props.editQuestion.type ? this.props.editQuestion.type: 'MCQ',
+  // Component Did Mount Hook
+  React.useState(() => {
+    dispatch(fetchUser());
+  },[]);
+  
+  // componentDidUpdate Hook for current User Object
+  React.useEffect(() => {
+    const _id = props.currentUser._id;
+    if(_id !== 'default' && !_id) {
+        setRedirect(true);
+    }
+  }, [props.currentUser]);
+
+  React.useEffect(()=>{
+    setQuestionType(props.editQuestion.type);
+  },[props.editQuestion]);
+  
+  const handleQuestionType = (e) => {
+    setQuestionType(e.target.value);
   };
 
-  handleQuestionType = (e) => {
-    this.setState({ questionType: e.target.value});
-  };
-
-  handleRedirect = () => {
-    this.props.history.push('/questions');
+  const handleRedirect = () => {
+    props.history.push('/questions');
   }
 
-  componentDidMount () {
-    this.props.fetchUser();
-  };
-
-  componentDidUpdate(prevProps, prevState) {
-    if (!prevProps.currentUser._id && !this.props.currentUser._id && this.state.redirect.length === 0) {
-      this.setState({ redirect: '/' });
-    }
-    if(prevProps.currentUser._id && !this.props.currentUser._id) {
-      this.setState({ redirect: '/' });
-    }
-    if(this.props.currentUser._id && !this.props.currentUser.verified) {
-      this.props.history.goBack();  
-    }
-  };
-
-  render() {
-    if(this.state.redirect.length > 0) {
-      return (
-        <Redirect to={this.state.redirect} />
-      );
-    }
-
+  if(redirect) {
     return (
-      <Grid container spacing={3}>
-        <Grid item xs={12}>&nbsp;</Grid>
-        <Grid item xs={12}>
-          <Grid container spacing={0}>
-            <Grid item xs={12}>&nbsp;</Grid>
-            <Grid item xs={2}></Grid>
-            <Grid item xs={8}>
-            <Typography variant="h6">New Question</Typography>
-              <Select
-                variant="outlined"
-                name="type"
-                value={this.state.questionType}
-                onChange={this.handleQuestionType}
-                fullWidth
-                required
-                >
-              <MenuItem value='MCQ'>MCQ</MenuItem>
-              <MenuItem value='MCQBLANK'>Fill In Blank(MCQ)</MenuItem>
-            </Select>
-            {this.state.questionType === 'MCQ' ?
-            <MCQFormComponent 
-              handleRedirect={this.handleRedirect} 
-              editQuestion={this.props.editQuestion} /> 
-              :
-            <BlankFormComponent 
-            handleRedirect={this.handleRedirect}
-            editQuestion={this.props.editQuestion}
-            />}
-            </Grid>
-            <Grid item xs={2}></Grid>
-            <Grid item xs={12}>&nbsp;</Grid>
-          </Grid>
-        </Grid>
-      </Grid> 
+      <Redirect to='/' />
     );
   }
-};
+
+  return (
+    <Grid container spacing={3}>
+      <Grid item xs={12}>&nbsp;</Grid>
+      <Grid item xs={12}>
+        <Grid container spacing={0}>
+          <Grid item xs={12}>&nbsp;</Grid>
+          <Grid item xs={2}></Grid>
+          <Grid item xs={8}>
+          <Typography variant="h6">New Question</Typography>
+            <Select
+              variant="outlined"
+              name="type"
+              value={questionType}
+              onChange={handleQuestionType}
+              fullWidth
+              required
+              >
+            <MenuItem value='MCQ'>MCQ</MenuItem>
+            <MenuItem value='MCQBLANK'>Fill In Blank(MCQ)</MenuItem>
+          </Select>
+          {questionType === 'MCQ' ?
+          <MCQFormComponent 
+            handleRedirect={handleRedirect} 
+            editQuestion={props.editQuestion} /> 
+            :
+          <BlankFormComponent 
+          handleRedirect={handleRedirect}
+          editQuestion={props.editQuestion}
+          />}
+          </Grid>
+          <Grid item xs={2}></Grid>
+          <Grid item xs={12}>&nbsp;</Grid>
+        </Grid>
+      </Grid>
+    </Grid> 
+  );
+
+}
+
 function mapStateToProps(state) {
   return {
     currentUser: state.auth.currentUser,
@@ -92,10 +90,16 @@ function mapStateToProps(state) {
   }
 };
 
-function mapDispatchToProps (dispatch) {
-  return bindActionCreators({
-    fetchUser
-  }, dispatch)
+
+// type checking for props
+NewQuestionPage.propTypes = {
+  editQuestion: PropTypes.objectOf(Object),
+  currentUser: PropTypes.objectOf(Object)
 };
-  
-export default connect(mapStateToProps, mapDispatchToProps)(NewQuestionPage);
+
+// setting default props
+NewQuestionPage.defaultProps = {
+  currentUser: { _id: 'default' },
+  editQuestion: {}
+};
+export default connect(mapStateToProps)(NewQuestionPage);
