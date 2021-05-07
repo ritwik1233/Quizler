@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const mongoose = require('mongoose');
@@ -8,23 +8,28 @@ const helmet = require('helmet');
 const fileUpload = require('express-fileupload');
 const keys = require('./keys');
 
-mongoose.connect(keys.MongoURI, { useNewUrlParser: true,  useUnifiedTopology: true  });
+mongoose.connect(keys.MongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 require('./models/quizModel.js');
 require('./models/questionModel.js');
-require('./models/userModel.js')
+require('./models/userModel.js');
 require('./models/tokenModel.js');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-app.use(helmet())
-app.use(session({
-  secret: keys.secret,
-  resave: false,
-  saveUninitialized: true,
-}));
+app.use(helmet());
+app.use(
+  session({
+    secret: keys.secret,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 app.use(fileUpload());
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 require('./routes/authRoutes.js')(app);
 require('./routes/questionRoutes.js')(app);
@@ -38,9 +43,9 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 app.listen(PORT, (err) => {
-    if(err) {
-        console.log(err);
-    } else {
-        console.log('Node Server listening at', PORT);
-    }
+  if (err) {
+    console.log(err);
+  } else {
+    console.log('Node Server listening at', PORT);
+  }
 });
