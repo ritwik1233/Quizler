@@ -87,6 +87,7 @@ function NewQuizPage(props) {
           <Grid item xs={2}></Grid>
           <Grid item xs={8}>
             <QuizFormComponent
+              selectedQuestions={selectedQuestions}
               editQuiz={props.editQuiz}
               selectedQuestions={selectedQuestions}
               allQuestions={props.allQuestions}

@@ -27,6 +27,12 @@ function QuizFormComponent(props) {
     setTime(props.editQuiz.time);
   }, [props.editQuiz]);
 
+  React.useEffect(() => {
+    if (!props.editQuiz._id) {
+      setQuestions(props.selectedQuestions);
+    }
+  }, [props.selectedQuestions]);
+
   const handleNameChange = (e) => {
     setName(e.target.value);
   };
@@ -48,15 +54,31 @@ function QuizFormComponent(props) {
       };
     });
     const data = {
-      _id: props.editQuiz._id ? props.editQuiz._id : undefined,
       name: name,
       time: time,
       description: description,
       questions: updatedQuestions,
     };
-    axios.post('/api/addQuiz', data).then((res) => {
-      props.handleRedirect();
-    });
+    if (props.editQuiz._id) {
+      data._id = props.editQuiz._id;
+      axios
+        .put('/api/updateQuiz', data)
+        .then((res) => {
+          props.handleRedirect();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      axios
+        .post('/api/addQuiz', data)
+        .then((res) => {
+          props.handleRedirect();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const addQuestion = () => {
@@ -85,7 +107,7 @@ function QuizFormComponent(props) {
         name="name"
         autoComplete="name"
         autoFocus
-        value={name}
+        value={name || ''}
         onChange={handleNameChange}
         required
         fullWidth
@@ -97,7 +119,7 @@ function QuizFormComponent(props) {
         label="Enter Description(Optional)...."
         name="description"
         autoComplete="description"
-        value={description}
+        value={description || ''}
         onChange={handleDescriptionChange}
         fullWidth
         multiline
@@ -111,14 +133,14 @@ function QuizFormComponent(props) {
         label="Enter Time of Quiz"
         name="time"
         autoComplete="time"
-        value={time}
+        value={time || ''}
         onChange={handleTimeChange}
         required
         fullWidth
       />
       <br />
       <br />
-      {questions.length > 0 && (
+      {questions && questions.length > 0 && (
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Typography variant="body1">Questions</Typography>

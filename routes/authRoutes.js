@@ -35,7 +35,7 @@ module.exports = (app) => {
   });
 
   app.post('/api/login', (req, res) => {
-    if (req.session.userID !== undefined) {
+    if (req.session.userID) {
       req.session.destroy((err) => {
         if (err) {
           console.log(err);
@@ -88,7 +88,7 @@ module.exports = (app) => {
           return res.status(500).send();
         });
     } else {
-      res.sendStatus(500);
+      return res.sendStatus(500);
     }
   });
 
@@ -102,7 +102,7 @@ module.exports = (app) => {
         }
       });
     } else {
-      res.sendStatus(500);
+      return res.sendStatus(500);
     }
   });
 

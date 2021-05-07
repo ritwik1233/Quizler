@@ -1,104 +1,51 @@
 const mongoose = require('mongoose');
-const Quiz = mongoose.model('Quiz');
+const OrQueryBuilder = require('../utils/OrQueryBuilder.js');
+const AndQueryBuilder = require('../utils/AndQueryBuilder.js');
+const QuizService = require('../service/QuizService.js');
 
 module.exports = (app) => {
-  app.post('/api/addQuiz', (req, res) => {
+  app.post('/api/addQuiz', async (req, res) => {
     if (req.session.userID) {
-      if (req.body._id) {
-        Quiz.updateOne(
-          {
-            _id: req.body._id,
-          },
-          { ...req.body },
-          { upsert: true }
-        )
-          .then((result) => {
-            return res.sendStatus(200);
-          })
-          .catch((err) => {
-            console.log(err);
-            return res.sendStatus(500);
-          });
-      } else {
-        const newQuiz = new Quiz({
-          ...req.body,
-          createdBy: req.session.userID,
-          createdDate: new Date(),
-        });
-        newQuiz
-          .save()
-          .then(() => {
-            return res.sendStatus(200);
-          })
-          .catch((err) => {
-            console.log(err);
-            return res.status(500).send('Internal Server Error');
-          });
-      }
-    } else {
-      res.sendStatus(500);
+      const data = {
+        ...req.body,
+        createdBy: req.session.userID,
+        createdDate: new Date(),
+      };
+      const response = await QuizService.addQuiz(data);
+      return res.status(response.status).send(response.message);
     }
+    return res.status(401).send('Unauthorised Access');
   });
 
-  app.get('/api/getAllQuiz', (req, res) => {
+  app.put('/api/updateQuiz', async (req, res) => {
     if (req.session.userID) {
-      const searchQuery = req.query.searchQuery;
-      if (searchQuery && searchQuery.length) {
-        var regex = new RegExp(searchQuery);
-        Quiz.find({
-          $and: [
-            { createdBy: req.session.userID },
-            {
-              $or: [
-                { name: { $regex: regex, $options: 'i' } },
-                { description: { $regex: regex, $options: 'i' } },
-                { 'questions.question': { $regex: regex, $options: 'i' } },
-                {
-                  'questions.question.options.description': {
-                    $regex: regex,
-                    $options: 'i',
-                  },
-                },
-                { 'comments.message': { $regex: regex, $options: 'i' } },
-                { createdBy: { $regex: regex, $options: 'i' } },
-              ],
-            },
-          ],
-        })
-          .then((questions) => {
-            return res.send(questions);
-          })
-          .catch((err) => {
-            console.log(err);
-            return res.send([]);
-          });
-      } else {
-        Quiz.find({ createdBy: req.session.userID })
-          .then((quiz) => {
-            return res.send(quiz);
-          })
-          .catch((err) => {
-            console.log(err);
-            return res.send([]);
-          });
-      }
-    } else {
-      res.send([]);
+      const response = await QuizService.updateQuiz(req.body);
+      return res.status(response.status).send(response.message);
     }
+    return res.status(401).send('Unauthorised Access');
   });
 
-  app.delete('/api/deleteQuiz', (req, res) => {
+  app.get('/api/getAllQuiz', async (req, res) => {
     if (req.session.userID) {
-      Quiz.remove({ _id: req.query._id })
-        .then((result) => {
-          return res.sendStatus(200);
-        })
-        .catch((err) => {
-          console.log(err);
-          return res.sendStatus(500);
-        });
-    } else {
-      res.sendStatus(500);
+      let searchValue = req.query.searchQuery ? req.query.searchQuery : '';
+      const _id = req.session.userID;
+      const searchQuery = { createdBy: _id };
+      const orQuery = new OrQueryBuilder(searchValue, 'Quiz');
+      let andQuery = new AndQueryBuilder().addQuery(searchQuery);
+      if (orQuery.$or) {
+        andQuery = andQuery.addQuery(orQuery);
+      }
+      let response = await QuizService.getQuiz(andQuery.getQuery());
+      return res.status(response.status).send(response.data);
     }
+    return res.status(401).send([]);
+  });
+
+  app.delete('/api/deleteQuiz', async (req, res) => {
+    if (req.session.userID) {
+      const response = await QuizService.deleteQuiz(req.query._id);
+      return res.status(response.status).send(response.message);
+    }
+    return res.status(401).send('Unauthorised Access');
   });
 };

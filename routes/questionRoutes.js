@@ -38,7 +38,7 @@ module.exports = (app) => {
           });
       }
     } else {
-      res.send([]);
+      return res.send([]);
     }
   });
 
@@ -75,7 +75,7 @@ module.exports = (app) => {
           });
       }
     } else {
-      res.sendStatus(500);
+      return res.sendStatus(500);
     }
   });
 
@@ -90,7 +90,7 @@ module.exports = (app) => {
           return res.sendStatus(500);
         });
     } else {
-      res.sendStatus(500);
+      return res.sendStatus(500);
     }
   });
 
@@ -114,7 +114,7 @@ module.exports = (app) => {
           return res.send([]);
         });
     } else {
-      res.send([]);
+      return res.send([]);
     }
   });
 
@@ -170,14 +170,14 @@ module.exports = (app) => {
                 return res.send('Internal Service Error');
               });
           } else {
-            res.send('Empty File');
+            return res.send('Empty File');
           }
         }
       } else {
-        res.send('Empty File');
+        return res.send('Empty File');
       }
     } else {
-      res.sendStatus(500);
+      return res.sendStatus(500);
     }
   });
 };

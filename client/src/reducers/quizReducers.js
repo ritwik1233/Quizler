@@ -3,7 +3,7 @@ const quizReducer = function (state = { allQuiz: [], editQuiz: {} }, action) {
     case 'GET_ALL_QUIZ':
       return { ...state, allQuiz: [...action.payload] };
     case 'GET_ALL_QUIZ_FAILED':
-      return { ...state, allQuiz: [...action.payload] };
+      return { ...state, allQuiz: [] };
     case 'EDIT_QUIZ':
       return { ...state, editQuiz: { ...action.payload } };
     default:
