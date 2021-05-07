@@ -1,5 +1,5 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Grid,
   Typography,
@@ -7,12 +7,12 @@ import {
   AccordionSummary,
   AccordionDetails,
   IconButton,
-} from "@material-ui/core";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import axios from "axios";
-import Delete from "@material-ui/icons/Delete";
-import Edit from "@material-ui/icons/Edit";
-import Share from "@material-ui/icons/Share";
+} from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import axios from 'axios';
+import Delete from '@material-ui/icons/Delete';
+import Edit from '@material-ui/icons/Edit';
+import Share from '@material-ui/icons/Share';
 
 function QuizItem(props) {
   const deleteItem = () => {
@@ -20,7 +20,7 @@ function QuizItem(props) {
       _id: props.quiz._id,
     };
     axios
-      .delete("/api/deleteQuiz", { params: payload })
+      .delete('/api/deleteQuiz', { params: payload })
       .then((result) => {
         props.deleteItem(true);
       })
@@ -81,8 +81,8 @@ function QuizItem(props) {
                                 <Grid item xs={2}>
                                   <Typography variant="body1">
                                     {eachOption.correct
-                                      ? "Correct"
-                                      : "Incorrect"}
+                                      ? 'Correct'
+                                      : 'Incorrect'}
                                   </Typography>
                                 </Grid>
                               </React.Fragment>

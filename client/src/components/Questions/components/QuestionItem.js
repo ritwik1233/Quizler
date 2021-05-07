@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Grid,
   Typography,
@@ -6,12 +6,12 @@ import {
   AccordionSummary,
   AccordionDetails,
   IconButton,
-} from "@material-ui/core";
-import PropTypes from "prop-types";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import axios from "axios";
-import Delete from "@material-ui/icons/Delete";
-import Edit from "@material-ui/icons/Edit";
+} from '@material-ui/core';
+import PropTypes from 'prop-types';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import axios from 'axios';
+import Delete from '@material-ui/icons/Delete';
+import Edit from '@material-ui/icons/Edit';
 
 function QuestionItem(props) {
   const deleteItem = () => {
@@ -19,7 +19,7 @@ function QuestionItem(props) {
       _id: props.question._id,
     };
     axios
-      .delete("/api/deleteQuestion", { params: payload })
+      .delete('/api/deleteQuestion', { params: payload })
       .then((result) => {
         props.deleteItem(true);
       })
@@ -55,7 +55,7 @@ function QuestionItem(props) {
                     </Grid>
                     <Grid item xs={2}>
                       <Typography variant="body1">
-                        {eachdata.correct ? "Correct" : "Incorrect"}
+                        {eachdata.correct ? 'Correct' : 'Incorrect'}
                       </Typography>
                     </Grid>
                   </React.Fragment>

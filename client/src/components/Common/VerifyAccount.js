@@ -1,12 +1,12 @@
-import React from "react";
-import { Grid, Typography, Button } from "@material-ui/core";
-import axios from "axios";
+import React from 'react';
+import { Grid, Typography, Button } from '@material-ui/core';
+import axios from 'axios';
 
 function VerifyAccount() {
   const [verified, setVerify] = React.useState(false);
 
   const handleVerify = () => {
-    axios.get("/api/verifyLink").then((res) => {
+    axios.get('/api/verifyLink').then((res) => {
       setVerify(true);
     });
   };

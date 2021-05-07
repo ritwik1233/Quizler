@@ -1,22 +1,22 @@
-import React from "react";
-import { Grid, Paper, Typography, TextField, Button } from "@material-ui/core";
-import { Redirect } from "react-router-dom";
-import axios from "axios";
+import React from 'react';
+import { Grid, Paper, Typography, TextField, Button } from '@material-ui/core';
+import { Redirect } from 'react-router-dom';
+import axios from 'axios';
 
 function ForgotPassword() {
-  const [email, setEmail] = React.useState("");
-  const [error, setError] = React.useState("");
+  const [email, setEmail] = React.useState('');
+  const [error, setError] = React.useState('');
   const [redirect, setRedirect] = React.useState(false);
 
   const onChange = (e) => {
     setEmail(e.target.value);
-    setError("");
+    setError('');
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
     axios
-      .get("/api/forgotPassword", {
+      .get('/api/forgotPassword', {
         params: {
           email: email,
         },

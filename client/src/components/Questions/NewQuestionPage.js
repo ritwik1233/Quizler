@@ -1,17 +1,17 @@
-import React from "react";
-import { Grid, Typography, Select, MenuItem } from "@material-ui/core";
-import { connect, useDispatch } from "react-redux";
-import PropTypes from "prop-types";
-import { Redirect } from "react-router-dom";
+import React from 'react';
+import { Grid, Typography, Select, MenuItem } from '@material-ui/core';
+import { connect, useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 
-import MCQFormComponent from "./components/MCQFormComponent.js";
-import BlankFormComponent from "./components/BlankFormComponent.js";
-import { fetchUser } from "../../actions/index.js";
+import MCQFormComponent from './components/MCQFormComponent.js';
+import BlankFormComponent from './components/BlankFormComponent.js';
+import { fetchUser } from '../../actions/index.js';
 
 function NewQuestionPage(props) {
   const dispatch = useDispatch();
   const [redirect, setRedirect] = React.useState(false);
-  const [questionType, setQuestionType] = React.useState("MCQ");
+  const [questionType, setQuestionType] = React.useState('MCQ');
 
   // Component Did Mount Hook
   React.useState(() => {
@@ -21,7 +21,7 @@ function NewQuestionPage(props) {
   // componentDidUpdate Hook for current User Object
   React.useEffect(() => {
     const _id = props.currentUser._id;
-    if (_id !== "default" && !_id) {
+    if (_id !== 'default' && !_id) {
       setRedirect(true);
     }
   }, [props.currentUser]);
@@ -35,7 +35,7 @@ function NewQuestionPage(props) {
   };
 
   const handleRedirect = () => {
-    props.history.push("/questions");
+    props.history.push('/questions');
   };
 
   if (redirect) {
@@ -66,7 +66,7 @@ function NewQuestionPage(props) {
               <MenuItem value="MCQ">MCQ</MenuItem>
               <MenuItem value="MCQBLANK">Fill In Blank(MCQ)</MenuItem>
             </Select>
-            {questionType === "MCQ" ? (
+            {questionType === 'MCQ' ? (
               <MCQFormComponent
                 handleRedirect={handleRedirect}
                 editQuestion={props.editQuestion}
@@ -103,7 +103,7 @@ NewQuestionPage.propTypes = {
 
 // setting default props
 NewQuestionPage.defaultProps = {
-  currentUser: { _id: "default" },
+  currentUser: { _id: 'default' },
   editQuestion: {},
 };
 export default connect(mapStateToProps)(NewQuestionPage);

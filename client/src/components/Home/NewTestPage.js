@@ -1,5 +1,5 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Typography,
   Grid,
@@ -7,13 +7,13 @@ import {
   FormLabel,
   RadioGroup,
   FormControlLabel,
-} from "@material-ui/core";
-import Radio from "@material-ui/core/Radio";
-import { connect, useDispatch } from "react-redux";
-import { Redirect } from "react-router-dom";
-import QuestionCard from "./QuestionCard.js";
+} from '@material-ui/core';
+import Radio from '@material-ui/core/Radio';
+import { connect, useDispatch } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import QuestionCard from './QuestionCard.js';
 
-import { showResult } from "../../actions/index.js";
+import { showResult } from '../../actions/index.js';
 
 function getTimer(totalTime, totalSeconds) {
   let minute = totalTime - totalSeconds;
@@ -31,8 +31,8 @@ function getTimer(totalTime, totalSeconds) {
 function NewTestPage(props) {
   const dispatch = useDispatch();
   const [answers, setAnswers] = React.useState([]);
-  const [answerValue, setAnswerValue] = React.useState("");
-  const [redirect, setRedirect] = React.useState("");
+  const [answerValue, setAnswerValue] = React.useState('');
+  const [redirect, setRedirect] = React.useState('');
   const [seconds, setSeconds] = React.useState(0);
   const [next, setNext] = React.useState(0);
 
@@ -64,7 +64,7 @@ function NewTestPage(props) {
       };
     });
     dispatch(showResult(result));
-    setRedirect("/result");
+    setRedirect('/result');
   };
 
   // hook to check if time is over
@@ -96,7 +96,7 @@ function NewTestPage(props) {
       answerArray[next] = answerValue;
       setAnswers(answerArray);
       setNext((prev) => prev - 1);
-      setAnswerValue("");
+      setAnswerValue('');
       return;
     }
     setNext((prev) => prev - 1);

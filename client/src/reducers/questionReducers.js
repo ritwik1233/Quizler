@@ -3,11 +3,11 @@ const questionReducer = function (
   action
 ) {
   switch (action.type) {
-    case "GET_ALL_QUESTIONS":
+    case 'GET_ALL_QUESTIONS':
       return { ...state, allQuestions: [...action.payload] };
-    case "GET_ALL_QUESTIONS_FAILED":
+    case 'GET_ALL_QUESTIONS_FAILED':
       return { ...state, allQuestions: [] };
-    case "EDIT_QUESTION":
+    case 'EDIT_QUESTION':
       return { ...state, editQuestion: { ...action.payload } };
     default:
       return state;

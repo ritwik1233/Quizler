@@ -1,5 +1,5 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Grid,
   Typography,
@@ -12,34 +12,34 @@ import {
   TableBody,
   Container,
   LinearProgress,
-} from "@material-ui/core";
-import axios from "axios";
+} from '@material-ui/core';
+import axios from 'axios';
 
 function FileUploadComponent(props) {
   const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState("");
+  const [error, setError] = React.useState('');
 
   const onSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
+    setError('');
     if (!e.target.fileUpload.files[0]) {
       setLoading(false);
-      setError("No File Selected");
+      setError('No File Selected');
       return;
     }
     const data = new FormData();
     data.append(
-      "file",
+      'file',
       e.target.fileUpload.files[0],
       e.target.fileUpload.files[0].name
     );
     const config = {
-      headers: { "Content-Type": "multipart/form-data" },
+      headers: { 'Content-Type': 'multipart/form-data' },
     };
 
     axios
-      .post("/api/uploadfile", data, config)
+      .post('/api/uploadfile', data, config)
       .then((res) => {
         if (res.data.length) {
           setLoading(false);
@@ -73,7 +73,7 @@ function FileUploadComponent(props) {
                   <Typography variant="body1">
                     File Upload functionality can only be implemented for MCQ
                     questions. Use the sample file provided below to edit your
-                    csv{" "}
+                    csv{' '}
                   </Typography>
                 </Grid>
                 <Grid item xs={12}>
@@ -130,10 +130,10 @@ function FileUploadComponent(props) {
                     type="file"
                     name="fileUpload"
                     style={{
-                      borderStyle: "solid",
-                      borderRadius: "2px",
-                      width: "100%",
-                      borderWidth: "1px",
+                      borderStyle: 'solid',
+                      borderRadius: '2px',
+                      width: '100%',
+                      borderWidth: '1px',
                     }}
                   />
                 </Grid>

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Typography,
   TextField,
@@ -8,16 +8,16 @@ import {
   AccordionSummary,
   AccordionDetails,
   IconButton,
-} from "@material-ui/core";
-import PropTypes from "prop-types";
-import axios from "axios";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import DeleteIcon from "@material-ui/icons/Delete";
+} from '@material-ui/core';
+import PropTypes from 'prop-types';
+import axios from 'axios';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 function QuizFormComponent(props) {
-  const [name, setName] = React.useState("");
+  const [name, setName] = React.useState('');
   const [questions, setQuestions] = React.useState([]);
-  const [description, setDescription] = React.useState("");
+  const [description, setDescription] = React.useState('');
   const [time, setTime] = React.useState(0);
 
   React.useEffect(() => {
@@ -54,7 +54,7 @@ function QuizFormComponent(props) {
       description: description,
       questions: updatedQuestions,
     };
-    axios.post("/api/addQuiz", data).then((res) => {
+    axios.post('/api/addQuiz', data).then((res) => {
       props.handleRedirect();
     });
   };
@@ -148,7 +148,7 @@ function QuizFormComponent(props) {
                               </Grid>
                               <Grid item xs={2}>
                                 <Typography variant="body1">
-                                  {option.correct ? "Correct" : "Incorrect"}
+                                  {option.correct ? 'Correct' : 'Incorrect'}
                                 </Typography>
                               </Grid>
                             </React.Fragment>

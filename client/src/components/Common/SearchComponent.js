@@ -1,16 +1,16 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Grid, TextField, LinearProgress } from "@material-ui/core";
-import { connect, useDispatch } from "react-redux";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Grid, TextField, LinearProgress } from '@material-ui/core';
+import { connect, useDispatch } from 'react-redux';
 import {
   getAllQuestion,
   getAllQuiz,
   getAllHomeQuiz,
-} from "../../actions/index.js";
+} from '../../actions/index.js';
 
 function SearchComponent(props) {
   const dispatch = useDispatch();
-  const [searchValue, setSearchValue] = React.useState("");
+  const [searchValue, setSearchValue] = React.useState('');
   const [loading, setLoading] = React.useState(false);
 
   // Use Effect Hook For Component Update
@@ -24,15 +24,15 @@ function SearchComponent(props) {
     setSearchValue(e.target.value);
     setLoading(true);
     const type = props.type;
-    if (type === "question") {
+    if (type === 'question') {
       dispatch(getAllQuestion({ searchQuery: e.target.value }));
       return;
     }
-    if (type === "quiz") {
+    if (type === 'quiz') {
       dispatch(getAllQuiz({ searchQuery: e.target.value }));
       return;
     }
-    if (type === "homequiz") {
+    if (type === 'homequiz') {
       dispatch(getAllHomeQuiz({ searchQuery: e.target.value }));
     }
   };

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Grid,
   Modal,
@@ -6,20 +6,20 @@ import {
   Link,
   Button,
   DialogContent,
-} from "@material-ui/core";
-import { Link as RouterLink, Redirect } from "react-router-dom";
-import { connect, useDispatch } from "react-redux";
-import PropTypes from "prop-types";
-import AddIcon from "@material-ui/icons/Add";
+} from '@material-ui/core';
+import { Link as RouterLink, Redirect } from 'react-router-dom';
+import { connect, useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
+import AddIcon from '@material-ui/icons/Add';
 
 import {
   getAllQuestion,
   fetchUser,
   editQuestion,
-} from "../../actions/index.js";
-import QuestionList from "./components/QuestionList.js";
-import SearchComponent from "../Common/SearchComponent.js";
-import FileUploadComponent from "../Common/FileUploadComponent.js";
+} from '../../actions/index.js';
+import QuestionList from './components/QuestionList.js';
+import SearchComponent from '../Common/SearchComponent.js';
+import FileUploadComponent from '../Common/FileUploadComponent.js';
 
 function QuestionPage(props) {
   const [redirect, setRedirect] = React.useState(false);
@@ -35,7 +35,7 @@ function QuestionPage(props) {
   // componentDidUpdate Hook for current User Object
   React.useEffect(() => {
     const _id = props.currentUser._id;
-    if (_id !== "default" && !_id) {
+    if (_id !== 'default' && !_id) {
       setRedirect(true);
     }
   }, [props.currentUser]);
@@ -48,7 +48,7 @@ function QuestionPage(props) {
 
   const editItem = (question) => {
     dispatch(editQuestion(question));
-    props.history.push("/newquestions");
+    props.history.push('/newquestions');
   };
 
   const handleAdd = () => {
@@ -86,9 +86,9 @@ function QuestionPage(props) {
               open={modalOpen}
               onClose={handleClose}
               style={{
-                width: "90%",
-                marginTop: "10%",
-                marginLeft: "5%",
+                width: '90%',
+                marginTop: '10%',
+                marginLeft: '5%',
               }}
             >
               <DialogContent>
@@ -151,7 +151,7 @@ QuestionPage.propTypes = {
 
 // setting default props
 QuestionPage.defaultProps = {
-  currentUser: { _id: "default" },
+  currentUser: { _id: 'default' },
   allQuiz: [],
 };
 export default connect(mapStateToProps)(QuestionPage);

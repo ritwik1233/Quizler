@@ -1,7 +1,7 @@
-import React from "react";
-import { Grid } from "@material-ui/core";
-import PropTypes from "prop-types";
-import QuizItem from "./QuizItem";
+import React from 'react';
+import { Grid } from '@material-ui/core';
+import PropTypes from 'prop-types';
+import QuizItem from './QuizItem';
 
 function QuizListComponent(props) {
   const deleteItem = (status) => {

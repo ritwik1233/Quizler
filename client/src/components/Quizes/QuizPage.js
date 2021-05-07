@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Grid,
   Typography,
@@ -7,26 +7,26 @@ import {
   Modal,
   CardContent,
   Card,
-} from "@material-ui/core";
-import PropTypes from "prop-types";
-import { Link as RouterLink, Redirect } from "react-router-dom";
-import { connect, useDispatch } from "react-redux";
-import AddIcon from "@material-ui/icons/Add";
+} from '@material-ui/core';
+import PropTypes from 'prop-types';
+import { Link as RouterLink, Redirect } from 'react-router-dom';
+import { connect, useDispatch } from 'react-redux';
+import AddIcon from '@material-ui/icons/Add';
 
 import {
   fetchUser,
   getAllQuestion,
   getAllQuiz,
   editQuiz,
-} from "../../actions/index.js";
-import QuizListComponent from "./components/QuizListComponent.js";
-import SearchComponent from "../Common/SearchComponent.js";
+} from '../../actions/index.js';
+import QuizListComponent from './components/QuizListComponent.js';
+import SearchComponent from '../Common/SearchComponent.js';
 
 function QuizPage(props) {
   const dispatch = useDispatch();
   const [redirect, setRedirect] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(false);
-  const [link, setLink] = React.useState("");
+  const [link, setLink] = React.useState('');
 
   // Component Did Mount Hook
   React.useState(() => {
@@ -38,14 +38,14 @@ function QuizPage(props) {
   // componentDidUpdate Hook for current User Object
   React.useEffect(() => {
     const _id = props.currentUser._id;
-    if (_id !== "default" && !_id) {
+    if (_id !== 'default' && !_id) {
       setRedirect(true);
     }
   }, [props.currentUser]);
 
   const editItem = (quiz) => {
     dispatch(editQuiz(quiz));
-    props.history.push("/newquiz");
+    props.history.push('/newquiz');
   };
 
   const deleteItem = (status) => {
@@ -80,9 +80,9 @@ function QuizPage(props) {
           open={modalOpen}
           onClose={handleClose}
           style={{
-            width: "50%",
-            marginTop: "15%",
-            marginLeft: "25%",
+            width: '50%',
+            marginTop: '15%',
+            marginLeft: '25%',
           }}
         >
           <Card>
@@ -165,7 +165,7 @@ QuizPage.propTypes = {
 
 // setting default props
 QuizPage.defaultProps = {
-  currentUser: { _id: "default" },
+  currentUser: { _id: 'default' },
   allQuiz: [],
 };
 export default connect(mapStateToProps)(QuizPage);

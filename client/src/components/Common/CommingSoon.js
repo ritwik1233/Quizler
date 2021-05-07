@@ -1,5 +1,5 @@
-import React from "react";
-import { Grid, Typography, Card, CardContent } from "@material-ui/core";
+import React from 'react';
+import { Grid, Typography, Card, CardContent } from '@material-ui/core';
 
 function CommingSoon() {
   return (

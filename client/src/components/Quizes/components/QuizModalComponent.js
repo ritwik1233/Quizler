@@ -1,6 +1,6 @@
-import React from "react";
-import { connect } from "react-redux";
-import Proptypes from "prop-types";
+import React from 'react';
+import { connect } from 'react-redux';
+import Proptypes from 'prop-types';
 import {
   Grid,
   Typography,
@@ -11,10 +11,10 @@ import {
   AccordionDetails,
   Checkbox,
   Button,
-} from "@material-ui/core";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+} from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import SearchComponent from "../../Common/SearchComponent.js";
+import SearchComponent from '../../Common/SearchComponent.js';
 
 function QuizModalComponent(props) {
   const [checkedArray, setCheckedArray] = React.useState([]);
@@ -96,7 +96,7 @@ function QuizModalComponent(props) {
                               onChange={() => {
                                 handleChange(question._id);
                               }}
-                              inputProps={{ "aria-label": "primary checkbox" }}
+                              inputProps={{ 'aria-label': 'primary checkbox' }}
                             />
                           )}
                         </Grid>
@@ -122,8 +122,8 @@ function QuizModalComponent(props) {
                                       <Grid item xs={2}>
                                         <Typography variant="body1">
                                           {option.correct
-                                            ? "Correct"
-                                            : "Incorrect"}
+                                            ? 'Correct'
+                                            : 'Incorrect'}
                                         </Typography>
                                       </Grid>
                                     </React.Fragment>

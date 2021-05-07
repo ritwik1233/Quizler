@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   Grid,
   Paper,
@@ -7,12 +7,12 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
 function AddOptionFormComponent(props) {
   const [checked, setChecked] = useState(false);
   const [error, setError] = useState(false);
-  const [optionValue, addOption] = useState("");
+  const [optionValue, addOption] = useState('');
   const handleChecked = () => {
     setChecked(!checked);
   };
@@ -52,7 +52,7 @@ function AddOptionFormComponent(props) {
             autoFocus
           />
         </Grid>
-        <Grid item xs={3} style={{ marginTop: "25px" }}>
+        <Grid item xs={3} style={{ marginTop: '25px' }}>
           {!props.correct && (
             <FormControlLabel
               control={
@@ -68,12 +68,12 @@ function AddOptionFormComponent(props) {
             />
           )}
         </Grid>
-        <Grid item xs={2} style={{ marginTop: "25px" }}>
+        <Grid item xs={2} style={{ marginTop: '25px' }}>
           <Button variant="contained" color="primary" onClick={addOptionForm}>
             Add
           </Button>
         </Grid>
-        <Grid item xs={2} style={{ marginTop: "25px" }}>
+        <Grid item xs={2} style={{ marginTop: '25px' }}>
           <Button variant="contained" color="primary" onClick={handleCancel}>
             Cancel
           </Button>

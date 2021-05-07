@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import React, { useState } from 'react';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {
   Avatar,
   Button,
@@ -10,23 +10,23 @@ import {
   Typography,
   makeStyles,
   Container,
-} from "@material-ui/core";
-import { Link as RouterLink, Redirect } from "react-router-dom";
-import axios from "axios";
+} from '@material-ui/core';
+import { Link as RouterLink, Redirect } from 'react-router-dom';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 const LoginPage = () => {
   const classes = useStyles();
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [redirect, setRedirect] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -45,9 +45,9 @@ const LoginPage = () => {
       password: e.target.password.value,
     };
     axios
-      .post("/api/login", values)
+      .post('/api/login', values)
       .then((res) => {
-        setError("");
+        setError('');
         setRedirect(true);
       })
       .catch((err) => {
@@ -107,7 +107,7 @@ const LoginPage = () => {
           <Grid container>
             <Grid item xs>
               <Link to="/forgotpassword" component={RouterLink} variant="body2">
-                {"Forgot Password"}
+                {'Forgot Password'}
               </Link>
             </Grid>
             <Grid item>

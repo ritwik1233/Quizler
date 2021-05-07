@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import React, { useState } from 'react';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {
   Avatar,
   Button,
@@ -8,23 +8,23 @@ import {
   Typography,
   makeStyles,
   Container,
-} from "@material-ui/core";
-import axios from "axios";
-import { Redirect } from "react-router-dom";
+} from '@material-ui/core';
+import axios from 'axios';
+import { Redirect } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -34,12 +34,12 @@ const useStyles = makeStyles((theme) => ({
 
 const RegisterPage = () => {
   const classes = useStyles();
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [redirect, setRedirect] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
     if (e.target.password.value !== e.target.cpassword.value) {
-      setError("Password Mismatch");
+      setError('Password Mismatch');
       return;
     }
     const values = {
@@ -49,9 +49,9 @@ const RegisterPage = () => {
       password: e.target.password.value,
     };
     axios
-      .post("/api/register", values)
+      .post('/api/register', values)
       .then((res) => {
-        setError("");
+        setError('');
         setRedirect(true);
       })
       .catch((err) => {

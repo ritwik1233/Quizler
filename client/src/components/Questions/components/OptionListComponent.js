@@ -1,7 +1,7 @@
-import React from "react";
-import { Grid, Typography, IconButton } from "@material-ui/core";
-import PropTypes from "prop-types";
-import DeleteIcon from "@material-ui/icons/Delete";
+import React from 'react';
+import { Grid, Typography, IconButton } from '@material-ui/core';
+import PropTypes from 'prop-types';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 function OptionListComponent(props) {
   const deleteOption = () => {
@@ -14,7 +14,7 @@ function OptionListComponent(props) {
       </Grid>
       <Grid item xs={2}>
         <Typography variant="body1">
-          {props.optionData.correct ? "Correct" : "Incorrect"}
+          {props.optionData.correct ? 'Correct' : 'Incorrect'}
         </Typography>
       </Grid>
       <Grid item xs={2}>

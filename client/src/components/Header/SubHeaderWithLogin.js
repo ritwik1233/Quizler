@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import axios from "axios";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import axios from 'axios';
 import {
   Grid,
   AppBar,
@@ -10,9 +10,9 @@ import {
   Menu,
   MenuItem,
   Button,
-} from "@material-ui/core";
-import { Link as RouterLink } from "react-router-dom";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+} from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 function SubHeaderWithLogin(props) {
   const [menuStatus, setMenu] = useState(false);
@@ -25,9 +25,9 @@ function SubHeaderWithLogin(props) {
     setAnchorEl(null);
     setMenu(false);
     const signOut = event.target.innerHTML;
-    if (signOut.includes("Sign Out")) {
+    if (signOut.includes('Sign Out')) {
       axios
-        .delete("/api/logout")
+        .delete('/api/logout')
         .then(() => {
           props.fetchUserData();
         })
@@ -61,13 +61,13 @@ function SubHeaderWithLogin(props) {
               <Menu
                 id="menu-appbar"
                 anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
+                  vertical: 'top',
+                  horizontal: 'right',
                 }}
                 keepMounted
                 transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
+                  vertical: 'top',
+                  horizontal: 'right',
                 }}
                 anchorEl={anchorEl}
                 open={menuStatus}
@@ -78,7 +78,7 @@ function SubHeaderWithLogin(props) {
                     color="inherit"
                     component={RouterLink}
                     to="/"
-                    style={{ width: "100%" }}
+                    style={{ width: '100%' }}
                   >
                     Home
                   </Link>
@@ -88,7 +88,7 @@ function SubHeaderWithLogin(props) {
                     color="inherit"
                     component={RouterLink}
                     to="/quiz"
-                    style={{ width: "100%" }}
+                    style={{ width: '100%' }}
                   >
                     Quiz
                   </Link>
@@ -98,7 +98,7 @@ function SubHeaderWithLogin(props) {
                     color="inherit"
                     component={RouterLink}
                     to="/questions"
-                    style={{ width: "100%" }}
+                    style={{ width: '100%' }}
                   >
                     Questions
                   </Link>
@@ -108,7 +108,7 @@ function SubHeaderWithLogin(props) {
                     color="inherit"
                     component={RouterLink}
                     to="/analytics"
-                    style={{ width: "100%" }}
+                    style={{ width: '100%' }}
                   >
                     Analytics
                   </Link>
@@ -118,7 +118,7 @@ function SubHeaderWithLogin(props) {
                     color="inherit"
                     component={RouterLink}
                     to="/profilepage"
-                    style={{ width: "100%" }}
+                    style={{ width: '100%' }}
                   >
                     Profile Page
                   </Link>

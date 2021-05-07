@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   TextField,
   Button,
@@ -6,32 +6,32 @@ import {
   ButtonGroup,
   Tooltip,
   Typography,
-} from "@material-ui/core";
-import axios from "axios";
-import PropTypes from "prop-types";
-import AddOptionFormComponent from "./AddOptionFormComponent.js";
-import OptionListComponent from "./OptionListComponent.js";
+} from '@material-ui/core';
+import axios from 'axios';
+import PropTypes from 'prop-types';
+import AddOptionFormComponent from './AddOptionFormComponent.js';
+import OptionListComponent from './OptionListComponent.js';
 
 function formSetence(editQuestion) {
   const correctAnswer = editQuestion.options.find((element) => element.correct);
-  const firstHalf = editQuestion.question.split("_____")[0].trim().length
-    ? editQuestion.question.split("_____")[0].trim() + " "
-    : "";
-  const secondHalf = editQuestion.question.split("_____")[1].trim();
-  const fullSentence = firstHalf + correctAnswer.description + " " + secondHalf;
+  const firstHalf = editQuestion.question.split('_____')[0].trim().length
+    ? editQuestion.question.split('_____')[0].trim() + ' '
+    : '';
+  const secondHalf = editQuestion.question.split('_____')[1].trim();
+  const fullSentence = firstHalf + correctAnswer.description + ' ' + secondHalf;
   return fullSentence;
 }
 
 function wordSplit(sentence) {
-  return sentence.split(" ");
+  return sentence.split(' ');
 }
 
 function BlankFormComponent(props) {
   const [tag, setTag] = React.useState([]);
   const [options, setOptions] = React.useState([]);
-  const [tagValue, setTagValue] = React.useState("");
+  const [tagValue, setTagValue] = React.useState('');
   const [point, setPoint] = React.useState(0);
-  const [sentenceValue, setSentenceValue] = React.useState("");
+  const [sentenceValue, setSentenceValue] = React.useState('');
   const [sentence, setSentence] = React.useState(false);
   const [addOption, setAddOption] = React.useState(false);
 
@@ -68,14 +68,14 @@ function BlankFormComponent(props) {
       options: options,
       tag: tagValue,
       point: e.target.point.value,
-      type: "MCQBLANK",
+      type: 'MCQBLANK',
     };
-    axios.post("/api/addQuestion", data).then(() => {
+    axios.post('/api/addQuestion', data).then(() => {
       props.handleRedirect();
     });
   };
   const markBlank = (data) => {
-    const sentence = sentenceValue.replace(data, "_____");
+    const sentence = sentenceValue.replace(data, '_____');
     const optionArray = options;
     optionArray.push({ description: data, correct: true });
     setOptions(optionArray);
@@ -119,7 +119,7 @@ function BlankFormComponent(props) {
   const handleTagChange = (e) => {
     setTagValue(e.target.value);
     axios
-      .get("/api/getAllTag", {
+      .get('/api/getAllTag', {
         params: {
           tag: e.target.value,
         },
@@ -188,7 +188,7 @@ function BlankFormComponent(props) {
         </ButtonGroup>
       )}
       <Button variant="contained" onClick={onSentenceUpdate} color="primary">
-        {sentence ? "Remove Sentence" : "Add Sentence"}
+        {sentence ? 'Remove Sentence' : 'Add Sentence'}
       </Button>
       <br />
       {options.length > 0 && (
@@ -224,7 +224,7 @@ function BlankFormComponent(props) {
       />
       {tag.length > 0 ? (
         <TextField
-          style={{ marginBottom: "0px" }}
+          style={{ marginBottom: '0px' }}
           variant="outlined"
           margin="normal"
           onChange={handleTagChange}
@@ -253,8 +253,8 @@ function BlankFormComponent(props) {
       {tag.length > 0 && (
         <div
           style={{
-            borderStyle: "solid",
-            borderWidth: "1px",
+            borderStyle: 'solid',
+            borderWidth: '1px',
           }}
         >
           {tag.map((eachData, key) => {

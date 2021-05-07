@@ -1,12 +1,12 @@
-import React from "react";
-import { Grid, Typography, IconButton } from "@material-ui/core";
-import GitHub from "@material-ui/icons/GitHub";
+import React from 'react';
+import { Grid, Typography, IconButton } from '@material-ui/core';
+import GitHub from '@material-ui/icons/GitHub';
 
 function About() {
   const openRepo = () => {
-    var a = document.createElement("a");
-    a.href = "https://github.com/ritwik1233/Quizler";
-    a.target = "_blank";
+    var a = document.createElement('a');
+    a.href = 'https://github.com/ritwik1233/Quizler';
+    a.target = '_blank';
     a.click();
   };
 
@@ -25,7 +25,7 @@ function About() {
             <Typography
               variant="overline"
               style={{
-                color: "white",
+                color: 'white',
               }}
             >
               Quizler is an open source web application which aims at creating a

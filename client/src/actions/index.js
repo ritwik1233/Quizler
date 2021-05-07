@@ -1,18 +1,18 @@
-import axios from "axios";
+import axios from 'axios';
 
 export function fetchUser() {
   return function (dispatch) {
     axios
-      .get("/api/currentUser")
+      .get('/api/currentUser')
       .then((res) => {
         dispatch({
-          type: "GET_USER",
+          type: 'GET_USER',
           payload: res.data,
         });
       })
       .catch((err) => {
         dispatch({
-          type: "GET_USER_FAILED",
+          type: 'GET_USER_FAILED',
         });
       });
   };
@@ -21,16 +21,16 @@ export function fetchUser() {
 export function getAllQuestion(query) {
   return function (dispatch) {
     axios
-      .get("/api/getAllQuestions", { params: { ...query } })
+      .get('/api/getAllQuestions', { params: { ...query } })
       .then((res) => {
         dispatch({
-          type: "GET_ALL_QUESTIONS",
+          type: 'GET_ALL_QUESTIONS',
           payload: res.data,
         });
       })
       .catch((err) => {
         dispatch({
-          type: "GET_ALL_QUESTIONS_FAILED",
+          type: 'GET_ALL_QUESTIONS_FAILED',
         });
       });
   };
@@ -39,7 +39,7 @@ export function getAllQuestion(query) {
 export function editQuestion(editQuestions) {
   return function (dispatch) {
     dispatch({
-      type: "EDIT_QUESTION",
+      type: 'EDIT_QUESTION',
       payload: editQuestions,
     });
   };
@@ -48,7 +48,7 @@ export function editQuestion(editQuestions) {
 export function editQuiz(editQuiz) {
   return function (dispatch) {
     dispatch({
-      type: "EDIT_QUIZ",
+      type: 'EDIT_QUIZ',
       payload: editQuiz,
     });
   };
@@ -57,7 +57,7 @@ export function editQuiz(editQuiz) {
 export function showResult(result) {
   return function (dispatch) {
     dispatch({
-      type: "QUIZ_RESULT",
+      type: 'QUIZ_RESULT',
       payload: result,
     });
   };
@@ -66,7 +66,7 @@ export function showResult(result) {
 export function editHomeQuiz(editQuiz) {
   return function (dispatch) {
     dispatch({
-      type: "EDIT_HOME_QUIZ",
+      type: 'EDIT_HOME_QUIZ',
       payload: editQuiz,
     });
   };
@@ -75,16 +75,16 @@ export function editHomeQuiz(editQuiz) {
 export function getAllQuiz(query) {
   return function (dispatch) {
     axios
-      .get("/api/getAllQuiz", { params: { ...query } })
+      .get('/api/getAllQuiz', { params: { ...query } })
       .then((res) => {
         dispatch({
-          type: "GET_ALL_QUIZ",
+          type: 'GET_ALL_QUIZ',
           payload: res.data,
         });
       })
       .catch((err) => {
         dispatch({
-          type: "GET_ALL_QUIZ_FAILED",
+          type: 'GET_ALL_QUIZ_FAILED',
         });
       });
   };
@@ -93,16 +93,16 @@ export function getAllQuiz(query) {
 export function getAllHomeQuiz(query) {
   return function (dispatch) {
     axios
-      .get("/api/getAllHomeQuiz", { params: { ...query } })
+      .get('/api/getAllHomeQuiz', { params: { ...query } })
       .then((res) => {
         dispatch({
-          type: "GET_ALL_HOME_QUIZ",
+          type: 'GET_ALL_HOME_QUIZ',
           payload: res.data,
         });
       })
       .catch((err) => {
         dispatch({
-          type: "GET_ALL_HOME_QUIZ_FAILED",
+          type: 'GET_ALL_HOME_QUIZ_FAILED',
         });
       });
   };

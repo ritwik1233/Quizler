@@ -1,18 +1,18 @@
-import React from "react";
-import { Typography, TextField, Button, MenuItem } from "@material-ui/core";
-import axios from "axios";
-import PropTypes from "prop-types";
+import React from 'react';
+import { Typography, TextField, Button, MenuItem } from '@material-ui/core';
+import axios from 'axios';
+import PropTypes from 'prop-types';
 
-import AddOptionFormComponent from "./AddOptionFormComponent.js";
-import OptionListComponent from "./OptionListComponent.js";
+import AddOptionFormComponent from './AddOptionFormComponent.js';
+import OptionListComponent from './OptionListComponent.js';
 
 function MCQFormComponent(props) {
   const [addOption, setAddOption] = React.useState(false);
-  const [question, setQuestion] = React.useState("");
+  const [question, setQuestion] = React.useState('');
   const [point, setPoint] = React.useState(0);
   const [options, setOptions] = React.useState([]);
   const [tag, setTag] = React.useState([]);
-  const [tagValue, setTagValue] = React.useState("");
+  const [tagValue, setTagValue] = React.useState('');
 
   React.useEffect(() => {
     if (props.editQuestion.question) {
@@ -68,9 +68,9 @@ function MCQFormComponent(props) {
       options: options,
       tag: tagValue,
       point: point,
-      type: "MCQ",
+      type: 'MCQ',
     };
-    axios.post("/api/addQuestion", data).then(() => {
+    axios.post('/api/addQuestion', data).then(() => {
       props.handleRedirect();
     });
   };
@@ -90,7 +90,7 @@ function MCQFormComponent(props) {
   const handleTagChange = (e) => {
     setTagValue(e.target.value);
     axios
-      .get("/api/getAllTag", {
+      .get('/api/getAllTag', {
         params: {
           tag: e.target.value,
         },
@@ -160,7 +160,7 @@ function MCQFormComponent(props) {
       />
       {tag.length > 0 ? (
         <TextField
-          style={{ marginBottom: "0px" }}
+          style={{ marginBottom: '0px' }}
           variant="outlined"
           margin="normal"
           onChange={handleTagChange}
@@ -189,8 +189,8 @@ function MCQFormComponent(props) {
       {tag.length > 0 && (
         <div
           style={{
-            borderStyle: "solid",
-            borderWidth: "1px",
+            borderStyle: 'solid',
+            borderWidth: '1px',
           }}
         >
           {tag.map((eachData, key) => {

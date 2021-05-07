@@ -1,6 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Grid, Card, CardContent, Button, Typography } from "@material-ui/core";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Grid, Card, CardContent, Button, Typography } from '@material-ui/core';
 
 function QuestionCard(props) {
   return (
@@ -79,7 +79,7 @@ QuestionCard.propTypes = {
 
 // setting default props
 QuestionCard.defaultProps = {
-  question: "",
+  question: '',
   questionLength: 0,
   next: 0,
   options: [],

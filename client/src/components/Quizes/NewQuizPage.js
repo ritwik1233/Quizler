@@ -1,12 +1,12 @@
-import React from "react";
-import { Grid, Modal } from "@material-ui/core";
-import { Redirect } from "react-router-dom";
-import { connect, useDispatch } from "react-redux";
-import PropTypes from "prop-types";
+import React from 'react';
+import { Grid, Modal } from '@material-ui/core';
+import { Redirect } from 'react-router-dom';
+import { connect, useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 
-import { fetchUser, getAllQuestion } from "../../actions/index.js";
-import QuizFormComponent from "./components/QuizFormComponent.js";
-import QuizModalComponent from "./components/QuizModalComponent.js";
+import { fetchUser, getAllQuestion } from '../../actions/index.js';
+import QuizFormComponent from './components/QuizFormComponent.js';
+import QuizModalComponent from './components/QuizModalComponent.js';
 
 function NewQuizPage(props) {
   const dispatch = useDispatch();
@@ -23,13 +23,13 @@ function NewQuizPage(props) {
   // componentDidUpdate Hook for current User Object
   React.useEffect(() => {
     const _id = props.currentUser._id;
-    if (_id !== "default" && !_id) {
+    if (_id !== 'default' && !_id) {
       setRedirect(true);
     }
   }, [props.currentUser]);
 
   const handleRedirect = () => {
-    props.history.push("/quiz");
+    props.history.push('/quiz');
   };
 
   const addQuestion = () => {
@@ -69,10 +69,10 @@ function NewQuizPage(props) {
           open={modalOpen}
           onClose={handleClose}
           style={{
-            width: "90%",
-            marginLeft: "5%",
-            maxHeight: "auto",
-            overflowY: "auto",
+            width: '90%',
+            marginLeft: '5%',
+            maxHeight: 'auto',
+            overflowY: 'auto',
           }}
         >
           <QuizModalComponent
@@ -122,7 +122,7 @@ NewQuizPage.propTypes = {
 
 // setting default props
 NewQuizPage.defaultProps = {
-  currentUser: { _id: "default" },
+  currentUser: { _id: 'default' },
   allQuiz: [],
 };
 export default connect(mapStateToProps)(NewQuizPage);

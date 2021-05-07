@@ -1,5 +1,5 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Grid,
   Typography,
@@ -9,11 +9,11 @@ import {
   TableBody,
   TableHead,
   TableCell,
-} from "@material-ui/core";
-import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
-import Check from "@material-ui/icons/Check";
-import Close from "@material-ui/icons/Close";
+} from '@material-ui/core';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import Check from '@material-ui/icons/Check';
+import Close from '@material-ui/icons/Close';
 
 function ResultPage(props) {
   const totalAnswered = (quizResult) => {
@@ -84,10 +84,10 @@ function ResultPage(props) {
   const getStatus = (options) => {
     for (let i = 0; i < options.length; i++) {
       if (options[i].answeredOption === options[i]._id && options[i].correct) {
-        return <Check style={{ color: "green" }} />;
+        return <Check style={{ color: 'green' }} />;
       }
     }
-    return <Close style={{ color: "red" }} />;
+    return <Close style={{ color: 'red' }} />;
   };
 
   const getYourAnswer = (options) => {
@@ -148,7 +148,7 @@ function ResultPage(props) {
             Incorrect Answers: {incorrectAnswers(props.quizResult)}
           </Grid>
           <Grid item xs={12}>
-            Points Earned: {pointsEarned(props.quizResult)} out of{" "}
+            Points Earned: {pointsEarned(props.quizResult)} out of{' '}
             {totalPoints(props.quizResult)}
           </Grid>
         </Grid>

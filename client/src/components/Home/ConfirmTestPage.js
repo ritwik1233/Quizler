@@ -1,9 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Typography, Grid, Button, Card, CardContent } from "@material-ui/core";
-import { connect, useDispatch } from "react-redux";
-import { Redirect } from "react-router-dom";
-import { editHomeQuiz, getAllHomeQuiz } from "../../actions/index.js";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Typography, Grid, Button, Card, CardContent } from '@material-ui/core';
+import { connect, useDispatch } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { editHomeQuiz, getAllHomeQuiz } from '../../actions/index.js';
 
 function ConfirmTestPage(props) {
   const dispatch = useDispatch();
@@ -11,7 +11,7 @@ function ConfirmTestPage(props) {
   //Component Did Mount Start
   React.useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const _id = urlParams.get("q");
+    const _id = urlParams.get('q');
     if (_id !== null) {
       if (props.allQuiz.length > 0) {
         const item = props.allQuiz.find((each) => {
@@ -34,7 +34,7 @@ function ConfirmTestPage(props) {
   //Component Did Update Start
   React.useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const _id = urlParams.get("q");
+    const _id = urlParams.get('q');
     if (_id !== null) {
       if (props.allQuiz.length > 0) {
         const item = props.allQuiz.find((each) => {
@@ -54,7 +54,7 @@ function ConfirmTestPage(props) {
   //Component Did Update Stop
 
   const handleSubmit = () => {
-    props.history.push("/newtest");
+    props.history.push('/newtest');
   };
 
   const handleCancel = () => {
@@ -98,13 +98,13 @@ function ConfirmTestPage(props) {
                   </Grid>
                   <Grid item xs={12}>
                     <Typography variant="body1">
-                      &nbsp;Number of Questions:{" "}
+                      &nbsp;Number of Questions:{' '}
                       {props.editQuiz.questions.length}
                     </Typography>
                   </Grid>
                   <Grid item xs={12}>
                     <Typography variant="body1">
-                      &nbsp;Total Point:{" "}
+                      &nbsp;Total Point:{' '}
                       {props.editQuiz.questions.reduce(
                         (acc, item) => acc + item.point,
                         0

@@ -1,8 +1,8 @@
-import { combineReducers } from "redux";
-import authReducers from "./authReducers.js";
-import questionReducer from "./questionReducers.js";
-import quizReducer from "./quizReducers.js";
-import homeReducer from "./homeReducer.js";
+import { combineReducers } from 'redux';
+import authReducers from './authReducers.js';
+import questionReducer from './questionReducers.js';
+import quizReducer from './quizReducers.js';
+import homeReducer from './homeReducer.js';
 
 const CombineReducers = combineReducers({
   auth: authReducers,

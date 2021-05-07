@@ -1,23 +1,23 @@
-import React from "react";
-import { Grid } from "@material-ui/core";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import React from 'react';
+import { Grid } from '@material-ui/core';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import Header from "./Header/Header.js";
-import HomePage from "../components/Home/HomePage.js";
-import LoginPage from "./Common/LoginPage.js";
-import CommingSoon from "./Common/CommingSoon.js";
-import ForgotPassword from "./Common/ForgotPassword.js";
-import About from "./Common/About.js";
-import RegisterPage from "./Common/RegisterPage.js";
-import QuestionPage from "../components/Questions/QuestionPage.js";
-import NewQuestionPage from "./Questions/NewQuestionPage.js";
-import ResetPage from "./Common/ResetPage.js";
-import QuizPage from "../components/Quizes/QuizPage.js";
-import NewQuizPage from "../components/Quizes/NewQuizPage.js";
-import ConfirmTestPage from "./Home/ConfirmTestPage.js";
-import NewTestPage from "./Home/NewTestPage.js";
-import ResultPage from "./Home/ResultPage.js";
-import ProfilePage from "./ProfilePage/ProfilePage.js";
+import Header from './Header/Header.js';
+import HomePage from '../components/Home/HomePage.js';
+import LoginPage from './Common/LoginPage.js';
+import CommingSoon from './Common/CommingSoon.js';
+import ForgotPassword from './Common/ForgotPassword.js';
+import About from './Common/About.js';
+import RegisterPage from './Common/RegisterPage.js';
+import QuestionPage from '../components/Questions/QuestionPage.js';
+import NewQuestionPage from './Questions/NewQuestionPage.js';
+import ResetPage from './Common/ResetPage.js';
+import QuizPage from '../components/Quizes/QuizPage.js';
+import NewQuizPage from '../components/Quizes/NewQuizPage.js';
+import ConfirmTestPage from './Home/ConfirmTestPage.js';
+import NewTestPage from './Home/NewTestPage.js';
+import ResultPage from './Home/ResultPage.js';
+import ProfilePage from './ProfilePage/ProfilePage.js';
 
 class App extends React.Component {
   render() {

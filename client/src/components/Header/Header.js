@@ -1,10 +1,10 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { connect, useDispatch } from "react-redux";
-import { fetchUser } from "../../actions/index.js";
-import VerifyAccount from "../Common/VerifyAccount.js";
-import SubHeaderWithLogin from "./SubHeaderWithLogin.js";
-import SubHeaderWithoutLogin from "./SubHeaderWithoutLogin.js";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect, useDispatch } from 'react-redux';
+import { fetchUser } from '../../actions/index.js';
+import VerifyAccount from '../Common/VerifyAccount.js';
+import SubHeaderWithLogin from './SubHeaderWithLogin.js';
+import SubHeaderWithoutLogin from './SubHeaderWithoutLogin.js';
 
 function Header(props) {
   const dispatch = useDispatch();

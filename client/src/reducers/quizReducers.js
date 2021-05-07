@@ -1,10 +1,10 @@
 const quizReducer = function (state = { allQuiz: [], editQuiz: {} }, action) {
   switch (action.type) {
-    case "GET_ALL_QUIZ":
+    case 'GET_ALL_QUIZ':
       return { ...state, allQuiz: [...action.payload] };
-    case "GET_ALL_QUIZ_FAILED":
+    case 'GET_ALL_QUIZ_FAILED':
       return { ...state, allQuiz: [...action.payload] };
-    case "EDIT_QUIZ":
+    case 'EDIT_QUIZ':
       return { ...state, editQuiz: { ...action.payload } };
     default:
       return state;

@@ -1,10 +1,10 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Grid, Typography, Card, CardContent, Avatar } from "@material-ui/core";
-import { connect, useDispatch } from "react-redux";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Grid, Typography, Card, CardContent, Avatar } from '@material-ui/core';
+import { connect, useDispatch } from 'react-redux';
 
-import { Redirect } from "react-router-dom";
-import { fetchUser } from "../../actions/index.js";
+import { Redirect } from 'react-router-dom';
+import { fetchUser } from '../../actions/index.js';
 
 function ProfilePage(props) {
   const [redirect, setRedirect] = React.useState(false);
@@ -17,7 +17,7 @@ function ProfilePage(props) {
   // componentDidUpdate Hook for current User Object
   React.useEffect(() => {
     const _id = props.currentUser._id;
-    if (_id !== "default" && !_id) {
+    if (_id !== 'default' && !_id) {
       setRedirect(true);
     }
   }, [props.currentUser]);
@@ -42,9 +42,9 @@ function ProfilePage(props) {
                 <Grid item xs={12}>
                   <Avatar
                     style={{
-                      backgroundColor: "#673ab7",
-                      width: "50px",
-                      height: "50px",
+                      backgroundColor: '#673ab7',
+                      width: '50px',
+                      height: '50px',
                     }}
                   >
                     {props.currentUser.fname.charAt(0)}
@@ -55,7 +55,7 @@ function ProfilePage(props) {
                 </Grid>
                 <Grid item xs={12}>
                   <Typography variant="body1">
-                    <strong>Name:</strong> {props.currentUser.fname}{" "}
+                    <strong>Name:</strong> {props.currentUser.fname}{' '}
                     {props.currentUser.lname}
                   </Typography>
                 </Grid>
@@ -66,8 +66,8 @@ function ProfilePage(props) {
                 </Grid>
                 <Grid item xs={12}>
                   <Typography variant="body1">
-                    <strong>Account Status:</strong>{" "}
-                    {props.currentUser.verified ? "Verified" : "Not Verified"}
+                    <strong>Account Status:</strong>{' '}
+                    {props.currentUser.verified ? 'Verified' : 'Not Verified'}
                   </Typography>
                 </Grid>
               </Grid>
@@ -93,7 +93,7 @@ ProfilePage.propTypes = {
 
 // setting default props
 ProfilePage.defaultProps = {
-  currentUser: { _id: "default" },
+  currentUser: { _id: 'default' },
 };
 
 export default connect(mapStateToProps)(ProfilePage);

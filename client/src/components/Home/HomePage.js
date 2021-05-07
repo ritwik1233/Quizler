@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Grid,
   Typography,
@@ -8,13 +8,13 @@ import {
   CardContent,
   CardActions,
   Avatar,
-} from "@material-ui/core";
-import { connect, useDispatch } from "react-redux";
-import { Link as RouterLink } from "react-router-dom";
+} from '@material-ui/core';
+import { connect, useDispatch } from 'react-redux';
+import { Link as RouterLink } from 'react-router-dom';
 
-import { fetchUser, getAllHomeQuiz } from "../../actions/index.js";
-import SearchComponent from "../Common/SearchComponent.js";
-import About from "../Common/About.js";
+import { fetchUser, getAllHomeQuiz } from '../../actions/index.js';
+import SearchComponent from '../Common/SearchComponent.js';
+import About from '../Common/About.js';
 
 function HomePage(props) {
   const dispatch = useDispatch();
@@ -28,10 +28,10 @@ function HomePage(props) {
     };
     dispatch(fetchUser());
     dispatch(getAllHomeQuiz());
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
     /*Component will unmount */
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -41,7 +41,7 @@ function HomePage(props) {
         item
         xs={12}
         style={{
-          backgroundColor: "grey",
+          backgroundColor: 'grey',
         }}
       >
         <About />
@@ -62,9 +62,9 @@ function HomePage(props) {
                     <Grid item xs={2}>
                       <Avatar
                         style={{
-                          backgroundColor: "#673ab7",
-                          width: "50px",
-                          height: "50px",
+                          backgroundColor: '#673ab7',
+                          width: '50px',
+                          height: '50px',
                         }}
                       >
                         {eachQuiz.createdBy.charAt(0)}
@@ -82,7 +82,7 @@ function HomePage(props) {
                         <strong>Time:</strong> {eachQuiz.time} min
                       </Typography>
                       <Typography variant="body2">
-                        <strong>Number of Questions:</strong>{" "}
+                        <strong>Number of Questions:</strong>{' '}
                         {eachQuiz.questions.length}
                       </Typography>
                       <Typography variant="body2">
