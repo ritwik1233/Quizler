@@ -63,16 +63,32 @@ function MCQFormComponent(props) {
   const submitQuestion = (e) => {
     e.preventDefault();
     const data = {
-      _id: props.editQuestion._id ? props.editQuestion._id : undefined,
       question: question,
       options: options,
       tag: tagValue,
       point: point,
       type: 'MCQ',
     };
-    axios.post('/api/addQuestion', data).then(() => {
-      props.handleRedirect();
-    });
+    if (props.editQuestion._id) {
+      data._id = props.editQuestion._id;
+      axios
+        .put('/api/updateQuestion', data)
+        .then(() => {
+          props.handleRedirect();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      axios
+        .post('/api/addQuestion', data)
+        .then(() => {
+          props.handleRedirect();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const handleQuestionChange = (e) => {

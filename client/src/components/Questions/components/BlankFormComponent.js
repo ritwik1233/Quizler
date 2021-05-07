@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import AddOptionFormComponent from './AddOptionFormComponent.js';
 import OptionListComponent from './OptionListComponent.js';
 
-function formSetence(editQuestion) {
+function formSentence(editQuestion) {
   const correctAnswer = editQuestion.options.find((element) => element.correct);
   const firstHalf = editQuestion.question.split('_____')[0].trim().length
     ? editQuestion.question.split('_____')[0].trim() + ' '
@@ -55,24 +55,40 @@ function BlankFormComponent(props) {
 
   React.useEffect(() => {
     if (props.editQuestion.question) {
-      const blankSentence = formSetence(props.editQuestion);
-      setPoint(blankSentence);
+      setSentenceValue(props.editQuestion.question);
+      setSentence(true);
     }
   }, [props.editQuestion.question]);
 
   const submitQuestion = (e) => {
     e.preventDefault();
     const data = {
-      _id: props.editQuestion._id ? props.editQuestion._id : undefined,
       question: sentenceValue,
       options: options,
       tag: tagValue,
       point: e.target.point.value,
       type: 'MCQBLANK',
     };
-    axios.post('/api/addQuestion', data).then(() => {
-      props.handleRedirect();
-    });
+    if (props.editQuestion._id) {
+      data._id = props.editQuestion._id;
+      axios
+        .put('/api/updateQuestion', data)
+        .then(() => {
+          props.handleRedirect();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      axios
+        .post('/api/addQuestion', data)
+        .then(() => {
+          props.handleRedirect();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
   const markBlank = (data) => {
     const sentence = sentenceValue.replace(data, '_____');

@@ -1,97 +1,53 @@
 const mongoose = require('mongoose');
-const fs = require('fs');
 const Question = mongoose.model('Question');
+const OrQueryBuilder = require('../utils/OrQueryBuilder.js');
+const AndQueryBuilder = require('../utils/AndQueryBuilder.js');
+const QuestionService = require('../service/QuestionsService.js');
 
 module.exports = (app) => {
-  app.get('/api/getAllQuestions', (req, res) => {
+  app.get('/api/getAllQuestions', async (req, res) => {
     if (req.session.userID) {
-      const searchQuery = req.query.searchQuery;
-      if (searchQuery && searchQuery.length) {
-        var regex = new RegExp(searchQuery);
-        Question.find({
-          $and: [
-            { createdBy: req.session.userID },
-            {
-              $or: [
-                { tag: { $regex: regex, $options: 'i' } },
-                { question: { $regex: regex, $options: 'i' } },
-                { 'options.description': { $regex: regex, $options: 'i' } },
-              ],
-            },
-          ],
-        })
-          .then((questions) => {
-            return res.send(questions);
-          })
-          .catch((err) => {
-            console.log(err);
-            return res.send([]);
-          });
-      } else {
-        Question.find({ createdBy: req.session.userID })
-          .then((questions) => {
-            return res.send(questions);
-          })
-          .catch((err) => {
-            console.log(err);
-            return res.send([]);
-          });
+      let searchValue = req.query.searchQuery ? req.query.searchQuery : '';
+      const _id = req.session.userID;
+      const searchQuery = { createdBy: _id };
+      const orQuery = new OrQueryBuilder(searchValue, 'Questions');
+      let andQuery = new AndQueryBuilder().addQuery(searchQuery);
+      if (orQuery.$or) {
+        andQuery = andQuery.addQuery(orQuery);
       }
-    } else {
-      return res.send([]);
+      const response = await QuestionService.getQuestions(andQuery.getQuery());
+      return res.status(200).send(response.data);
     }
+    return res.status(401).send([]);
   });
 
-  app.post('/api/addQuestion', (req, res) => {
+  app.post('/api/addQuestion', async (req, res) => {
     if (req.session.userID) {
-      if (req.body._id) {
-        Question.updateOne(
-          {
-            _id: req.body._id,
-          },
-          { ...req.body },
-          { upsert: true }
-        )
-          .then((result) => {
-            return res.sendStatus(200);
-          })
-          .catch((err) => {
-            console.log(err);
-            return res.sendStatus(500);
-          });
-      } else {
-        const newQuestion = new Question({
-          ...req.body,
-          createdBy: req.session.userID,
-        });
-        newQuestion
-          .save()
-          .then(() => {
-            return res.sendStatus(200);
-          })
-          .catch((err) => {
-            console.log(err);
-            return res.status(500).send('Internal Server Error');
-          });
-      }
-    } else {
-      return res.sendStatus(500);
+      const data = {
+        ...req.body,
+        createdBy: req.session.userID,
+        createdDate: new Date(),
+      };
+      const response = await QuestionService.addQuestion(data);
+      return res.status(response.status).send(response.message);
     }
+    return res.status(401).send('Unauthorised Access');
   });
 
-  app.delete('/api/deleteQuestion', (req, res) => {
+  app.put('/api/updateQuestion', async (req, res) => {
     if (req.session.userID) {
-      Question.remove({ _id: req.query._id })
-        .then((result) => {
-          return res.sendStatus(200);
-        })
-        .catch((err) => {
-          console.log(err);
-          return res.sendStatus(500);
-        });
-    } else {
-      return res.sendStatus(500);
+      const response = await QuestionService.updateQuestion(req.body);
+      return res.status(response.status).send(response.message);
     }
+    return res.status(401).send('Unauthorised Access');
+  });
+
+  app.delete('/api/deleteQuestion', async (req, res) => {
+    if (req.session.userID) {
+      const response = await QuestionService.deleteQuestion(req.query._id);
+      return res.status(response.status).send(response.message);
+    }
+    return res.status(401).send('Unauthorised Access');
   });
 
   app.get('/api/getAllTag', (req, res) => {

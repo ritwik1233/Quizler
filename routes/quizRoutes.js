@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const OrQueryBuilder = require('../utils/OrQueryBuilder.js');
 const AndQueryBuilder = require('../utils/AndQueryBuilder.js');
 const QuizService = require('../service/QuizService.js');

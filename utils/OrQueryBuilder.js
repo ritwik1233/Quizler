@@ -6,7 +6,7 @@ const defaultQuizFields = [
   'questions.question.options.description',
   'comments.message',
 ];
-const defaultQuestionFields = [];
+const defaultQuestionFields = ['tag', 'question', 'options.description'];
 class OrQueryBuilder {
   constructor(searchValue, collectionName) {
     if (searchValue && searchValue.length > 0) {
@@ -14,6 +14,8 @@ class OrQueryBuilder {
       this.fields = [];
       if (collectionName === 'Quiz') {
         this.fields = defaultQuizFields;
+      } else if (collectionName === 'Questions') {
+        this.fields = defaultQuestionFields;
       }
       this.queryObject = { $or: [] };
       for (let i = 0; i < this.fields.length; i++) {
